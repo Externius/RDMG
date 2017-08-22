@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+ <link rel="stylesheet" href="styles.css">
+<title>Random dungeon map generator</title>
+</head>
+<body>
+<script src="src/dungeon.js"></script> 
+<canvas id="mapArea" width="1000" height="1000" style="border:0px #000000;">
+</canvas> 
+<div id="container" class="settings">
+<h3>Dungeon size:</h3>
+<select id="dungeonSize">
+  <option value="20">Small</option>
+  <option value="28" selected="selected">Medium</option>
+  <option value="40">Big</option>
+</select>
+<br> 
+<h3>Room density:</h3>
+<select id="roomDensity">
+  <option value="10">Small</option>
+  <option value="20" selected="selected">Medium</option>
+  <option value="30">Big</option>
+</select>
+<br>
+<h3>Room size:</h3>
+<select id="roomSize">
+  <option value="15">Small</option>
+  <option value="20" selected="selected">Medium</option>
+  <option value="25">Big</option>
+</select>
+<br>
+<br>
+<button type="button" onclick="drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize')">Generate</button>
+</div>
+</body>
+</html>
