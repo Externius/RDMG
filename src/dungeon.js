@@ -1,6 +1,6 @@
-var _Doors = [];
-var _Movement = 10;
-var _Result = [];
+var DOORS = [];
+var MOVEMENT = 10;
+var RESULT = [];
 Array.prototype.contains = function (obj) {
     var i = this.length;
     while (i--) {
@@ -12,7 +12,7 @@ Array.prototype.contains = function (obj) {
 }
 
 function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
-    _Doors = [];
+    DOORS = [];
     var canvas = document.getElementById(canvasID);
     var dungeon = document.getElementById(sizeID);
     var room = document.getElementById(roomDensityID);
@@ -102,11 +102,11 @@ function loadImages(sources, callback) {
 
 function getDegree(tiles, i, j) {
     var degree = 0; // default degree is 0 witch is the above tile is room
-    if (tiles[i][j - 1].Texture == 3) { // left tile is room
+    if (tiles[i][j - 1].Texture === 3) { // left tile is room
         degree = -90;
-    } else if (tiles[i][j + 1].Texture == 3) { // right tile is room
+    } else if (tiles[i][j + 1].Texture === 3) { // right tile is room
         degree = 90;
-    } else if (tiles[i + 1][j].Texture == 3) { // below tile is room
+    } else if (tiles[i + 1][j].Texture === 3) { // below tile is room
         degree = 180;
     } 
     return degree;
@@ -155,12 +155,12 @@ function checkTileIsRoom(tiles, x, y, roomSize) {
     var maxY = y + roomSize;
     var roomIsOk = checkCorners(tiles, x, y, maxX, maxY);
     for (var i = x; i < maxX; i++) { // check room area
-        if (tiles[i][y - 1].Texture == 3 || tiles[i][maxY + 1].Texture == 3) { // check vertical edges
+        if (tiles[i][y - 1].Texture === 3 || tiles[i][maxY + 1].Texture === 3) { // check vertical edges
             roomIsOk = false;
             return roomIsOk;
         }
         for (var j = y; j < maxY; j++) { // check horizontal edges + normal room tile
-            if (tiles[x - 1][j].Texture == 3 || tiles[maxX + 1][j].Texture == 3 || tiles[i][j].Texture == 3) {
+            if (tiles[x - 1][j].Texture === 3 || tiles[maxX + 1][j].Texture === 3 || tiles[i][j].Texture === 3) {
                 roomIsOk = false;
                 return roomIsOk;
             }
@@ -172,7 +172,7 @@ function checkTileIsRoom(tiles, x, y, roomSize) {
 
 function checkCorners(tiles, x, y, maxX, maxY) {
     var roomIsOk = true;
-    if (tiles[x - 1][y - 1].Texture == 3 || tiles[x][maxY + 1].Texture == 3 || tiles[maxX + 1][y - 1].Texture == 3 || tiles[maxX + 1][maxY + 1].Texture == 3) {
+    if (tiles[x - 1][y - 1].Texture === 3 || tiles[x][maxY + 1].Texture === 3 || tiles[maxX + 1][y - 1].Texture === 3 || tiles[maxX + 1][maxY + 1].Texture === 3) {
         roomIsOk = false;
         return roomIsOk;
     }
@@ -211,16 +211,16 @@ function fillRoom(x, y, roomSize, tiles) { // x-y is the top left corner the roo
 
 function addDoor(roomSize, tiles, doorx, doory) {
     for (var i = 0; i < roomSize; i++) { // if first random room texture not in the edges, go right
-        if (tiles[doorx][doory + i - 1].Texture == 0) { // left
+        if (tiles[doorx][doory + i - 1].Texture === 0) { // left
             setDoor(tiles, doorx, doory + i - 1);
             return;
-        } else if (tiles[doorx][doory + i + 1].Texture == 0) { // right
+        } else if (tiles[doorx][doory + i + 1].Texture === 0) { // right
             setDoor(tiles, doorx, doory + i + 1);
             return;
-        } else if (tiles[doorx + 1][doory + i].Texture == 0) { // bottom
+        } else if (tiles[doorx + 1][doory + i].Texture === 0) { // bottom
             setDoor(tiles, doorx + 1, doory + i);
             return;
-        } else if (tiles[doorx - 1][doory + i].Texture == 0) { // top
+        } else if (tiles[doorx - 1][doory + i].Texture === 0) { // top
             setDoor(tiles, doorx - 1, doory + i);
             return;
         }
@@ -228,20 +228,20 @@ function addDoor(roomSize, tiles, doorx, doory) {
 }
 
 function setDoor(tiles, x, y) {
-    if (tiles[x][y - 1].Texture != 2 || (tiles[x][y - 1].Texture == 2 && tiles[x][y - 2].Texture == 3 && tiles[x][y + 1].Texture == 3)) { //check theres no door in the left because we always went to right
+    if (tiles[x][y - 1].Texture !== 2 || (tiles[x][y - 1].Texture === 2 && tiles[x][y - 2].Texture === 3 && tiles[x][y + 1].Texture === 3)) { //check theres no door in the left because we always went to right
         tiles[x][y].Texture = 2;
-        _Doors[_Doors.length] = { X: x, Y: y };
+        DOORS[DOORS.length] = { X: x, Y: y };
     }
 }
 
 function generateCorridors(tiles) {
-    _Movement = 10;
-    for (var d = 0; d < _Doors.length - 1; d++) { // -1 because the end point
-        _Result = [];
+    MOVEMENT = 10;
+    for (var d = 0; d < DOORS.length - 1; d++) { // -1 because the end point
+        RESULT = [];
         var openList = [];
         var closedList = [];
-        var start = tiles[_Doors[d].X][_Doors[d].Y]; // set door as the starting point
-        var end = tiles[_Doors[d + 1].X][_Doors[d + 1].Y]; // set the next door as the end point
+        var start = tiles[DOORS[d].X][DOORS[d].Y]; // set door as the starting point
+        var end = tiles[DOORS[d + 1].X][DOORS[d + 1].Y]; // set the next door as the end point
         for (var i = 1; i < tiles.length - 1; i++) { // preconfig H value + restore default values
             for (var j = 1; j < tiles.length - 1; j++) {
                 tiles[i][j].H = manhattan(Math.abs(i - end.I), Math.abs(j - end.J));
@@ -252,7 +252,7 @@ function generateCorridors(tiles) {
         }   
         addToClosedList(closedList, tiles, start); // add start point to closed list
         addToOpen(tiles, start, openList, closedList, end); // add the nearby nodes to openList
-        while (_Result.length < 1 || openList.length < 1) {
+        while (RESULT.length < 1 || openList.length < 1) {
             start = openList[0]; // get lowest F to repeat things (openList sorted)
             addToClosedList(closedList, tiles, start); // add to closed list this node
             removeFromOpen(openList, start); // remove from open list this node
@@ -263,15 +263,15 @@ function generateCorridors(tiles) {
 }
 
 function setPath(tiles) {
-    for (var i = 0; i < _Result.length; i++) {
-        if (_Result[i].Texture != 2) { // do not change door Texture
-            tiles[_Result[i].I][_Result[i].J].Texture = 1;
+    for (var i = 0; i < RESULT.length; i++) {
+        if (RESULT[i].Texture !== 2) { // do not change door Texture
+            tiles[RESULT[i].I][RESULT[i].J].Texture = 1;
         }
     }
 }
 
 function checkEnd(tiles, node, x, y, end) {
-    if (end.I == x && end.J == y) {
+    if (end.I === x && end.J === y) {
         setParent(tiles, node, x, y);
         getParents(node);
         return true;
@@ -280,15 +280,15 @@ function checkEnd(tiles, node, x, y, end) {
 }
 
 function getParents(node) {
-    _Result[_Result.length] = node;
+    RESULT[RESULT.length] = node;
     while (node.Parent) {
         node = node.Parent;
-        _Result[_Result.length] = node;
+        RESULT[RESULT.length] = node;
     }
 }
 
 function checkG(tiles, node, x, y, openList) {
-    if (openList.contains(tiles[x][y] && tiles[x][y].G > node.G + _Movement)) {
+    if (openList.contains(tiles[x][y] && tiles[x][y].G > node.G + MOVEMENT)) {
         setParent(tiles, node, x, y);
     }
 }
@@ -314,7 +314,7 @@ function addToOpen(tiles, node, openList, closedList, end) {
 function addToOpenList(tiles, node, x, y, openList, closedList, end) {
     if (!checkEnd(tiles, node, x, y, end)) {
         checkG(tiles, node, x, y, openList); // check if it needs reparenting
-        if (tiles[x][y].H != null && tiles[x][y].Texture != 3 && !closedList.contains(tiles[x][y]) && !openList.contains(tiles[x][y])) {
+        if (tiles[x][y].H !== undefined && tiles[x][y].Texture !== 3 && !closedList.contains(tiles[x][y]) && !openList.contains(tiles[x][y])) { //check its not edge/room and not in openlist/closedlist
             setParent(tiles, node, x, y);
             openList[openList.length] = tiles[x][y];
         }
@@ -323,7 +323,7 @@ function addToOpenList(tiles, node, x, y, openList, closedList, end) {
 
 function calcGValue(openList) {
     for (var i = 0; i < openList.length; i++) {
-        openList[i].G = openList[i].Parent.G + _Movement;
+        openList[i].G = openList[i].Parent.G + MOVEMENT;
     }
 }
 
