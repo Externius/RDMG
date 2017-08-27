@@ -64,8 +64,7 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
                         context.drawImage(images.corridor, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 2:
-                        var degree = getDegree(tiles, i, j);
-                        rotateImage(context, images.door, degree, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                        rotateImage(context, images.door, getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
                         break;
                     case 3:
                         context.drawImage(images.room, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
@@ -100,15 +99,14 @@ function loadImages(sources, callback) {
 }
 
 function getDegree(tiles, i, j) {
-    var degree = 0; // default degree is 0 witch is the above tile is room
     if (tiles[i][j - 1].Texture === 3) { // left tile is room
-        degree = -90;
+        return -90;
     } else if (tiles[i][j + 1].Texture === 3) { // right tile is room
-        degree = 90;
+        return 90;
     } else if (tiles[i + 1][j].Texture === 3) { // below tile is room
-        degree = 180;
+        return 180;
     } 
-    return degree;
+    return 0; // above tile is room
 }
 
 function rotateImage(context, image, degree, x, y, width, height) {
@@ -155,13 +153,11 @@ function checkTileIsRoom(tiles, x, y, roomSize) {
     var roomIsOk = checkCorners(tiles, x, y, maxX, maxY);
     for (var i = x; i < maxX; i++) { // check room area
         if (tiles[i][y - 1].Texture === 3 || tiles[i][maxY + 1].Texture === 3) { // check vertical edges
-            roomIsOk = false;
-            return roomIsOk;
+            return false;
         }
         for (var j = y; j < maxY; j++) { // check horizontal edges + normal room tile
             if (tiles[x - 1][j].Texture === 3 || tiles[maxX + 1][j].Texture === 3 || tiles[i][j].Texture === 3) {
-                roomIsOk = false;
-                return roomIsOk;
+                return false;
             }
         }
     }
@@ -169,12 +165,10 @@ function checkTileIsRoom(tiles, x, y, roomSize) {
 }
 
 function checkCorners(tiles, x, y, maxX, maxY) {
-    var roomIsOk = true;
     if (tiles[x - 1][y - 1].Texture === 3 || tiles[x][maxY + 1].Texture === 3 || tiles[maxX + 1][y - 1].Texture === 3 || tiles[maxX + 1][maxY + 1].Texture === 3) {
-        roomIsOk = false;
-        return roomIsOk;
+        return false;
     }
-    return roomIsOk;
+    return true;
 }
 
 function setTilesForRoom(tiles, roomSize) {
