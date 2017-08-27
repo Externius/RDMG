@@ -20,10 +20,8 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
     var dungeonSize = parseInt(dungeon.options[dungeon.selectedIndex].value);
     var roomCount = Math.round((dungeonSize / 100) * parseInt(room.options[room.selectedIndex].value));
     var roomSize = Math.round(((dungeonSize - Math.round((dungeonSize * 0.35))) / 100) * parseInt(rooms.options[rooms.selectedIndex].value));
-    var iMax = dungeonSize; // horizontal array number
-    var jMax = dungeonSize; // vertical array number
-    var sizeX = Math.round(canvas.clientWidth / iMax); // set image X size
-    var sizeY = Math.round(canvas.clientHeight / jMax); // set image Y size
+    var sizeX = Math.round(canvas.clientWidth / dungeonSize); // set image X size
+    var sizeY = Math.round(canvas.clientHeight / dungeonSize); // set image Y size
     var tiles = [];
     /**
      * Textures:
@@ -33,14 +31,16 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
      *  2 door (basically a corridor with a door)
      *  3 room
      */
-    for (var i = 0; i < iMax + 2; i++) { // declare base array (+ 2 because of edges)
+
+    dungeonSize+=2; // + 2 because of edges
+    for (var i = 0; i < dungeonSize; i++) { // declare base array 
         tiles[i] = [];
-        for (var j = 0; j < jMax + 2; j++) {
+        for (var j = 0; j < dungeonSize; j++) {
             tiles[i][j] = { X: j * sizeX, Y: i * sizeY, Width: sizeX, Height: sizeY, Texture: -1 };
         }
     } 
-    for (i = 1; i < iMax + 1; i++) { // set drawingarea
-        for (j = 1; j < jMax + 1; j++) {
+    for (i = 1; i < dungeonSize - 1; i++) { // set drawingarea
+        for (j = 1; j < dungeonSize - 1; j++) {
             tiles[i][j] = { X: (j - 1) * sizeX, Y: (i - 1) * sizeY, Width: sizeX, Height: sizeY, Texture: 0, H: null, G: 0, Parent: null, F: null, I: i, J: j }; //-1 because we dont use the edges
         }
     }
