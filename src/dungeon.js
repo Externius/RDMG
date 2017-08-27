@@ -31,8 +31,7 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
      *  2 door (basically a corridor with a door)
      *  3 room
      */
-
-    dungeonSize+=2; // + 2 because of edges
+    dungeonSize += 2; // + 2 because of edges
     for (var i = 0; i < dungeonSize; i++) { // declare base array 
         tiles[i] = [];
         for (var j = 0; j < dungeonSize; j++) {
@@ -55,8 +54,8 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
     generateRoom(tiles, roomCount, roomSize);
     generateCorridors(tiles); // generate corridors between room doors
     loadImages(sources, function (images) {  // load images to tiles
-        for (i = 1; i < tiles.length-1; i++) {
-            for (j = 1; j < tiles[i].length-1; j++) {
+        for (i = 1; i < tiles.length - 1; i++) {
+            for (j = 1; j < tiles[i].length - 1; j++) {
                 switch (tiles[i][j].Texture) {
                     case 0:
                         context.drawImage(images.black, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
@@ -65,7 +64,7 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
                         context.drawImage(images.corridor, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 2:
-                        var degree = getDegree(tiles, i, j);  
+                        var degree = getDegree(tiles, i, j);
                         rotateImage(context, images.door, degree, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
                         break;
                     case 3:
@@ -166,7 +165,6 @@ function checkTileIsRoom(tiles, x, y, roomSize) {
             }
         }
     }
-
     return roomIsOk;
 }
 
