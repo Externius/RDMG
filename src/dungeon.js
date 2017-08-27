@@ -189,31 +189,31 @@ function fillRoom(x, y, roomSize, tiles) { // x-y is the top left corner the roo
     var right = getRandomInt(2, roomSize + 1); //to reach max roomsize need to add +1
     var down = getRandomInt(2, roomSize + 1);
     var doorCount = getRandomInt(1, 3);
-    var doorx = getRandomInt(x, x + down);
-    var doory = getRandomInt(y, y + right);
+    var doorX = getRandomInt(x, x + down);
+    var doorY = getRandomInt(y, y + right);
     for (var i = 0; i < down; i++) { // fill room texture
         for (var j = 0; j < right; j++) {
             tiles[x + i][y + j].Texture = 3;
         }
     }
     for (var d = 0; d < doorCount; d++) {
-        addDoor(roomSize, tiles, doorx, doory);
+        addDoor(roomSize, tiles, doorX, doorY);
     }
 }
 
-function addDoor(roomSize, tiles, doorx, doory) {
+function addDoor(roomSize, tiles, x, y) {
     for (var i = 0; i < roomSize; i++) { // if first random room texture not in the edges, go right
-        if (tiles[doorx][doory + i - 1].Texture === 0) { // left
-            setDoor(tiles, doorx, doory + i - 1);
+        if (tiles[x][y + i - 1].Texture === 0) { // left
+            setDoor(tiles, x, y + i - 1);
             return;
-        } else if (tiles[doorx][doory + i + 1].Texture === 0) { // right
-            setDoor(tiles, doorx, doory + i + 1);
+        } else if (tiles[x][y + i + 1].Texture === 0) { // right
+            setDoor(tiles, x, y + i + 1);
             return;
-        } else if (tiles[doorx + 1][doory + i].Texture === 0) { // bottom
-            setDoor(tiles, doorx + 1, doory + i);
+        } else if (tiles[x + 1][y + i].Texture === 0) { // bottom
+            setDoor(tiles, x + 1, y + i);
             return;
-        } else if (tiles[doorx - 1][doory + i].Texture === 0) { // top
-            setDoor(tiles, doorx - 1, doory + i);
+        } else if (tiles[x - 1][y + i].Texture === 0) { // top
+            setDoor(tiles, x - 1, y + i);
             return;
         }
     }
