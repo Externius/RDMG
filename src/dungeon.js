@@ -192,41 +192,64 @@ function fillRoom(x, y, roomSize, tiles) { // x-y is the top left corner the roo
     var right = getRandomInt(2, roomSize + 1); //to reach max roomsize need to add +1
     var down = getRandomInt(2, roomSize + 1);
     var doorCount = getRandomInt(1, 3);
-    var doorX = getRandomInt(x, x + down);
-    var doorY = getRandomInt(y, y + right);
     for (var i = 0; i < down; i++) { // fill room texture
         for (var j = 0; j < right; j++) {
             tiles[x + i][y + j].Texture = 3;
         }
     }
     for (var d = 0; d < doorCount; d++) {
-        addDoor(roomSize, tiles, doorX, doorY);
+        addDoor(roomSize, tiles, x, y, down, right);
     }
 }
 
-function addDoor(roomSize, tiles, x, y) {
-    for (var i = 0; i < roomSize; i++) { // if first random room texture not in the edges, go right
-        if (tiles[x][y + i - 1].Texture === 0) { // left
-            setDoor(tiles, x, y + i - 1);
-            return;
-        } else if (tiles[x][y + i + 1].Texture === 0) { // right
-            setDoor(tiles, x, y + i + 1);
-            return;
-        } else if (tiles[x + 1][y + i].Texture === 0) { // bottom
-            setDoor(tiles, x + 1, y + i);
-            return;
-        } else if (tiles[x - 1][y + i].Texture === 0) { // top
-            setDoor(tiles, x - 1, y + i);
-            return;
+function addDoor(roomSize, tiles, x, y, down, right) {
+    var doorIsOK;
+    var doorX;
+    var doorY;
+    do {
+        doorX = getRandomInt(x, x + down);
+        doorY = getRandomInt(y, y + right);
+        doorIsOK = checkDoor(tiles, doorX, doorY);
+    }
+    while (!doorIsOK);
+}
+
+function checkDoor(tiles, x, y) {
+    var checkdoors = true;
+    for (var i = x - 1; i < x + 2; i++){
+        for (var j = y - 1; j < y + 3; j++){
+            if (tiles[i][j].Texture == 2) { //check nearby doors
+                checkdoors = false;
+                break;
+            }
         }
     }
+    if (checkdoors) {
+        return checkEnviroment(tiles, x, y);
+    }
+    return false;
+}
+
+function checkEnviroment(tiles, x, y) {
+    if (tiles[x][y - 1].Texture === 0) { // left
+        setDoor(tiles, x, y - 1);
+        return true;
+    } else if (tiles[x][y + 1].Texture === 0) { // right
+        setDoor(tiles, x, y + 1);
+        return true;
+    } else if (tiles[x + 1][y].Texture === 0) { // bottom
+        setDoor(tiles, x + 1, y);
+        return true;
+    } else if (tiles[x - 1][y + 1].Texture === 0) { // top
+        setDoor(tiles, x - 1, y);
+        return true;
+    }
+    return false;
 }
 
 function setDoor(tiles, x, y) {
-    if (tiles[x][y - 1].Texture !== 2 || (tiles[x][y - 1].Texture === 2 && tiles[x][y - 2].Texture === 3 && tiles[x][y + 1].Texture === 3)) { //check theres no door in the left because we always went to right
-        tiles[x][y].Texture = 2;
-        DOORS[DOORS.length] = { X: x, Y: y };
-    }
+    tiles[x][y].Texture = 2;
+    DOORS[DOORS.length] = { X: x, Y: y };
 }
 
 function generateCorridors(tiles) {
