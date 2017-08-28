@@ -277,7 +277,7 @@ function getParents(node) {
 }
 
 function checkG(tiles, node, x, y, openList) {
-    if (openList.contains(tiles[x][y] && tiles[x][y].G > node.G + MOVEMENT)) {
+    if (openList.contains(tiles[x][y]) && tiles[x][y].G > (node.G + MOVEMENT)) {
         setParent(tiles, node, x, y);
     }
 }
@@ -316,8 +316,8 @@ function calcGValue(openList) {
     }
 }
 
-function setParent(tiles, node, X, Y) {
-    tiles[X][Y].Parent = node;
+function setParent(tiles, node, x, y) {
+    tiles[x][y].Parent = node;
 }
 
 function calcFValue(openList) {
