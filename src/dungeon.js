@@ -217,7 +217,7 @@ function addDoor(roomSize, tiles, x, y, down, right) {
 function checkDoor(tiles, x, y) {
     var checkdoors = true;
     for (var i = x - 1; i < x + 2; i++){
-        for (var j = y - 1; j < y + 3; j++){
+        for (var j = y - 1; j < y + 2; j++){
             if (tiles[i][j].Texture == 2) { //check nearby doors
                 checkdoors = false;
                 break;
