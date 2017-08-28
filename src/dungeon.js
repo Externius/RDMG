@@ -198,11 +198,11 @@ function fillRoom(x, y, roomSize, tiles) { // x-y is the top left corner the roo
         }
     }
     for (var d = 0; d < doorCount; d++) {
-        addDoor(roomSize, tiles, x, y, down, right);
+        addDoor(tiles, x, y, down, right);
     }
 }
 
-function addDoor(roomSize, tiles, x, y, down, right) {
+function addDoor(tiles, x, y, down, right) {
     var doorIsOK;
     var doorX;
     var doorY;
@@ -215,22 +215,22 @@ function addDoor(roomSize, tiles, x, y, down, right) {
 }
 
 function checkDoor(tiles, x, y) {
-    var checkdoors = true;
+    var checkDoors = true;
     for (var i = x - 1; i < x + 2; i++){
         for (var j = y - 1; j < y + 2; j++){
-            if (tiles[i][j].Texture == 2) { //check nearby doors
-                checkdoors = false;
+            if (tiles[i][j].Texture === 2) { //check nearby doors
+                checkDoors = false;
                 break;
             }
         }
     }
-    if (checkdoors) {
-        return checkEnviroment(tiles, x, y);
+    if (checkDoors) {
+        return checkEnvironment(tiles, x, y);
     }
     return false;
 }
 
-function checkEnviroment(tiles, x, y) {
+function checkEnvironment(tiles, x, y) {
     if (tiles[x][y - 1].Texture === 0) { // left
         setDoor(tiles, x, y - 1);
         return true;
@@ -369,7 +369,7 @@ function addEntryPoint(tiles) {
     do {
         x = getRandomInt(1, tiles.length - 1);
         y = getRandomInt(1, tiles.length - 1);
-        entryIsOk = (tiles[x][y].Texture != 2 && tiles[x][y].Texture != 3); // not door or room tile
+        entryIsOk = (tiles[x][y].Texture !== 2 && tiles[x][y].Texture !== 3); // not door or room tile
     }
     while (!entryIsOk);
     tiles[x][y].Texture = 4;
