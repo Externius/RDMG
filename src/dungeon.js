@@ -165,10 +165,7 @@ function checkTileIsRoom(tiles, x, y, roomSize) {
 }
 
 function checkCorners(tiles, x, y, maxX, maxY) {
-    if (tiles[x - 1][y - 1].Texture === 3 || tiles[x][maxY + 1].Texture === 3 || tiles[maxX + 1][y - 1].Texture === 3 || tiles[maxX + 1][maxY + 1].Texture === 3) {
-        return false;
-    }
-    return true;
+    return !(tiles[x - 1][y - 1].Texture === 3 || tiles[x][maxY + 1].Texture === 3 || tiles[maxX + 1][y - 1].Texture === 3 || tiles[maxX + 1][maxY + 1].Texture === 3)
 }
 
 function setTilesForRoom(tiles, roomSize) {
