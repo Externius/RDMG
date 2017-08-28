@@ -26,10 +26,11 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
     /**
      * Textures:
      *  -1 edge
-     *  0 black
+     *  0 marble
      *  1 corridor
      *  2 door (basically a corridor with a door)
      *  3 room
+     *  4 entry
      */
     dungeonSize += 2; // + 2 because of edges
     for (var i = 0; i < dungeonSize; i++) { // declare base array 
@@ -47,18 +48,20 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
     context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
     var sources = { // image source
         corridor: 'images/corridor.png',
-        black: 'images/black.png',
+        marble: 'images/marble.png',
         door: 'images/door.png',
-        room: 'images/room.png'
+        room: 'images/room.png',
+        entry: 'images/entry.png'
     };
     generateRoom(tiles, roomCount, roomSize);
+    addEntryPoint(tiles);
     generateCorridors(tiles); // generate corridors between room doors
     loadImages(sources, function (images) {  // load images to tiles
         for (i = 1; i < tiles.length - 1; i++) {
             for (j = 1; j < tiles[i].length - 1; j++) {
                 switch (tiles[i][j].Texture) {
                     case 0:
-                        context.drawImage(images.black, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        context.drawImage(images.marble, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 1:
                         context.drawImage(images.corridor, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
@@ -68,6 +71,9 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
                         break;
                     case 3:
                         context.drawImage(images.room, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        break;
+                    case 4:
+                        context.drawImage(images.entry, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     default:
                         break;
@@ -253,7 +259,7 @@ function generateCorridors(tiles) {
 
 function setPath(tiles) {
     for (var i = 0; i < RESULT.length; i++) {
-        if (RESULT[i].Texture !== 2) { // do not change door Texture
+        if (RESULT[i].Texture !== 2 && RESULT[i].Texture !== 4) { // do not change door or entry Texture
             tiles[RESULT[i].I][RESULT[i].J].Texture = 1;
         }
     }
@@ -331,4 +337,18 @@ function calcFValue(openList) {
 
 function addToClosedList(closedList, tiles, node) {
     closedList[closedList.length] = tiles[node.I][node.J];
+}
+
+function addEntryPoint(tiles) {
+    var entryIsOk;
+    var x;
+    var y;
+    do {
+        x = getRandomInt(1, tiles.length - 1);
+        y = getRandomInt(1, tiles.length - 1);
+        entryIsOk = (tiles[x][y].Texture != 2 && tiles[x][y].Texture != 3); // not door or room tile
+    }
+    while (!entryIsOk);
+    tiles[x][y].Texture = 4;
+    DOORS[DOORS.length] = { X: x, Y: y };
 }
