@@ -239,10 +239,7 @@ function checkDoor(tiles, x, y) {
             }
         }
     }
-    if (checkDoors) {
-        return checkEnvironment(tiles, x, y);
-    }
-    return false;
+    return checkDoors && checkEnvironment(tiles, x, y);
 }
 
 function checkEnvironment(tiles, x, y) {
