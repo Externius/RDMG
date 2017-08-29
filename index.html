@@ -12,27 +12,35 @@
 <div id="container" class="settings">
 <h3>Dungeon size:</h3>
 <select id="dungeonSize">
-  <option value="20">Small</option>
-  <option value="28" selected="selected">Medium</option>
+  <option value="20" selected="selected">Small</option>
+  <option value="28">Medium</option>
   <option value="40">Big</option>
 </select>
 <br> 
 <h3>Room density:</h3>
 <select id="roomDensity">
   <option value="10">Small</option>
-  <option value="20" selected="selected">Medium</option>
-  <option value="30">Big</option>
+  <option value="20">Medium</option>
+  <option value="30" selected="selected">Big</option>
 </select>
 <br>
 <h3>Room size:</h3>
 <select id="roomSize">
   <option value="15">Small</option>
-  <option value="20" selected="selected">Medium</option>
-  <option value="25">Big</option>
+  <option value="20">Medium</option>
+  <option value="25" selected="selected">Big</option>
+</select>
+<br>
+<h3>Traps:</h3>
+<select id="trapPercent">
+  <option value="0">None</option>
+  <option value="4" selected="selected">Few</option>
+  <option value="8">More</option>
+  <option value="40">Are you insane?</option>
 </select>
 <br>
 <br>
-<button type="button" onclick="drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize')">Generate</button>
+<button type="button" onclick="drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent')">Generate</button>
 </div>
 </body>
 </html>

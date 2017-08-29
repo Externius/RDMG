@@ -11,12 +11,14 @@ Array.prototype.contains = function (obj) {
     return false;
 }
 
-function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
+function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID, trapID) {
     DOORS = [];
     var canvas = document.getElementById(canvasID);
     var dungeon = document.getElementById(sizeID);
     var room = document.getElementById(roomDensityID);
     var rooms = document.getElementById(roomSizeID);
+    var traps = document.getElementById(trapID);
+    var trapPercent = parseInt(traps.options[traps.selectedIndex].value);
     var dungeonSize = parseInt(dungeon.options[dungeon.selectedIndex].value);
     var roomCount = Math.round((dungeonSize / 100) * parseInt(room.options[room.selectedIndex].value));
     var roomSize = Math.round(((dungeonSize - Math.round((dungeonSize * 0.35))) / 100) * parseInt(rooms.options[rooms.selectedIndex].value));
@@ -31,6 +33,7 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
      *  2 door (basically a corridor with a door)
      *  3 room
      *  4 entry
+     *  5 trap
      */
     dungeonSize += 2; // + 2 because of edges
     for (var i = 0; i < dungeonSize; i++) { // declare base array 
@@ -51,11 +54,12 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
         marble: 'images/marble.png',
         door: 'images/door.png',
         room: 'images/room.png',
-        entry: 'images/entry.png'
+        entry: 'images/entry.png',
+        trap: 'images/trap.png'
     };
     generateRoom(tiles, roomCount, roomSize);
     addEntryPoint(tiles);
-    generateCorridors(tiles); // generate corridors between room doors
+    generateCorridors(tiles, trapPercent); // generate corridors between room doors
     loadImages(sources, function (images) {  // load images to tiles
         for (i = 1; i < tiles.length - 1; i++) {
             for (j = 1; j < tiles[i].length - 1; j++) {
@@ -74,6 +78,9 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID) {
                         break;
                     case 4:
                         context.drawImage(images.entry, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        break;
+                    case 5:
+                        context.drawImage(images.trap, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     default:
                         break;
@@ -142,7 +149,9 @@ function rotateImage(context, image, degree, x, y, width, height) {
 function generateRoom(tiles, roomNumber, roomSize) {
     for (var roomCount = 0; roomCount < roomNumber; roomCount++) {
         var result = setTilesForRoom(tiles, roomSize);
-        fillRoom(result.X, result.Y, roomSize, tiles);
+        if (result.X !== 0) {
+            fillRoom(result.X, result.Y, roomSize, tiles);  
+        }
     }
     return tiles;
 }
@@ -178,14 +187,20 @@ function setTilesForRoom(tiles, roomSize) {
     var roomIsOk;
     var x;
     var y;
+    var failSafeCount = tiles.length;
     do {
         x = getRandomInt(2, (tiles.length - (1 + roomSize)));
         y = getRandomInt(2, (tiles.length - (1 + roomSize)));
         roomIsOk = checkTileIsRoom(tiles, x - 1, y - 1, roomSize + 1); // x&y-1 && roomsize +1 because i want min 2 tiles between rooms
+        failSafeCount--;
     }
-    while (!roomIsOk);
-    var result = { X: x, Y: y };  
-    return result;
+    while (!roomIsOk && failSafeCount > 0);
+    if (failSafeCount > 0) {
+        return { X: x, Y: y };
+    }
+    else {
+        return { X: 0, Y: 0 }; // it can never be 0 if its a good coordinate
+    }
 }
 
 function fillRoom(x, y, roomSize, tiles) { // x-y is the top left corner the room goes random right and left then fill between
@@ -218,7 +233,7 @@ function checkDoor(tiles, x, y) {
     var checkDoors = true;
     for (var i = x - 1; i < x + 2; i++){
         for (var j = y - 1; j < y + 2; j++){
-            if (tiles[i][j].Texture === 2) { //check nearby doors
+            if (tiles[i][j].Texture === 2) { // check nearby doors
                 checkDoors = false;
                 break;
             }
@@ -252,7 +267,7 @@ function setDoor(tiles, x, y) {
     DOORS[DOORS.length] = { X: x, Y: y };
 }
 
-function generateCorridors(tiles) {
+function generateCorridors(tiles, trapPercent) {
     MOVEMENT = 10;
     for (var d = 0; d < DOORS.length - 1; d++) { // -1 because the end point
         RESULT = [];
@@ -276,14 +291,20 @@ function generateCorridors(tiles) {
             removeFromOpen(openList, start); // remove from open list this node
             addToOpen(tiles, start, openList, closedList, end); // add open list the nearby nodes
         }
-        setPath(tiles); // modify tiles Texture with the path
+        setPath(tiles, trapPercent); // modify tiles Texture with the path
     }
 }
 
-function setPath(tiles) {
+function setPath(tiles, trapPercent) {
     for (var i = 0; i < RESULT.length; i++) {
-        if (RESULT[i].Texture !== 2 && RESULT[i].Texture !== 4) { // do not change door or entry Texture
-            tiles[RESULT[i].I][RESULT[i].J].Texture = 1;
+        if (RESULT[i].Texture !== 2 && RESULT[i].Texture !== 4 && RESULT[i].Texture !== 5) { // do not change door or entry or trap Texture
+            if (Math.floor((Math.random() * 100)) < trapPercent) {
+                tiles[RESULT[i].I][RESULT[i].J].Texture = 5;
+            }
+            else {
+                tiles[RESULT[i].I][RESULT[i].J].Texture = 1;
+            }
+
         }
     }
 }
