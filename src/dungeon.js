@@ -34,6 +34,7 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID, trapI
      *  3 room
      *  4 entry
      *  5 trap
+     *  6 room_edge
      */
     dungeonSize += 2; // + 2 because of edges
     for (var i = 0; i < dungeonSize; i++) { // declare base array 
@@ -55,7 +56,8 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID, trapI
         door: 'images/door.png',
         room: 'images/room.png',
         entry: 'images/entry.png',
-        trap: 'images/trap.png'
+        trap: 'images/trap.png',
+        room_edge: 'images/marble.png'
     };
     generateRoom(tiles, roomCount, roomSize);
     addEntryPoint(tiles);
@@ -81,6 +83,9 @@ function drawDungeonOneCanvas(canvasID, sizeID, roomDensityID, roomSizeID, trapI
                         break;
                     case 5:
                         context.drawImage(images.trap, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        break;
+                    case 6:
+                        context.drawImage(images.room_edge, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     default:
                         break;
@@ -167,16 +172,20 @@ function checkTileIsRoom(tiles, x, y, roomSize) {
     var maxY = y + roomSize;
     var roomIsOk = checkCorners(tiles, x, y, maxX, maxY);
     for (var i = x; i < maxX; i++) { // check room area
-        if (tiles[i][y - 1].Texture === 3 || tiles[i][maxY + 1].Texture === 3) { // check vertical edges
+        if (checkIsRoom(tiles, i, y - 1) || checkIsRoom(tiles, i, maxY + 1)) { // check vertical edges
             return false;
         }
         for (var j = y; j < maxY; j++) { // check horizontal edges + normal room tile
-            if (tiles[x - 1][j].Texture === 3 || tiles[maxX + 1][j].Texture === 3 || tiles[i][j].Texture === 3) {
+            if (checkIsRoom(tiles, x - 1, j) || checkIsRoom(tiles, maxX + 1, j) || tiles[i][j].Texture === 3) {
                 return false;
             }
         }
     }
     return roomIsOk;
+}
+
+function checkIsRoom(tiles,x,y) {
+    return tiles[x][y].Texture === 3 || tiles[x][y].Texture === 6
 }
 
 function checkCorners(tiles, x, y, maxX, maxY) {
@@ -187,11 +196,11 @@ function setTilesForRoom(tiles, roomSize) {
     var roomIsOk;
     var x;
     var y;
-    var failSafeCount = tiles.length;
+    var failSafeCount = tiles.length * tiles.length / 2;
     do {
-        x = getRandomInt(2, (tiles.length - (1 + roomSize)));
-        y = getRandomInt(2, (tiles.length - (1 + roomSize)));
-        roomIsOk = checkTileIsRoom(tiles, x - 1, y - 1, roomSize + 1); // x&y-1 && roomsize +1 because i want min 2 tiles between rooms
+        x = getRandomInt(3, (tiles.length - (roomSize + 2))); // 3 and +2, becuse of edge + room_edge 
+        y = getRandomInt(3, (tiles.length - (roomSize + 2)));
+        roomIsOk = checkTileIsRoom(tiles, x - 2, y - 2, roomSize + 2); // x&y-2 && roomsize +2 because i want min 2 tiles between rooms + room edges
         failSafeCount--;
     }
     while (!roomIsOk && failSafeCount > 0);
@@ -207,8 +216,13 @@ function fillRoom(x, y, roomSize, tiles) { // x-y is the top left corner the roo
     var right = getRandomInt(2, roomSize + 1); //to reach max roomsize need to add +1
     var down = getRandomInt(2, roomSize + 1);
     var doorCount = getRandomInt(1, 3);
-    for (var i = 0; i < down; i++) { // fill room texture
-        for (var j = 0; j < right; j++) {
+    for (var i = 0; i < down + 2; i++) { // fill with room_edge texture the bigger boundaries 
+        for (var j = 0; j < right + 2; j++) {
+            tiles[x + i - 1][y + j - 1].Texture = 6;
+        }
+    }
+    for (i = 0; i < down; i++) { // fill room texture
+        for (j = 0; j < right; j++) {
             tiles[x + i][y + j].Texture = 3;
         }
     }
@@ -242,17 +256,17 @@ function checkDoor(tiles, x, y) {
     return checkDoors && checkEnvironment(tiles, x, y);
 }
 
-function checkEnvironment(tiles, x, y) {
-    if (tiles[x][y - 1].Texture === 0) { // left
+function checkEnvironment(tiles, x, y) { // check nearby tiles for room edges
+    if (tiles[x][y - 1].Texture === 6) { // left
         setDoor(tiles, x, y - 1);
         return true;
-    } else if (tiles[x][y + 1].Texture === 0) { // right
+    } else if (tiles[x][y + 1].Texture === 6) { // right
         setDoor(tiles, x, y + 1);
         return true;
-    } else if (tiles[x + 1][y].Texture === 0) { // bottom
+    } else if (tiles[x + 1][y].Texture === 6) { // bottom
         setDoor(tiles, x + 1, y);
         return true;
-    } else if (tiles[x - 1][y + 1].Texture === 0) { // top
+    } else if (tiles[x - 1][y + 1].Texture === 6) { // top
         setDoor(tiles, x - 1, y);
         return true;
     }
@@ -282,7 +296,7 @@ function generateCorridors(tiles, trapPercent) {
         }   
         addToClosedList(closedList, tiles, start); // add start point to closed list
         addToOpen(tiles, start, openList, closedList, end); // add the nearby nodes to openList
-        while (RESULT.length < 1 || openList.length < 1) {
+        while (RESULT.length < 1 && openList.length > 0) {
             start = openList[0]; // get lowest F to repeat things (openList sorted)
             addToClosedList(closedList, tiles, start); // add to closed list this node
             removeFromOpen(openList, start); // remove from open list this node
@@ -350,11 +364,15 @@ function addToOpen(tiles, node, openList, closedList, end) {
 function addToOpenList(tiles, node, x, y, openList, closedList, end) {
     if (!checkEnd(tiles, node, x, y, end)) {
         checkG(tiles, node, x, y, openList); // check if it needs reparenting
-        if (tiles[x][y].H !== undefined && tiles[x][y].Texture !== 3 && !closedList.contains(tiles[x][y]) && !openList.contains(tiles[x][y])) { //check its not edge/room and not in openlist/closedlist
+        if (checkTileForOpenlist(tiles,x,y) && !closedList.contains(tiles[x][y]) && !openList.contains(tiles[x][y])) { // checkTile + not in openlist/closedlist
             setParent(tiles, node, x, y);
             openList[openList.length] = tiles[x][y];
         }
     }
+}
+
+function checkTileForOpenlist(tiles,x,y){
+    return tiles[x][y].H !== undefined && tiles[x][y].Texture !== 3 && tiles[x][y].Texture !== 6 // check its not edge/room/room_edge
 }
 
 function calcGValue(openList) {
