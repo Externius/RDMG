@@ -295,7 +295,7 @@ function generateCorridors(tiles, trapPercent) {
 function setPath(tiles, trapPercent) {
     for (var i = 0; i < RESULT.length; i++) {
         if (RESULT[i].Texture !== 2 && RESULT[i].Texture !== 4 && RESULT[i].Texture !== 5) { // do not change door or entry or trap Texture
-            if (Math.floor((Math.random() * 100)) < trapPercent) {
+            if (Math.floor(Math.random() * 100) < trapPercent) {
                 tiles[RESULT[i].I][RESULT[i].J].Texture = 5;
             }
             else {
