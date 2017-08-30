@@ -155,7 +155,7 @@ function generateRoom(tiles, roomNumber, roomSize) {
     for (var roomCount = 0; roomCount < roomNumber; roomCount++) {
         var result = setTilesForRoom(tiles, roomSize);
         if (result.X !== 0) {
-            fillRoom(result.X, result.Y, roomSize, tiles);  
+            fillRoom(tiles, result.X, result.Y, result.Right, result.Down);
         }
     }
     return tiles;
@@ -167,29 +167,21 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function checkTileIsRoom(tiles, x, y, roomSize) {
-    var maxX = x + roomSize;
-    var maxY = y + roomSize;
-    var roomIsOk = checkCorners(tiles, x, y, maxX, maxY);
+function checkTileGoodForRoom(tiles, x, y, right, down) {
+    var maxX = x + down + 2; // +2 because of the edges
+    var maxY = y + right + 2;
     for (var i = x; i < maxX; i++) { // check room area
-        if (checkIsRoom(tiles, i, y - 1) || checkIsRoom(tiles, i, maxY + 1)) { // check vertical edges
-            return false;
-        }
-        for (var j = y; j < maxY; j++) { // check horizontal edges + normal room tile
-            if (checkIsRoom(tiles, x - 1, j) || checkIsRoom(tiles, maxX + 1, j) || tiles[i][j].Texture === 3) {
+        for (var j = y; j < maxY ; j++) { // check horizontal edges + normal room tile
+            if (checkIsRoom(tiles, i, j)) {
                 return false;
             }
         }
     }
-    return roomIsOk;
+    return true;
 }
 
 function checkIsRoom(tiles,x,y) {
     return tiles[x][y].Texture === 3 || tiles[x][y].Texture === 6
-}
-
-function checkCorners(tiles, x, y, maxX, maxY) {
-    return !(tiles[x - 1][y - 1].Texture === 3 || tiles[x][maxY + 1].Texture === 3 || tiles[maxX + 1][y - 1].Texture === 3 || tiles[maxX + 1][maxY + 1].Texture === 3)
 }
 
 function setTilesForRoom(tiles, roomSize) {
@@ -197,24 +189,26 @@ function setTilesForRoom(tiles, roomSize) {
     var x;
     var y;
     var failSafeCount = tiles.length * tiles.length / 2;
+    var right;
+    var down;
     do {
         x = getRandomInt(3, (tiles.length - (roomSize + 2))); // 3 and +2, becuse of edge + room_edge 
         y = getRandomInt(3, (tiles.length - (roomSize + 2)));
-        roomIsOk = checkTileIsRoom(tiles, x - 2, y - 2, roomSize + 2); // x&y-2 && roomsize +2 because i want min 2 tiles between rooms + room edges
+        right = getRandomInt(2, roomSize + 1);
+        down = getRandomInt(2, roomSize + 1);
+        roomIsOk = checkTileGoodForRoom(tiles, x - 2, y - 2, right + 2, down + 2); // x&y-2 && roomsize +2 because i want min 2 tiles between rooms + room edges
         failSafeCount--;
     }
     while (!roomIsOk && failSafeCount > 0);
     if (failSafeCount > 0) {
-        return { X: x, Y: y };
+        return { X: x, Y: y, Right: right, Down: down };
     }
     else {
         return { X: 0, Y: 0 }; // it can never be 0 if its a good coordinate
     }
 }
 
-function fillRoom(x, y, roomSize, tiles) { // x-y is the top left corner the room goes random right and left then fill between
-    var right = getRandomInt(2, roomSize + 1); //to reach max roomsize need to add +1
-    var down = getRandomInt(2, roomSize + 1);
+function fillRoom(tiles, x, y, right, down) { // x-y is the top left corner
     var doorCount = getRandomInt(1, 3);
     for (var i = 0; i < down + 2; i++) { // fill with room_edge texture the bigger boundaries 
         for (var j = 0; j < right + 2; j++) {
