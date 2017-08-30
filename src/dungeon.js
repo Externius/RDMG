@@ -170,8 +170,8 @@ function getRandomInt(min, max) {
 function checkTileGoodForRoom(tiles, x, y, right, down) {
     var maxX = x + down + 2; // +2 because of the edges
     var maxY = y + right + 2;
-    for (var i = x; i < maxX; i++) { // check room area
-        for (var j = y; j < maxY ; j++) { // check horizontal edges + normal room tile
+    for (var i = x; i < maxX; i++) { // check the room area + boundaries
+        for (var j = y; j < maxY ; j++) { 
             if (checkIsRoom(tiles, i, j)) {
                 return false;
             }
@@ -358,14 +358,14 @@ function addToOpen(tiles, node, openList, closedList, end) {
 function addToOpenList(tiles, node, x, y, openList, closedList, end) {
     if (!checkEnd(tiles, node, x, y, end)) {
         checkG(tiles, node, x, y, openList); // check if it needs reparenting
-        if (checkTileForOpenlist(tiles,x,y) && !closedList.contains(tiles[x][y]) && !openList.contains(tiles[x][y])) { // checkTile + not in openlist/closedlist
+        if (checkTileForOpenList(tiles,x,y) && !closedList.contains(tiles[x][y]) && !openList.contains(tiles[x][y])) { // checkTile + not in openlist/closedlist
             setParent(tiles, node, x, y);
             openList[openList.length] = tiles[x][y];
         }
     }
 }
 
-function checkTileForOpenlist(tiles,x,y){
+function checkTileForOpenList(tiles,x,y){
     return tiles[x][y].H !== undefined && tiles[x][y].Texture !== 3 && tiles[x][y].Texture !== 6 // check its not edge/room/room_edge
 }
 
