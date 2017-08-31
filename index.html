@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script type="text/javascript" src="src/util.js" async></script> 
+<script type="text/javascript" src="src/dungeon.js" async></script> 
 <meta charset="UTF-8">
  <link rel="stylesheet" href="styles.css">
 <title>Random dungeon map generator</title>
 </head>
 <body>
-<script src="src/dungeon.js"></script> 
 <div class="settings">
 <h3>Dungeon size:</h3>
 <select id="dungeonSize">
@@ -17,9 +18,9 @@
 <br> 
 <h3>Room density:</h3>
 <select id="roomDensity">
-  <option value="10">Small</option>
+  <option value="10">Low/option>
   <option value="20">Medium</option>
-  <option value="30" selected="selected">Big</option>
+  <option value="30" selected="selected">High</option>
 </select>
 <br>
 <h3>Room size:</h3>

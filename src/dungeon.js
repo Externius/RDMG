@@ -206,12 +206,6 @@ function generateRoom(tiles, roomNumber, roomSize, roomDescription) {
     return tiles;
 }
 
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
-}
-
 function checkTileGoodForRoom(tiles, x, y, right, down) {
     var maxX = x + down + 2; // +2 because of the edges
     var maxY = y + right + 2;
@@ -266,32 +260,10 @@ function fillRoom(tiles, x, y, right, down, roomDescription) { // x-y is the top
             tiles[x + i][y + j].RoomCount = " ";
         }
     }
-    roomDescription[roomDescription.length] = { Name: getRoomName(roomDescription.length + 1), Treasure: getTreasure(), Monster: getMonster() };
+    roomDescription[roomDescription.length] = { Name: getRoomName(roomDescription.length + 1), Treasure: getData(40, false), Monster: getData(50, true) };
     tiles[x][y].RoomCount = roomDescription.length;
     for (var d = 0; d < doorCount; d++) {
         addDoor(tiles, x, y, down, right);
-    }
-}
-
-function getRoomName(x) {
-    return "###ROOM" + x + "###";
-}
-
-function getMonster() {
-    if (Math.floor(Math.random() * 100) < 50) {
-        return "Monster: TBD Monster";     
-    }
-    else {
-        return "Monster: None";
-    }
-}
-
-function getTreasure() {
-    if (Math.floor(Math.random() * 100) < 40) {
-        return "Treasure: TBD Treasure";     
-    }
-    else {
-        return "Treasure: Empty";
     }
 }
 
@@ -405,10 +377,6 @@ function checkG(tiles, node, x, y, openList) {
     if (openList.contains(tiles[x][y]) && tiles[x][y].G > (node.G + MOVEMENT)) {
         setParent(tiles, node, x, y);
     }
-}
-
-function manhattan(dx, dy) {
-    return (dx + dy);
 }
 
 function removeFromOpen(openList, node) {
