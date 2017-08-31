@@ -12,15 +12,26 @@ h3 {
 p {
     color: red;
 }
-div.drawarea {
-    color: white;
-    display:inline-block;
-    width:800px;
-    height:800px;
-    background-color:#475;
+.settings {
+    float: left;
+    width: 400px;
 }
-div.settings {
-    color: white;
-    display:inline-block;
-    vertical-align:top;
+.drawarea{
+
+    float: left;
+}
+.description {
+    clear: both;
+}
+table, th, td {
+    border-collapse: collapse;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;  
+    width: 100%;
+}
+td.room{
+    width: unset;
 }

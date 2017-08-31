@@ -7,14 +7,12 @@
 </head>
 <body>
 <script src="src/dungeon.js"></script> 
-<canvas id="mapArea" width="1000" height="1000" style="border:0px #000000;">
-</canvas> 
-<div id="container" class="settings">
+<div class="settings">
 <h3>Dungeon size:</h3>
 <select id="dungeonSize">
   <option value="20" selected="selected">Small</option>
-  <option value="28">Medium</option>
-  <option value="40">Big</option>
+  <option value="32">Medium</option>
+  <option value="44">Big</option>
 </select>
 <br> 
 <h3>Room density:</h3>
@@ -41,6 +39,13 @@
 <br>
 <br>
 <button type="button" onclick="drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent')">Generate</button>
+<br>
+</div>
+<div class ="drawarea">
+    <canvas id="mapArea" width="800" height="800" style="border:0px #000000;"> </canvas> 
+</div>
+<div class="description"> 
+  <table id="description"> </table>
 </div>
 </body>
 </html>
