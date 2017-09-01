@@ -1,17 +1,6 @@
 body {
     background-color: whitesmoke;
 }
-h1 {
-    color: blue;
-}
-h3 {
-    color: blue;
-    display:inline-block;
-    margin: 10px;
-}
-p {
-    color: red;
-}
 .settings {
     float: left;
     width: 400px;
@@ -34,4 +23,7 @@ th, td {
 }
 td.room{
     width: unset;
+}
+select{
+    width: 150px;
 }

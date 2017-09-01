@@ -12,18 +12,26 @@ function getRoomName(x) {
     return "###ROOM" + x + "###";
 }
 
-function getData(percentage,isMonster) {
+function getData(percentage, isMonster, dungeonLevel) {
     var json  = getJSON();
     if (Math.floor(Math.random() * 100) < percentage) {
         if (isMonster) {
-            var m = getRandomInt(0, json.monsters.length);
+            var result = getMonsters(json, dungeonLevel);
+            var m = getRandomInt(0, result.length);
             var count = getRandomInt(1, 4);
-            return "Monster: " + count + "x " + json.monsters[m].name + " (" + json.monsters[m].XP * count + "xp)";    
+            return "Monster: " + count + "x " + result[m].name + " (" + result[m].XP * count + "xp)";    
         }
         else {
-            var t = getRandomInt(0, json.treasures.length);
-            var price = getRandomInt(10, 100);
-            return "Treasure: " + price + " " + json.treasures[t].name;
+            var gp = getRandomInt(0, 100);
+            var sp = getRandomInt(0, 100);
+            var cp = getRandomInt(0, 100);
+            var ep = getRandomInt(0, 10);
+            var pp = getRandomInt(0, 10);
+            return "Treasure: " + gp + " " + json.treasures[0].name +
+                " " + sp + " " + json.treasures[1].name +
+                " " + cp + " " + json.treasures[2].name +
+                " " + ep + " " + json.treasures[3].name +
+                " " + pp + " " + json.treasures[4].name;
         }
     }
     else {
@@ -36,16 +44,26 @@ function getData(percentage,isMonster) {
     }
 }
 
+function getMonsters(json, dungeonLevel) {
+    return json.monsters.filter(function( obj ) {
+        return obj.XP < dungeonLevel * 100;
+      });
+}
+
 function getJSON() {
     var data = '{"monsters":[' +
+        '{"name":"Kobold","challange":"1/8","size":"Medium","XP":25 },' +    
+        '{"name":"Flying Snake","challange":"1/8","size":"Medium","XP":25 },' +    
         '{"name":"Bugbear","challange":1,"size":"Medium","XP":200 },' +
         '{"name":"Ghoul","challange":1,"size":"Medium","XP":200 },' +
         '{"name":"Dire wolf","challange":1,"size":"Medium","XP":200 }' +
         '],' +
         '"treasures":[' +
-        '{ "name":"Gold" },' +
-        '{ "name":"Silver" },' +
-        '{ "name":"Bronze" } ' +
+        '{ "name":"gp" },' +
+        '{ "name":"sp" },' +
+        '{ "name":"cp" },' +
+        '{ "name":"ep" },' +
+        '{ "name":"pp" }' +
         ']' +
         '}';
     return JSON.parse(data);

@@ -1,52 +1,96 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<script type="text/javascript" src="src/util.js" async></script> 
-<script type="text/javascript" src="src/dungeon.js" async></script> 
-<meta charset="UTF-8">
- <link rel="stylesheet" href="styles.css">
-<title>Random dungeon map generator</title>
+  <script type="text/javascript" src="src/util.js" async></script>
+  <script type="text/javascript" src="src/dungeon.js" async></script>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+  <title>Random dungeon map generator</title>
 </head>
+
 <body>
-<div class="settings">
-<h3>Dungeon size:</h3>
-<select id="dungeonSize">
+  <div class="settings">
+    <table>
+      <tr>
+        <td>Dungeon level:</td>
+        <td>
+          <select id="dungeonLevel">
+            <option value="1" selected="selected">1</option>
+            <option value="2" disabled>2</option>
+            <option value="3" disabled>3</option>
+            <option value="4" disabled>4</option>
+            <option value="5" disabled>5</option>
+            <option value="6" disabled>6</option>
+            <option value="7" disabled>7</option>
+            <option value="8" disabled>8</option>
+            <option value="9" disabled>9</option>
+            <option value="10" disabled>10</option>
+            <option value="11" disabled>11</option>
+            <option value="12" disabled>12</option>
+            <option value="13" disabled>13</option>
+            <option value="14" disabled>14</option>
+            <option value="15" disabled>15</option>
+            <option value="16" disabled>16</option>
+            <option value="17" disabled>17</option>
+            <option value="18" disabled>18</option>
+            <option value="19" disabled>19</option>
+            <option value="20" disabled>20</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Dungeon size:</td>
+        <td>
+          <select id="dungeonSize">
   <option value="20" selected="selected">Small</option>
   <option value="32">Medium</option>
   <option value="44">Big</option>
 </select>
-<br> 
-<h3>Room density:</h3>
-<select id="roomDensity">
-  <option value="10">Low/option>
+        </td>
+      </tr>
+      <tr>
+        <td>Room density:</td>
+        <td>
+          <select id="roomDensity">
+  <option value="10">Low</option>
   <option value="20">Medium</option>
   <option value="30" selected="selected">High</option>
 </select>
-<br>
-<h3>Room size:</h3>
-<select id="roomSize">
+        </td>
+      </tr>
+      <tr>
+        <td>Room size:</td>
+        <td>
+          <select id="roomSize">
   <option value="15">Small</option>
   <option value="20">Medium</option>
   <option value="25" selected="selected">Big</option>
 </select>
-<br>
-<h3>Traps:</h3>
-<select id="trapPercent">
+        </td>
+      </tr>
+      <tr>
+        <td> Traps: </td>
+        <td>
+          <select id="trapPercent">
   <option value="0">None</option>
   <option value="4" selected="selected">Few</option>
   <option value="8">More</option>
   <option value="40">Are you insane?</option>
 </select>
-<br>
-<br>
-<button type="button" onclick="drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent')">Generate</button>
-<br>
-</div>
-<div class ="drawarea">
-    <canvas id="mapArea" width="800" height="800" style="border:0px #000000;"> </canvas> 
-</div>
-<div class="description"> 
-  <table id="description"> </table>
-</div>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <button type="button" onclick="drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','dungeonLevel')">Generate</button>
+    <br>
+  </div>
+  <div class="drawarea">
+    <canvas id="mapArea" width="800" height="800" style="border:0px #000000;"> </canvas>
+  </div>
+  <div class="description">
+    <table id="description"> </table>
+  </div>
 </body>
+
 </html>
