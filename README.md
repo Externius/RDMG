@@ -5,7 +5,9 @@ Written in JavaScript
 
 ### Usage
 
-After you downloaded the zip, unpack it and just launch index.html. 
+Visit https://externius.github.io/ you can try it there. 
+
+Alternatively you can download the zip, unpack it and just launch index.html. 
 
 ### Screenshot
 ![](images/screen.png)
