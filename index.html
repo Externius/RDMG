@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <script type="text/javascript" src="src/util.js" async></script>
+  <script type="text/javascript" src="src/utils.js" async></script>
   <script type="text/javascript" src="src/dungeon.js" async></script>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="styles.css">
@@ -80,9 +80,18 @@
 </select>
         </td>
       </tr>
+      <tr>
+        <td> Corridors: </td>
+        <td>
+          <select id="corridor">
+  <option value="1" selected="selected">Yes</option>
+  <option value="0" disabled> No</option>
+</select>
+        </td>
+      </tr>
     </table>
     <br>
-    <button type="button" onclick="drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','dungeonLevel')">Generate</button>
+    <button type="button" onclick="Dungeon.drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','dungeonLevel','corridor')">Generate</button>
     <br>
   </div>
   <div class="drawarea">
