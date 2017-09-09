@@ -1,4 +1,11 @@
 var Utils = (function () {
+    var corridorOnchange = function (e) {
+        if (e.value === "1") {
+            document.getElementById("roomDensity").disabled = false;
+        } else {
+            document.getElementById("roomDensity").disabled = true;
+        }
+    };
     var getMonsters = function (json, dungeonLevel) {
         return json.monsters.filter(function (obj) {
             return obj.XP < dungeonLevel * 100;
@@ -38,8 +45,8 @@ var Utils = (function () {
         if (Math.floor(Math.random() * 100) < percentage) {
             if (isMonster) {
                 var result = getMonsters(json, dungeonLevel);
-                var m = this.getRandomInt(0, result.length);
-                var count = this.getRandomInt(1, 4);
+                var m = getRandomInt(0, result.length);
+                var count = getRandomInt(1, 4);
                 return "Monster: " + count + "x " + result[m].name + " (" + result[m].XP * count + "xp)";
             }
             else {
@@ -64,10 +71,14 @@ var Utils = (function () {
             }
         }
     };
+    var addDescription = function (tiles, x, y, roomDescription, dungeonLevel) {
+        roomDescription[roomDescription.length] = { Name: getRoomName(roomDescription.length + 1), Treasure: getData(40, false, dungeonLevel), Monster: getData(50, true, dungeonLevel) };
+        tiles[x][y].RoomCount = roomDescription.length;
+    };
     return {
+        addDescription: addDescription,
         getRandomInt: getRandomInt,
         manhattan: manhattan,
-        getRoomName: getRoomName,
-        getData: getData
+        corridorOnchange: corridorOnchange
     }
 })();

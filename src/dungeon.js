@@ -130,7 +130,7 @@ var Dungeon = (function () {
         } else if (tiles[x + 1][y].Texture === 6) { // bottom
             setDoor(tiles, x + 1, y);
             return true;
-        } else if (tiles[x - 1][y + 1].Texture === 6) { // top
+        } else if (tiles[x - 1][y].Texture === 6) { // top
             setDoor(tiles, x - 1, y);
             return true;
         }
@@ -172,8 +172,7 @@ var Dungeon = (function () {
                 tiles[x + i][y + j].RoomCount = " ";
             }
         }
-        roomDescription[roomDescription.length] = { Name: Utils.getRoomName(roomDescription.length + 1), Treasure: Utils.getData(40, false, dungeonLevel), Monster: Utils.getData(50, true, dungeonLevel) };
-        tiles[x][y].RoomCount = roomDescription.length;
+        Utils.addDescription(tiles, x, y, roomDescription, dungeonLevel);
         for (var d = 0; d < doorCount; d++) {
             addDoor(tiles, x, y, down, right);
         }
@@ -356,6 +355,7 @@ var Dungeon = (function () {
          *  4 entry
          *  5 trap
          *  6 room_edge
+         *  7 no corridor door
          */
         dungeonSize += 2; // + 2 because of edges
         for (var i = 0; i < dungeonSize; i++) { // declare base array 
@@ -378,7 +378,8 @@ var Dungeon = (function () {
             room: 'images/room.png',
             entry: 'images/entry.png',
             trap: 'images/trap.png',
-            room_edge: 'images/marble.png'
+            room_edge: hasCorridor === 1 ? 'images/marble.png' : 'images/room_edge.png',
+            no_corridor_door: 'images/nc_door.png'
         };
         if (hasCorridor) {
             generateRoom(tiles, roomCount, roomSize, roomDescription, dungeonLevel);
@@ -386,12 +387,10 @@ var Dungeon = (function () {
             generateCorridors(tiles, trapPercent); // generate corridors between room doors
         }
         else {
-            /**
-             * TODO
-             *implement this
-             */
+            NoCorridor.generateRoom(tiles, roomSize, roomDescription, dungeonLevel);
         }
-        loadImages(sources, function (images) {  // load images to tiles
+        addDescription(roomDescription);
+        loadImages(sources, function (images) {  // load default images to tiles
             for (i = 1; i < tiles.length - 1; i++) {
                 for (j = 1; j < tiles[i].length - 1; j++) {
                     switch (tiles[i][j].Texture) {
@@ -418,13 +417,15 @@ var Dungeon = (function () {
                         case 6:
                             context.drawImage(images.room_edge, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                             break;
+                        case 7:
+                            rotateImage(context, images.no_corridor_door, getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                            break;
                         default:
                             break;
                     }
                 }
             }
         });
-        addDescription(roomDescription);
     };
     return {
         drawDungeonOneCanvas: drawDungeonOneCanvas
