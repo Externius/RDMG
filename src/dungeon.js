@@ -37,7 +37,7 @@ var Dungeon = (function () {
         return tr;
     };
     var addDescription = function (roomDescription) {
-        var table = document.getElementById("description");
+        var table = document.getElementById("table_description");
         table.innerHTML = "";
         for (var i = 0; i < roomDescription.length; i++) {
             var tr = createTableNode(roomDescription[i].Name, true);
@@ -426,6 +426,9 @@ var Dungeon = (function () {
                 }
             }
         });
+        Utils.downloadImg("download_map", canvas);
+        Utils.downloadDescription("download_description", "DungeonRooms.csv");
+        Utils.downloadHTML("download_html");
     };
     return {
         drawDungeonOneCanvas: drawDungeonOneCanvas

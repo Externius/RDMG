@@ -27,3 +27,14 @@ td.room{
 select{
     width: 150px;
 }
+.button {
+    font: 15px Arial;
+    text-decoration: none;
+    text-align: center;
+    padding-left: 7%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 7%;
+    background: #0c5b7b;
+    color: #FFF;
+}
