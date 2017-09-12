@@ -227,7 +227,7 @@ var NoCorridor = (function () {
         }
     };
     var setVerticalEdge = function (tiles, x, y, right, down) {
-        var addToEdgeList = right === 1 || right === -1 ? false : true;
+        var addToEdgeList = !(right == 1 || right == -1);
         if (down < 0) { // up
             for (var i = down; i < 2; i++) { //right edge
                 setRoomEdge(tiles, x + i, y + right, addToEdgeList);
@@ -240,7 +240,7 @@ var NoCorridor = (function () {
         }
     };
     var setHorizontalEdge = function (tiles, x, y, right, down) {
-        var addToEdgeList = down === 1 || down === -1 ? false : true;
+        var addToEdgeList = !(down === 1 || down === -1);
         if (right < 0) { // left
             for (var i = right; i < 2; i++) { 
                 setRoomEdge(tiles, x + down, y + i, addToEdgeList);
@@ -340,7 +340,6 @@ var NoCorridor = (function () {
             var down = result.down;
             var right = result.right;
             fillUpDown(tiles, x, y, down, right, roomDescription, dungeonLevel);
-            return true;
         }
     };
     var randomFillLeftRight = function (tiles, x, y, roomSize, roomDescription, dungeonLevel, door) {
@@ -351,7 +350,6 @@ var NoCorridor = (function () {
             var down = result.down;
             var right = result.right;
             fillLeftRight(tiles, x, y , down, right, roomDescription, dungeonLevel);
-            return true;
         } 
     };
     var checkPos = function (position) {
