@@ -90,27 +90,14 @@ var NoCorridor = (function () {
     var checkDungeonEdge = function (tiles, x, y) {
         return tiles[x][y].Texture === -1
     };
-    var getCheckResult = function (x, y, vertical) {
-        var result = { isUp: null, isLeft: null, count: 0 };
-        if (vertical) {
-            if (Math.abs(x) > y && Math.abs(x) > 2) {
-                result.isUp = true;
-                result.count = x++;
-            } else if (y > Math.abs(x) && y > 2) {
-                result.isUp = false;
-                result.count = y--;
-            }
+    var getCheckResult = function (x, y) {
+        var count = 0;
+        if (Math.abs(x) > y && Math.abs(x) > 2) {
+            count = x++;
+        } else if (y > Math.abs(x) && y > 2) {
+            count = y--;
         }
-        else {
-            if (Math.abs(x) > y && Math.abs(x) > 2) {
-                result.isLeft = true;
-                result.count = x++;
-            } else if (y > Math.abs(x) && y > 2) {
-                result.isLeft = false;
-                result.count = y--;
-            }
-        }
-        return result;
+        return count;
     };
     var checkVertical = function (tiles, x, y) {
         var tile;
@@ -139,7 +126,7 @@ var NoCorridor = (function () {
         if (edge) {
             downCount--;
         }
-        return getCheckResult(upCount, downCount, true);
+        return getCheckResult(upCount, downCount);
     };
     var checkHorizontal = function (tiles, x, y) {
         var tile;
@@ -168,21 +155,21 @@ var NoCorridor = (function () {
         if (edge) {
             rightCount--;
         }
-        return getCheckResult(leftCount, rightCount, false);
+        return getCheckResult(leftCount, rightCount);
     };
     var getDownRight = function (vertical, horizontal, roomSize) {
-        var down = Utils.getRandomInt(2, (Math.abs(vertical.count)) > roomSize ? roomSize : Math.abs(vertical.count));
-        var right = Utils.getRandomInt(2, (Math.abs(horizontal.count)) > roomSize ? roomSize : Math.abs(horizontal.count));
-        if (vertical.count < 0) {
+        var down = Utils.getRandomInt(2, (Math.abs(vertical)) > roomSize ? roomSize : Math.abs(vertical));
+        var right = Utils.getRandomInt(2, (Math.abs(horizontal)) > roomSize ? roomSize : Math.abs(horizontal));
+        if (vertical < 0) {
             down = -down;
         }
-        if (horizontal.count < 0) {
+        if (horizontal < 0) {
             right = -right;
         }
         return { down: down, right: right };
     };
-    var checkPossible = function (tiles, verticalCount, horizontalCount, door) {
-        if (verticalCount === 0 || horizontalCount === 0) { //its impossible to add room
+    var checkPossible = function (tiles, vertical, horizontal, door) {
+        if (vertical === 0 || horizontal === 0) { //its impossible to add room
             tiles[door.X][door.Y].Texture = 6; //change the door to a room_edge
             return false;
         }
@@ -348,7 +335,7 @@ var NoCorridor = (function () {
     var randomFillUpDown = function (tiles, x, y, roomSize, roomDescription, dungeonLevel, door) { // x-y is the door coordinates
         var vertical = checkVertical(tiles, x, y);
         var horizontal = checkHorizontal(tiles, x, y);
-        if (checkPossible(tiles, vertical.count, horizontal.count, door)) {
+        if (checkPossible(tiles, vertical, horizontal, door)) {
             var result = getDownRight(vertical, horizontal, roomSize);
             var down = result.down;
             var right = result.right;
@@ -359,7 +346,7 @@ var NoCorridor = (function () {
     var randomFillLeftRight = function (tiles, x, y, roomSize, roomDescription, dungeonLevel, door) {
         var vertical = checkVertical(tiles, x, y);
         var horizontal = checkHorizontal(tiles, x, y);
-        if (checkPossible(tiles, vertical.count, horizontal.count, door)) {
+        if (checkPossible(tiles, vertical, horizontal, door)) {
             var result = getDownRight(vertical, horizontal, roomSize);
             var down = result.down;
             var right = result.right;
