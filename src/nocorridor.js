@@ -227,7 +227,7 @@ var NoCorridor = (function () {
         }
     };
     var setVerticalEdge = function (tiles, x, y, right, down) {
-        var addToEdgeList = !(right == 1 || right == -1);
+        var addToEdgeList = !(right === 1 || right === -1);
         if (down < 0) { // up
             for (var i = down; i < 2; i++) { //right edge
                 setRoomEdge(tiles, x + i, y + right, addToEdgeList);
