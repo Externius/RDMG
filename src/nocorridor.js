@@ -91,13 +91,13 @@ var NoCorridor = (function () {
         return tiles[x][y].Texture === -1
     };
     var getCheckResult = function (x, y) {
-        var count = 0;
         if (Math.abs(x) > y && Math.abs(x) > 2) {
-            count = x++;
-        } else if (y > Math.abs(x) && y > 2) {
-            count = y--;
+            return x;
         }
-        return count;
+        if (y > Math.abs(x) && y > 2) {
+            return y;
+        }
+        return 0;
     };
     var checkVertical = function (tiles, x, y) {
         var tile;
