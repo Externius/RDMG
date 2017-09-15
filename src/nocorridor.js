@@ -91,10 +91,10 @@ var NoCorridor = (function () {
         return tiles[x][y].Texture === -1
     };
     var getCheckResult = function (x, y) {
-        if (Math.abs(x) > y && Math.abs(x) > 2) {
+        if (Math.abs(x) > Math.abs(y) && Math.abs(x) > 2) {
             return x;
         }
-        if (y > Math.abs(x) && y > 2) {
+        if (Math.abs(y) > Math.abs(x) && Math.abs(y) > 2) {
             return y;
         }
         return 0;
