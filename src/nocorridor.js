@@ -46,7 +46,7 @@ var NoCorridor = (function () {
         }
         while (!doorIsOK);
     };
-    var fillRoom = function (tiles, x, y, down, right, roomDescription, dungeonLevel) {
+    var fillRoom = function (tiles, x, y, down, right, roomDescription) {
         var doorCount = Utils.getRandomInt(2, 3);
         for (var i = 0; i < down + 2; i++) { // fill with room_edge texture the bigger boundaries 
             for (var j = 0; j < right + 2; j++) {
@@ -59,7 +59,7 @@ var NoCorridor = (function () {
                 tiles[x + i][y + j].RoomCount = " ";
             }
         }
-        Utils.addDescription(tiles, x, y, roomDescription, dungeonLevel);
+        Utils.addDescription(tiles, x, y, roomDescription);
         for (var d = 0; d < doorCount; d++) {
             addDoor(tiles, x, y, down, right);
         }
@@ -300,7 +300,7 @@ var NoCorridor = (function () {
             edgeTileList[edgeTileList.length] = tiles[x + down][y];
         }
     };
-    var fillLeftRight = function (tiles, x, y, down, right, roomDescription, dungeonLevel) {
+    var fillLeftRight = function (tiles, x, y, down, right, roomDescription) {
         edgeTileList = [];
         if (right < 0) {
             for (var i = right + 1; i < 1; i++) {
@@ -314,9 +314,9 @@ var NoCorridor = (function () {
         setVerticalEdge(tiles, x, y, right, down);
         setVerticalEdge(tiles, x, y, right < 0 ? 1 : -1, down);
         fillDoor(tiles);
-        Utils.addDescription(tiles, x, y, roomDescription, dungeonLevel);
+        Utils.addDescription(tiles, x, y, roomDescription);
     };
-    var fillUpDown = function (tiles, x, y, down, right, roomDescription, dungeonLevel) {
+    var fillUpDown = function (tiles, x, y, down, right, roomDescription) {
         edgeTileList = [];
         if (down < 0) {
             for (var i = down + 1; i < 1; i++) {
@@ -330,26 +330,26 @@ var NoCorridor = (function () {
         setHorizontalEdge(tiles, x, y, right, down);
         setHorizontalEdge(tiles, x, y, right, down < 0 ? 1 : -1);
         fillDoor(tiles);
-        Utils.addDescription(tiles, x, y, roomDescription, dungeonLevel);
+        Utils.addDescription(tiles, x, y, roomDescription);
     };
-    var randomFillUpDown = function (tiles, x, y, roomSize, roomDescription, dungeonLevel, door) { // x-y is the door coordinates
+    var randomFillUpDown = function (tiles, x, y, roomSize, roomDescription, door) { // x-y is the door coordinates
         var vertical = checkVertical(tiles, x, y);
         var horizontal = checkHorizontal(tiles, x, y);
         if (checkPossible(tiles, vertical, horizontal, door)) {
             var result = getDownRight(vertical, horizontal, roomSize);
             var down = result.down;
             var right = result.right;
-            fillUpDown(tiles, x, y, down, right, roomDescription, dungeonLevel);
+            fillUpDown(tiles, x, y, down, right, roomDescription);
         }
     };
-    var randomFillLeftRight = function (tiles, x, y, roomSize, roomDescription, dungeonLevel, door) {
+    var randomFillLeftRight = function (tiles, x, y, roomSize, roomDescription, door) {
         var vertical = checkVertical(tiles, x, y);
         var horizontal = checkHorizontal(tiles, x, y);
         if (checkPossible(tiles, vertical, horizontal, door)) {
             var result = getDownRight(vertical, horizontal, roomSize);
             var down = result.down;
             var right = result.right;
-            fillLeftRight(tiles, x, y , down, right, roomDescription, dungeonLevel);
+            fillLeftRight(tiles, x, y , down, right, roomDescription);
         } 
     };
     var checkPos = function (position) {
@@ -365,7 +365,7 @@ var NoCorridor = (function () {
             }
         }
     };
-    var fillRoomToDoor = function (tiles, roomSize, roomDescription, dungeonLevel) {
+    var fillRoomToDoor = function (tiles, roomSize, roomDescription) {
         while (openDoorList.length > 0) {
             var i = openDoorList.length - 1;
             var position = checkRoomPosition(tiles, openDoorList[i].X, openDoorList[i].Y);
@@ -373,16 +373,16 @@ var NoCorridor = (function () {
                 removeFromDoors(openDoorList[i]);
                 return;
             } else if (position.Up) {
-                randomFillUpDown(tiles, openDoorList[i].X + 1, openDoorList[i].Y, roomSize, roomDescription, dungeonLevel, openDoorList[i]);
+                randomFillUpDown(tiles, openDoorList[i].X + 1, openDoorList[i].Y, roomSize, roomDescription, openDoorList[i]);
                 removeFromDoors(openDoorList[i]);
             } else if (position.Down) {
-                randomFillUpDown(tiles, openDoorList[i].X - 1, openDoorList[i].Y, roomSize, roomDescription, dungeonLevel, openDoorList[i]);
+                randomFillUpDown(tiles, openDoorList[i].X - 1, openDoorList[i].Y, roomSize, roomDescription, openDoorList[i]);
                 removeFromDoors(openDoorList[i]);
             } else if (position.Right) {
-                randomFillLeftRight(tiles, openDoorList[i].X, openDoorList[i].Y - 1, roomSize, roomDescription, dungeonLevel, openDoorList[i]);
+                randomFillLeftRight(tiles, openDoorList[i].X, openDoorList[i].Y - 1, roomSize, roomDescription, openDoorList[i]);
                 removeFromDoors(openDoorList[i]);
             } else if (position.Left) {
-                randomFillLeftRight(tiles, openDoorList[i].X, openDoorList[i].Y + 1, roomSize, roomDescription, dungeonLevel, openDoorList[i]);
+                randomFillLeftRight(tiles, openDoorList[i].X, openDoorList[i].Y + 1, roomSize, roomDescription, openDoorList[i]);
                 removeFromDoors(openDoorList[i]);
             }
         }
@@ -403,20 +403,20 @@ var NoCorridor = (function () {
         while (!entryIsOk);
         tiles[x][y].Texture = 4;
     };
-    var setRoom = function (tiles, roomSize, roomDescription, dungeonLevel) {
+    var setRoom = function (tiles, roomSize, roomDescription) {
         openDoorList = [];
         allDoorList = [];
         var x = Utils.getRandomInt(5, (tiles.length - (roomSize + 5)));
         var y = Utils.getRandomInt(5, (tiles.length - (roomSize + 5)));
         var right = Utils.getRandomInt(2, roomSize + 1);
         var down = Utils.getRandomInt(2, roomSize + 1);
-        fillRoom(tiles, x, y, down, right, roomDescription, dungeonLevel);
-        fillRoomToDoor(tiles, roomSize, roomDescription, dungeonLevel);
+        fillRoom(tiles, x, y, down, right, roomDescription);
+        fillRoomToDoor(tiles, roomSize, roomDescription);
         cleanUpDoors(tiles);
         addEntryPoint(tiles);
     };
-    var generateRoom = function (tiles, roomSize, roomDescription, dungeonLevel) {
-        setRoom(tiles, roomSize, roomDescription, dungeonLevel);
+    var generateRoom = function (tiles, roomSize, roomDescription) {
+        setRoom(tiles, roomSize, roomDescription);
         return tiles;
     };
     return {
