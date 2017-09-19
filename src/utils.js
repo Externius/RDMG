@@ -65,21 +65,7 @@ var Utils = (function () {
     };
     var getData = function (percentage, isMonster) {
         if (Math.floor(Math.random() * 100) < percentage) {
-            if (isMonster) {
-                return Encounter.getEncounter();
-            }
-            else {
-                var gp = getRandomInt(0, 100);
-                var sp = getRandomInt(0, 100);
-                var cp = getRandomInt(0, 100);
-                var ep = getRandomInt(0, 10);
-                var pp = getRandomInt(0, 10);
-                return "Treasure: " + gp + " gp" +
-                    " " + sp + " sp" +
-                    " " + cp + " cp" + 
-                    " " + ep + " ep" +
-                    " " + pp + " pp";
-            }
+            return Encounter.getData(isMonster);
         }
         else {
             if (isMonster) {
