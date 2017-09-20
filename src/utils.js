@@ -73,8 +73,7 @@ var Utils = (function () {
         }
     };
     var addTrapDescription = function (tiles, x, y, trapDescription) {
-        var trapDanger = Utils.getRandomInt(0, 3); // setback, dangerous, deadly 
-        trapDescription[trapDescription.length] = { name: Encounter.getTrapName(trapDescription.length+1), description: Encounter.getTrap(trapDanger) };
+        trapDescription[trapDescription.length] = { name: Encounter.getTrapName(trapDescription.length+1), description: Encounter.getTrap() };
         tiles[x][y].Count = trapDescription.length;
     };
     var addRoomDescription = function (tiles, x, y, roomDescription) {

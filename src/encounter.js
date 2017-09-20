@@ -3,11 +3,16 @@ var Encounter = (function () {
     var partySize;
     var dungeonDifficulty;
     var monsters;
+    var trapSeverity = [
+        "Setback",
+        "Dangeorus",
+        "Deadly"
+    ];
     var trapSave = [
-        10, 12, 16, 20
+        10, 12, 16, 21
     ];
     var trapAttackBonus = [
-        3, 6, 9, 12
+        3, 6, 9, 13
     ];
     var trapDmgSeverity = [
         [1, 2, 4],
@@ -151,12 +156,26 @@ var Encounter = (function () {
     var getTrapName = function (count) {
         return "###TRAP" + count + "###";
     };
-    var getTrap = function (trapDanger) {
+    var getTrapDanger = function () {
+        switch (dungeonDifficulty) {
+            case 0:
+                return Utils.getRandomInt(0, 1);
+            case 1:
+            case 2:
+                return Utils.getRandomInt(0, 2);
+            case 3:
+                return Utils.getRandomInt(0, 3);
+            default:
+                break;
+        }
+    };
+    var getTrap = function () {
+        var trapDanger = getTrapDanger(); // setback, dangerous, deadly 
         var dmg = getTrapDamage(trapDanger);
         var save = getTrapSaveDC(trapDanger);
         var attack = getTrapAttackBonus(trapDanger);
         var index = Utils.getRandomInt(0, trapKind.length); // get random trap index
-        return trapKind[index] + " (Damage " + dmg + "D10" + " Attack Bonus +" + attack + " DC " + save + ")";
+        return trapKind[index] + " [" + trapSeverity[trapDanger] + "] (Damage " + dmg + "D10" + " Attack Bonus +" + attack + " DC " + save + ")";
     };
     var getMonsters = function (partyLevel) {
         return monsters.filter(function (obj) {
@@ -187,7 +206,6 @@ var Encounter = (function () {
         if (Math.floor(Math.random() * 100) > percentage) {
             return "Treasure: Empty";
         }
-        loadVariables();
         var gp = 0;
         var sp = 0;
         var cp = 0;
@@ -239,11 +257,11 @@ var Encounter = (function () {
         if (Math.floor(Math.random() * 100) > percentage) {
             return "Monster: None";
         }
-        loadVariables();
         return getEncounter();
     };
     return {
         loadJSON: loadJSON,
+        loadVariables: loadVariables,
         getMonster: getMonster,
         getTreasure: getTreasure,
         getTrap: getTrap,
