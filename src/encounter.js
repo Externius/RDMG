@@ -3,6 +3,7 @@ var Encounter = (function () {
     var partySize;
     var dungeonDifficulty;
     var monsters;
+    var trap;
     var trapSeverity = [
         "Setback",
         "Dangerous",
@@ -20,15 +21,15 @@ var Encounter = (function () {
         [4, 10, 18],
         [10, 18, 24]
     ];
-    var trapKind = [
-        "Collapsing Roof",
-        "Falling Net",
-        "Fire-Breathing Statue",
-        "Spiked Pit",
-        "Posion Darts",
-        "Poison Needle",
-        "Rolling Sphere",
-        "Sphere of Annihilation"
+    var trapKind = [ // name, save, spot, disable, diableCheck, attackMod
+        ["Collapsing Roof", "Dexterity", 10, 15, "Dexterity", false],
+        ["Falling Net", "Strength", 10, 15, "Dexterity", false],
+        ["Fire-Breathing Statue", "Dexterity", 15, 13, "Dispel Magic", false],
+        ["Spiked Pit", "Constitution", 15, 15, "Intelligence", false], //
+        ["Locking Pit", "Strength", 10, 15, "Intelligence", false], //
+        ["Posion Darts", "Constitution", 15, 15, "Intelligence", true], //
+        ["Poison Needle", "Constitution", 15, 15, "Dexterity", false],
+        ["Rolling Sphere", "Dexterity", 15, 15, " Intelligence", false]
     ];
     var challengeRatingXP = [
         10,
@@ -130,10 +131,16 @@ var Encounter = (function () {
         difficulty[2] = thresholds[partyLevel][2] * partySize;
         difficulty[3] = thresholds[partyLevel][3] * partySize;
     };
-    var getTrapAttackBonus = function (trapDanger) {
-        var min = trapAttackBonus[trapDanger];
-        var max = trapAttackBonus[trapDanger + 1];
-        return Utils.getRandomInt(min, max);
+    var getTrapAttackBonus = function (trap, trapDanger) {
+        if (trap[5]) {
+            var min = trapAttackBonus[trapDanger];
+            var max = trapAttackBonus[trapDanger + 1];
+            return " (attack bonus +" + Utils.getRandomInt(min, max) + ").";
+        }
+        else {
+            
+            return ".";
+        }
     };
     var getTrapSaveDC = function (trapDanger) {
         var min = trapSave[trapDanger];
@@ -171,11 +178,14 @@ var Encounter = (function () {
     };
     var getTrap = function () {
         var trapDanger = getTrapDanger(); // setback, dangerous, deadly 
+        trap = trapKind[Utils.getRandomInt(0, trapKind.length)]; // get random trap index
         var dmg = getTrapDamage(trapDanger);
         var save = getTrapSaveDC(trapDanger);
-        var attack = getTrapAttackBonus(trapDanger);
-        var index = Utils.getRandomInt(0, trapKind.length); // get random trap index
-        return trapKind[index] + " [" + trapSeverity[trapDanger] + "] (Damage " + dmg + "D10" + " Attack Bonus +" + attack + " DC " + save + ")";
+        var spot = trap[2];
+        var disable = trap[3];
+        var disableCheck = trap[4];
+        var attack = getTrapAttackBonus(trap,trapDanger);
+        return trap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + spot + " to spot, DC  " + disable + " to disable (" + disableCheck + "), DC " + save + " " + trap[1] + " save or take " + dmg + "D10 damage" + attack; 
     };
     var getMonsters = function (partyLevel) {
         return monsters.filter(function (obj) {
