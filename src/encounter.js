@@ -5,7 +5,7 @@ var Encounter = (function () {
     var monsters;
     var trapSeverity = [
         "Setback",
-        "Dangeorus",
+        "Dangerous",
         "Deadly"
     ];
     var trapSave = [
