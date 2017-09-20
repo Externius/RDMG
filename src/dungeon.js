@@ -36,15 +36,21 @@ var Dungeon = (function () {
         tr.appendChild(td);
         return tr;
     };
-    var addDescription = function (roomDescription) {
+    var addDescription = function (roomDescription, trapDescription) {
         var table = document.getElementById("table_description");
         table.innerHTML = "";
         for (var i = 0; i < roomDescription.length; i++) {
-            var tr = createTableNode(roomDescription[i].Name, true);
+            var tr = createTableNode(roomDescription[i].name, true);
             table.appendChild(tr);
-            tr = createTableNode(roomDescription[i].Monster, false, tr);
+            tr = createTableNode(roomDescription[i].monster, false, tr);
             table.appendChild(tr);
-            tr = createTableNode(roomDescription[i].Treasure, false);
+            tr = createTableNode(roomDescription[i].treasure, false);
+            table.appendChild(tr);
+        }
+        for (i = 0; i < trapDescription.length; i++) {
+            tr = createTableNode(trapDescription[i].name, true);
+            table.appendChild(tr);
+            tr = createTableNode(trapDescription[i].description, false);
             table.appendChild(tr);
         }
     };
@@ -169,10 +175,10 @@ var Dungeon = (function () {
         for (i = 0; i < down; i++) { // fill room texture
             for (j = 0; j < right; j++) {
                 tiles[x + i][y + j].Texture = 3;
-                tiles[x + i][y + j].RoomCount = " ";
+                tiles[x + i][y + j].Count = " ";
             }
         }
-        Utils.addDescription(tiles, x, y, roomDescription);
+        Utils.addRoomDescription(tiles, x, y, roomDescription);
         for (var d = 0; d < doorCount; d++) {
             addDoor(tiles, x, y, down, right);
         }
@@ -209,11 +215,12 @@ var Dungeon = (function () {
         }
         return tiles;
     };
-    var setPath = function (tiles, trapPercent) {
+    var setPath = function (tiles, trapPercent, trapDescription) {
         for (var i = 0; i < RESULT.length; i++) {
             if (RESULT[i].Texture !== 2 && RESULT[i].Texture !== 4 && RESULT[i].Texture !== 5) { // do not change door or entry or trap Texture
                 if (Math.floor(Math.random() * 100) < trapPercent) {
-                    tiles[RESULT[i].I][RESULT[i].J].Texture = 5;
+                    tiles[RESULT[i].I][RESULT[i].J].Texture = 5; // add trap
+                    Utils.addTrapDescription(tiles, RESULT[i].I, RESULT[i].J, trapDescription);
                 }
                 else {
                     tiles[RESULT[i].I][RESULT[i].J].Texture = 1;
@@ -298,7 +305,7 @@ var Dungeon = (function () {
         tiles[x][y].Texture = 4;
         DOORS[DOORS.length] = { X: x, Y: y };
     };
-    var generateCorridors = function (tiles, trapPercent) {
+    var generateCorridors = function (tiles, trapPercent, trapDescription) {
         MOVEMENT = 10;
         for (var d = 0; d < DOORS.length - 1; d++) { // -1 because the end point
             RESULT = [];
@@ -322,12 +329,13 @@ var Dungeon = (function () {
                 removeFromOpen(openList, start); // remove from open list this node
                 addToOpen(tiles, start, openList, closedList, end); // add open list the nearby nodes
             }
-            setPath(tiles, trapPercent); // modify tiles Texture with the path
+            setPath(tiles, trapPercent, trapDescription); // modify tiles Texture with the path
         }
     };
     var drawDungeonOneCanvas = function (canvasID, sizeID, roomDensityID, roomSizeID, trapID, corridorID) {
         DOORS = [];
         var roomDescription = [];
+        var trapDescription = [];
         var canvas = document.getElementById(canvasID);
         var dungeon = document.getElementById(sizeID);
         var room = document.getElementById(roomDensityID);
@@ -382,12 +390,12 @@ var Dungeon = (function () {
         if (hasCorridor) {
             generateRoom(tiles, roomCount, roomSize, roomDescription);
             addEntryPoint(tiles);
-            generateCorridors(tiles, trapPercent); // generate corridors between room doors
+            generateCorridors(tiles, trapPercent, trapDescription); // generate corridors between room doors
         }
         else {
             NoCorridor.generateRoom(tiles, roomSize, roomDescription);
         }
-        addDescription(roomDescription);
+        addDescription(roomDescription, trapDescription);
         loadImages(sources, function (images) {  // load default images to tiles
             for (i = 1; i < tiles.length - 1; i++) {
                 for (j = 1; j < tiles[i].length - 1; j++) {
@@ -404,13 +412,15 @@ var Dungeon = (function () {
                         case 3:
                             context.drawImage(images.room, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                             context.font = contextFont;
-                            context.fillText(tiles[i][j].RoomCount, tiles[i][j].X + Math.round(tiles[i][j].Width * 0.1), tiles[i][j].Y + Math.round(tiles[i][j].Height * 0.65));
+                            context.fillText(tiles[i][j].Count, tiles[i][j].X + Math.round(tiles[i][j].Width * 0.1), tiles[i][j].Y + Math.round(tiles[i][j].Height * 0.65));
                             break;
                         case 4:
                             context.drawImage(images.entry, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                             break;
                         case 5:
                             context.drawImage(images.trap, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                            context.font = contextFont;
+                            context.fillText(tiles[i][j].Count, tiles[i][j].X + Math.round(tiles[i][j].Width * 0.1), tiles[i][j].Y + Math.round(tiles[i][j].Height * 0.5));
                             break;
                         case 6:
                             context.drawImage(images.room_edge, tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);

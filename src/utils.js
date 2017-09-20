@@ -48,8 +48,10 @@ var Utils = (function () {
     var corridorOnchange = function (e) {
         if (e.value === "1") {
             document.getElementById("roomDensity").disabled = false;
+            document.getElementById("trapPercent").disabled = false;
         } else {
             document.getElementById("roomDensity").disabled = true;
+            document.getElementById("trapPercent").disabled = true;
         }
     };
     var getRandomInt = function (min, max) {
@@ -64,24 +66,24 @@ var Utils = (function () {
         return "###ROOM" + x + "###";
     };
     var getData = function (percentage, isMonster) {
-        if (Math.floor(Math.random() * 100) < percentage) {
-            return Encounter.getData(isMonster);
-        }
-        else {
-            if (isMonster) {
-                return "Monster: None";
-            }
-            else {
-                return "Treasure: Empty";
-            }
+        if (isMonster) {
+            return Encounter.getMonster(percentage);
+        } else {
+            return Encounter.getTreasure(percentage);
         }
     };
-    var addDescription = function (tiles, x, y, roomDescription) {
-        roomDescription[roomDescription.length] = { Name: getRoomName(roomDescription.length + 1), Treasure: getData(40, false), Monster: getData(50, true) };
-        tiles[x][y].RoomCount = roomDescription.length;
+    var addTrapDescription = function (tiles, x, y, trapDescription) {
+        var trapDanger = Utils.getRandomInt(0, 3); // setback, dangerous, deadly 
+        trapDescription[trapDescription.length] = { name: Encounter.getTrapName(trapDescription.length+1), description: Encounter.getTrap(trapDanger) };
+        tiles[x][y].Count = trapDescription.length;
+    };
+    var addRoomDescription = function (tiles, x, y, roomDescription) {
+        roomDescription[roomDescription.length] = { name: getRoomName(roomDescription.length + 1), treasure: getData(40, false), monster: getData(50, true) };
+        tiles[x][y].Count = roomDescription.length;
     };
     return {
-        addDescription: addDescription,
+        addRoomDescription: addRoomDescription,
+        addTrapDescription: addTrapDescription,
         getRandomInt: getRandomInt,
         manhattan: manhattan,
         corridorOnchange: corridorOnchange,

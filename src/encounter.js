@@ -3,17 +3,28 @@ var Encounter = (function () {
     var partySize;
     var dungeonDifficulty;
     var monsters;
-    var loadJSON = function () {
-        var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-        xobj.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                monsters = JSON.parse(this.responseText);
-            }
-        };
-        xobj.open("GET", "data/5e-SRD-Monsters.json", true);
-        xobj.send();
-    };
+    var trapSave = [
+        10, 12, 16, 20
+    ];
+    var trapAttackBonus = [
+        3, 6, 9, 12
+    ];
+    var trapDmgSeverity = [
+        [1, 2, 4],
+        [2, 4, 10],
+        [4, 10, 18],
+        [10, 18, 24]
+    ];
+    var trapKind = [
+        "Collapsing Roof",
+        "Falling Net",
+        "Fire-Breathing Statue",
+        "Spiked Pit",
+        "Posion Darts",
+        "Poison Needle",
+        "Rolling Sphere",
+        "Sphere of Annihilation"
+    ];
     var challengeRatingXP = [
         10,
         25,
@@ -90,75 +101,18 @@ var Encounter = (function () {
         [2400, 4900, 7300, 10900],
         [2800, 5700, 8500, 12700]
     ];
-    var getMonsters = function (partyLevel) {
-        return monsters.filter(function (obj) {
-            return obj.challenge_rating <= partyLevel;
-        });
-    };
-    var calcEncounter = function (monsterXP, dungeonDifficulty) {
-        var allXP;
-        var count;
-        for (var i = multipliers.length - 1; i > -1; i--) {
-            count = multipliers[i][0];
-            allXP = monsterXP * count * multipliers[i][1];
-            if (allXP <= difficulty[dungeonDifficulty]) {
-                return { allXP: allXP, count: count };
+    var loadJSON = function () {
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                monsters = JSON.parse(this.responseText);
             }
-        }
-        return { allXP: 0, count: 0 };
+        };
+        xobj.open("GET", "data/5e-SRD-Monsters.json", true);
+        xobj.send();
     };
-    var getTreasure = function () {
-        var gp = 0;
-        var sp = 0;
-        var cp = 0;
-        var ep = 0;
-        var pp = 0;
-        switch (dungeonDifficulty) {
-            case 0:
-                gp = Utils.getRandomInt(0, 10);
-                sp = Utils.getRandomInt(0, 100);
-                cp = Utils.getRandomInt(0, 1000);
-                break;
-            case 1:
-                gp = Utils.getRandomInt(0, 100);
-                sp = Utils.getRandomInt(0, 100);
-                cp = Utils.getRandomInt(0, 100);
-                ep = Utils.getRandomInt(0, 10);
-                break;
-            case 2:
-                gp = Utils.getRandomInt(0, 1000);
-                sp = Utils.getRandomInt(0, 100);
-                ep = Utils.getRandomInt(0, 100);
-                pp = Utils.getRandomInt(0, 10);
-                break;
-            case 3:
-                gp = Utils.getRandomInt(0, 1000);
-                sp = Utils.getRandomInt(0, 100);
-                ep = Utils.getRandomInt(0, 100);
-                pp = Utils.getRandomInt(0, 100);
-                break;
-            default:
-                break;
-        }
-        return "Treasure: " + gp + " gp" +
-            " " + sp + " sp" +
-            " " + cp + " cp" +
-            " " + ep + " ep" +
-            " " + pp + " pp";
-    };
-    var getEncounter = function () {
-        var result = getMonsters(partyLevel); //get monsters for party level
-        var monster = Utils.getRandomInt(0, result.length); // get random monster
-        var monsterXP = challengeRatingXP[challengeRating.indexOf(result[monster].challenge_rating)]; //get monster xp
-        var encounter = calcEncounter(monsterXP, dungeonDifficulty);
-        if (encounter.allXP !== 0) {
-            return "Monster: " + encounter.count + "x " + result[monster].name + " (CR: " + result[monster].challenge_rating + ") " + encounter.allXP + " XP";
-        } else {
-            return "Monster: None";
-        }
-    };
-    var getData = function (isMonster) {
-        //get variables
+    var loadVariables = function () {
         var pl = document.getElementById("partyLevel");
         partyLevel = parseInt(pl.options[pl.selectedIndex].value);
         var ps = document.getElementById("partySize");
@@ -170,15 +124,129 @@ var Encounter = (function () {
         difficulty[1] = thresholds[partyLevel][1] * partySize;
         difficulty[2] = thresholds[partyLevel][2] * partySize;
         difficulty[3] = thresholds[partyLevel][3] * partySize;
-        if (isMonster) {
-            return getEncounter();
+    };
+    var getTrapAttackBonus = function (trapDanger) {
+        var min = trapAttackBonus[trapDanger];
+        var max = trapAttackBonus[trapDanger + 1];
+        return Utils.getRandomInt(min, max);
+    };
+    var getTrapSaveDC = function (trapDanger) {
+        var min = trapSave[trapDanger];
+        var max = trapSave[trapDanger + 1];
+        return Utils.getRandomInt(min, max);
+    };
+    var getTrapDamage = function (trapDanger) {
+        if (partyLevel < 5) {
+            return trapDmgSeverity[0][trapDanger];
+        } else if (partyLevel < 11) {
+            return trapDmgSeverity[1][trapDanger];
+        }
+        else if (partyLevel < 17) {
+            return trapDmgSeverity[2][trapDanger];
         }
         else {
-            return getTreasure();
+            return trapDmgSeverity[3][trapDanger];
         }
+    };
+    var getTrapName = function (count) {
+        return "###TRAP" + count + "###";
+    };
+    var getTrap = function (trapDanger) {
+        var dmg = getTrapDamage(trapDanger);
+        var save = getTrapSaveDC(trapDanger);
+        var attack = getTrapAttackBonus(trapDanger);
+        var index = Utils.getRandomInt(0, trapKind.length); // get random trap index
+        return trapKind[index] + " (Damage " + dmg + "D10" + " Attack Bonus +" + attack + " DC " + save + ")";
+    };
+    var getMonsters = function (partyLevel) {
+        return monsters.filter(function (obj) {
+            return obj.challenge_rating <= partyLevel + 2;
+        });
+    };
+    var calcEncounter = function (filteredMonsters, dungeonDifficulty) {
+        var monsterCount = filteredMonsters.length;
+        var monster = 0
+        do {
+            var currentMonster = Utils.getRandomInt(0, monsterCount); // get random monster
+            var monsterXP = challengeRatingXP[challengeRating.indexOf(filteredMonsters[currentMonster].challenge_rating)]; //get monster xp
+            var allXP;
+            var count;
+            for (var i = multipliers.length - 1; i > -1; i--) { // find how many monster fit the difficulty 
+                count = multipliers[i][0];
+                allXP = monsterXP * count * multipliers[i][1];
+                if (allXP <= difficulty[dungeonDifficulty]) {
+                    return { allXP: allXP, count: count, monster: filteredMonsters[currentMonster] };
+                }
+            }
+            monster++;
+        }
+        while (monster < monsterCount);
+        return { allXP: 0, count: 0 };
+    };
+    var getTreasure = function (percentage) {
+        if (Math.floor(Math.random() * 100) > percentage) {
+            return "Treasure: Empty";
+        }
+        loadVariables();
+        var gp = 0;
+        var sp = 0;
+        var cp = 0;
+        var ep = 0;
+        var pp = 0;
+        switch (dungeonDifficulty) {
+            case 0:
+                gp = Utils.getRandomInt(1, 10);
+                sp = Utils.getRandomInt(0, 100);
+                cp = Utils.getRandomInt(0, 1000);
+                break;
+            case 1:
+                gp = Utils.getRandomInt(10, 100);
+                sp = Utils.getRandomInt(1, 100);
+                cp = Utils.getRandomInt(0, 100);
+                ep = Utils.getRandomInt(0, 10);
+                break;
+            case 2:
+                gp = Utils.getRandomInt(50, 1000);
+                sp = Utils.getRandomInt(0, 100);
+                ep = Utils.getRandomInt(1, 100);
+                pp = Utils.getRandomInt(1, 10);
+                break;
+            case 3:
+                gp = Utils.getRandomInt(100, 1000);
+                sp = Utils.getRandomInt(0, 100);
+                ep = Utils.getRandomInt(20, 100);
+                pp = Utils.getRandomInt(10, 100);
+                break;
+            default:
+                break;
+        }
+        return "Treasure: " + gp + " gp" +
+            " " + sp + " sp" +
+            " " + cp + " cp" +
+            " " + ep + " ep" +
+            " " + pp + " pp";
+    };
+    var getEncounter = function () {
+        var filteredMonsters = getMonsters(partyLevel); //get monsters for party level
+        var encounter = calcEncounter(filteredMonsters, dungeonDifficulty);
+        if (encounter.allXP !== 0) {
+            return "Monster: " + encounter.count + "x " + encounter.monster.name + " (CR: " + encounter.monster.challenge_rating + ") " + encounter.allXP + " XP";
+        } else {
+            return "Monster: None";
+        }
+    };
+    var getMonster = function (percentage) {
+        if (Math.floor(Math.random() * 100) > percentage) {
+            return "Monster: None";
+        }
+        loadVariables();
+        return getEncounter();
     };
     return {
         loadJSON: loadJSON,
-        getData: getData
+        getMonster: getMonster,
+        getTreasure: getTreasure,
+        getTrap: getTrap,
+        getTrapName: getTrapName
     }
 })();

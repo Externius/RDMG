@@ -56,10 +56,10 @@ var NoCorridor = (function () {
         for (i = 0; i < down; i++) { // fill room texture
             for (j = 0; j < right; j++) {
                 tiles[x + i][y + j].Texture = 3;
-                tiles[x + i][y + j].RoomCount = " ";
+                tiles[x + i][y + j].Count = " ";
             }
         }
-        Utils.addDescription(tiles, x, y, roomDescription);
+        Utils.addRoomDescription(tiles, x, y, roomDescription);
         for (var d = 0; d < doorCount; d++) {
             addDoor(tiles, x, y, down, right);
         }
@@ -179,7 +179,7 @@ var NoCorridor = (function () {
         if (right < 0) { // left
             for (var i = right + 1; i < 1; i++) { // set room
                 tiles[x][y + i].Texture = 3;
-                tiles[x][y + i].RoomCount = " ";
+                tiles[x][y + i].Count = " ";
             }
             tiles[x][y + 1].Texture = 6; // right edge
             tiles[x][y + right].Texture = 6; // left edge 
@@ -189,7 +189,7 @@ var NoCorridor = (function () {
         else { // right
             for (i = 0; i < right; i++) { // set room
                 tiles[x][y + i].Texture = 3;
-                tiles[x][y + i].RoomCount = " ";
+                tiles[x][y + i].Count = " ";
             }
             tiles[x][y - 1].Texture = 6; // left edge
             tiles[x][y + right].Texture = 6; // right edge 
@@ -282,7 +282,7 @@ var NoCorridor = (function () {
         if (down < 0) { // up
             for (var i = down + 1; i < 1; i++) { // set room
                 tiles[x + i][y].Texture = 3;
-                tiles[x + i][y].RoomCount = " ";
+                tiles[x + i][y].Count = " ";
             }
             tiles[x + 1][y].Texture = 6; // bottom edge
             tiles[x + down][y].Texture = 6; // top edge 
@@ -292,7 +292,7 @@ var NoCorridor = (function () {
         else { // down
             for (i = 0; i < down; i++) { // set room
                 tiles[x + i][y].Texture = 3;
-                tiles[x + i][y].RoomCount = " ";
+                tiles[x + i][y].Count = " ";
             }
             tiles[x - 1][y].Texture = 6; // top edge
             tiles[x + down][y].Texture = 6; // bottom edge 
@@ -314,7 +314,7 @@ var NoCorridor = (function () {
         setVerticalEdge(tiles, x, y, right, down);
         setVerticalEdge(tiles, x, y, right < 0 ? 1 : -1, down);
         fillDoor(tiles);
-        Utils.addDescription(tiles, x, y, roomDescription);
+        Utils.addRoomDescription(tiles, x, y, roomDescription);
     };
     var fillUpDown = function (tiles, x, y, down, right, roomDescription) {
         edgeTileList = [];
@@ -330,7 +330,7 @@ var NoCorridor = (function () {
         setHorizontalEdge(tiles, x, y, right, down);
         setHorizontalEdge(tiles, x, y, right, down < 0 ? 1 : -1);
         fillDoor(tiles);
-        Utils.addDescription(tiles, x, y, roomDescription);
+        Utils.addRoomDescription(tiles, x, y, roomDescription);
     };
     var randomFillUpDown = function (tiles, x, y, roomSize, roomDescription, door) { // x-y is the door coordinates
         var vertical = checkVertical(tiles, x, y);
