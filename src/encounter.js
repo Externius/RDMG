@@ -131,14 +131,13 @@ var Encounter = (function () {
         difficulty[2] = thresholds[partyLevel][2] * partySize;
         difficulty[3] = thresholds[partyLevel][3] * partySize;
     };
-    var getTrapAttackBonus = function (trap, trapDanger) {
+    var getTrapAttackBonus = function (trapDanger) {
         if (trap[5]) {
             var min = trapAttackBonus[trapDanger];
             var max = trapAttackBonus[trapDanger + 1];
             return " (attack bonus +" + Utils.getRandomInt(min, max) + ").";
         }
         else {
-            
             return ".";
         }
     };
@@ -173,7 +172,7 @@ var Encounter = (function () {
             case 3:
                 return Utils.getRandomInt(0, 3);
             default:
-                break;
+                return 0;
         }
     };
     var getTrap = function () {
@@ -184,7 +183,7 @@ var Encounter = (function () {
         var spot = trap[2];
         var disable = trap[3];
         var disableCheck = trap[4];
-        var attack = getTrapAttackBonus(trap,trapDanger);
+        var attack = getTrapAttackBonus(trapDanger);
         return trap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + spot + " to spot, DC  " + disable + " to disable (" + disableCheck + "), DC " + save + " " + trap[1] + " save or take " + dmg + "D10 damage" + attack; 
     };
     var getMonsters = function (partyLevel) {
@@ -194,7 +193,7 @@ var Encounter = (function () {
     };
     var calcEncounter = function (filteredMonsters, dungeonDifficulty) {
         var monsterCount = filteredMonsters.length;
-        var monster = 0
+        var monster = 0;
         do {
             var currentMonster = Utils.getRandomInt(0, monsterCount); // get random monster
             var monsterXP = challengeRatingXP[challengeRating.indexOf(filteredMonsters[currentMonster].challenge_rating)]; //get monster xp
