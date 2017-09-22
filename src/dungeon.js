@@ -358,7 +358,7 @@ var Dungeon = (function () {
         var sizeY = Math.round(canvas.clientHeight / dungeonSize); // set image Y size
         var tiles = [];
         var contextFont = getFontSize(dungeonSize);
-        Encounter.loadVariables();
+        Utils.loadVariables();
         /**
          * Textures:
          *  -1 edge

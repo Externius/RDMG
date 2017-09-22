@@ -1,4 +1,29 @@
 var Utils = (function () {
+    var partyLevel;
+    var partySize;
+    var dungeonDifficulty;
+    var getPercentage = function () {
+        switch (this.dungeonDifficulty) {
+            case 0:
+                return Utils.getRandomInt(20, 71);
+            case 1:
+                return Utils.getRandomInt(30, 81);
+            case 2:
+                return Utils.getRandomInt(40, 91);
+            case 3:
+                return Utils.getRandomInt(50, 101);
+            default:
+                return 0;
+        }
+    };
+    var loadVariables = function () {
+        var pl = document.getElementById("partyLevel");
+        this.partyLevel = parseInt(pl.options[pl.selectedIndex].value);
+        var ps = document.getElementById("partySize");
+        this.partySize = parseInt(ps.options[ps.selectedIndex].value);
+        var dd = document.getElementById("dungeonDifficulty");
+        this.dungeonDifficulty = parseInt(dd.options[dd.selectedIndex].value);
+    };
     var downloadHTML = function (linkID) {
         var link = document.getElementById(linkID);
         link.hidden = false;
@@ -73,14 +98,19 @@ var Utils = (function () {
         return "###ROOM" + x + "###";
     };
     var addTrapDescription = function (tiles, x, y, trapDescription) {
-        trapDescription[trapDescription.length] = { name: Encounter.getTrapName(trapDescription.length + 1), description: Encounter.getTrap() };
+        trapDescription[trapDescription.length] = { name: Trap.getTrapName(trapDescription.length + 1), description: Trap.getTrap() };
         tiles[x][y].Count = trapDescription.length;
     };
     var addRoomDescription = function (tiles, x, y, roomDescription) {
-        roomDescription[roomDescription.length] = { name: getRoomName(roomDescription.length + 1), treasure: Encounter.getTreasure(), monster: Encounter.getMonster() };
+        roomDescription[roomDescription.length] = { name: getRoomName(roomDescription.length + 1), treasure: Treasure.getTreasure(), monster: Encounter.getMonster() };
         tiles[x][y].Count = roomDescription.length;
     };
     return {
+        partyLevel: partyLevel,
+        partySize: partySize,
+        dungeonDifficulty: dungeonDifficulty,
+        getPercentage: getPercentage,
+        loadVariables: loadVariables,
         addRoomDescription: addRoomDescription,
         addTrapDescription: addTrapDescription,
         getRandomInt: getRandomInt,
