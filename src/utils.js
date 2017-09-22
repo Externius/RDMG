@@ -12,8 +12,8 @@ var Utils = (function () {
             var style = document.createElement('style');
             var head = doc.getElementsByTagName("head")[0];
             var css = "table, th, td {border-collapse: collapse;} " +
-            "th, td {padding: 8px; text-align: left; border-bottom: 1px solid #ddd; width: 100%;}" +
-            "td.room{ width: unset;}";
+                "th, td {padding: 8px; text-align: left; border-bottom: 1px solid #ddd; width: 100%;}" +
+                "td.room{ width: unset;}";
             img.src = canvas.toDataURL();
             doc.body.appendChild(img);
             doc.body.appendChild(tableClone);
@@ -72,19 +72,12 @@ var Utils = (function () {
     var getRoomName = function (x) {
         return "###ROOM" + x + "###";
     };
-    var getData = function (percentage, isMonster) {
-        if (isMonster) {
-            return Encounter.getMonster(percentage);
-        } else {
-            return Encounter.getTreasure(percentage);
-        }
-    };
     var addTrapDescription = function (tiles, x, y, trapDescription) {
-        trapDescription[trapDescription.length] = { name: Encounter.getTrapName(trapDescription.length+1), description: Encounter.getTrap() };
+        trapDescription[trapDescription.length] = { name: Encounter.getTrapName(trapDescription.length + 1), description: Encounter.getTrap() };
         tiles[x][y].Count = trapDescription.length;
     };
     var addRoomDescription = function (tiles, x, y, roomDescription) {
-        roomDescription[roomDescription.length] = { name: getRoomName(roomDescription.length + 1), treasure: getData(40, false), monster: getData(50, true) };
+        roomDescription[roomDescription.length] = { name: getRoomName(roomDescription.length + 1), treasure: Encounter.getTreasure(), monster: Encounter.getMonster() };
         tiles[x][y].Count = roomDescription.length;
     };
     return {

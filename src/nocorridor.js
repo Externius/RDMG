@@ -92,7 +92,7 @@ var NoCorridor = (function () {
         openDoorList.splice(index, 1);
     };
     var checkTile = function (tiles, x, y) { // check if it is a room_edge or door
-        return tiles[x][y].Texture === 6 || tiles[x][y].Texture === 7 
+        return tiles[x][y].Texture === 6 || tiles[x][y].Texture === 7
     };
     var checkDungeonEdge = function (tiles, x, y) {
         return tiles[x][y].Texture === -1
@@ -205,7 +205,7 @@ var NoCorridor = (function () {
         }
     };
     var checkRooms = function (tiles, x, y) {
-        return tiles[x][y - 1].Texture !== 3 && tiles[x][y + 1].Texture !== 3 && tiles[x + 1][y].Texture !== 3 && tiles[x - 1][y].Texture !== 3;  
+        return tiles[x][y - 1].Texture !== 3 && tiles[x][y + 1].Texture !== 3 && tiles[x + 1][y].Texture !== 3 && tiles[x - 1][y].Texture !== 3;
     };
     var cleanEdgeTileList = function (tiles) {
         var toDelete = [];
@@ -249,17 +249,17 @@ var NoCorridor = (function () {
     var setHorizontalEdge = function (tiles, x, y, right, down) {
         var addToEdgeList = !(down === 1 || down === -1);
         if (right < 0) { // left
-            for (var i = right; i < 2; i++) { 
+            for (var i = right; i < 2; i++) {
                 setRoomEdge(tiles, x + down, y + i, addToEdgeList);
             }
         }
         else { // right
-            for (i = -1; i < right + 1; i++) { 
+            for (i = -1; i < right + 1; i++) {
                 setRoomEdge(tiles, x + down, y + i, addToEdgeList);
             }
         }
     };
-    var checkNearbyDoor = function (tiles,node) {
+    var checkNearbyDoor = function (tiles, node) {
         var checkDoors = true;
         for (var i = node.I - 1; i < node.I + 2; i++) {
             for (var j = node.J - 1; j < node.J + 2; j++) {
@@ -271,7 +271,7 @@ var NoCorridor = (function () {
         }
         return checkDoors;
     };
-    var fillDoor = function (tiles,down,right) {
+    var fillDoor = function (tiles, down, right) {
         var doorCount = getDoorCount(down, right);
         cleanEdgeTileList(tiles);
         var maxTryNumber = edgeTileList.length;
@@ -356,8 +356,8 @@ var NoCorridor = (function () {
             var result = getDownRight(vertical, horizontal, roomSize);
             var down = result.down;
             var right = result.right;
-            fillLeftRight(tiles, x, y , down, right, roomDescription);
-        } 
+            fillLeftRight(tiles, x, y, down, right, roomDescription);
+        }
     };
     var checkPos = function (position) {
         return position.Up && position.Down || position.Left && position.Right;

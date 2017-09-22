@@ -4,6 +4,7 @@ var Encounter = (function () {
     var dungeonDifficulty;
     var monsters;
     var trap;
+    var percentage;
     var trapSeverity = [
         "Setback",
         "Dangerous",
@@ -118,6 +119,20 @@ var Encounter = (function () {
         xobj.open("GET", "data/5e-SRD-Monsters.json", true);
         xobj.send();
     };
+    var getPercentage = function () {
+        switch (dungeonDifficulty) {
+            case 0:
+                return Utils.getRandomInt(20, 71);
+            case 1:
+                return Utils.getRandomInt(30, 81);
+            case 2:
+                return Utils.getRandomInt(40, 91);
+            case 3:
+                return Utils.getRandomInt(50, 101);
+            default:
+                return 0;
+        }
+    };
     var loadVariables = function () {
         var pl = document.getElementById("partyLevel");
         partyLevel = parseInt(pl.options[pl.selectedIndex].value);
@@ -130,6 +145,7 @@ var Encounter = (function () {
         difficulty[1] = thresholds[partyLevel][1] * partySize;
         difficulty[2] = thresholds[partyLevel][2] * partySize;
         difficulty[3] = thresholds[partyLevel][3] * partySize;
+        percentage = getPercentage();
     };
     var getTrapAttackBonus = function (trapDanger) {
         if (trap[5]) {
@@ -184,7 +200,7 @@ var Encounter = (function () {
         var disable = trap[3];
         var disableCheck = trap[4];
         var attack = getTrapAttackBonus(trapDanger);
-        return trap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + spot + " to spot, DC  " + disable + " to disable (" + disableCheck + "), DC " + save + " " + trap[1] + " save or take " + dmg + "D10 damage" + attack; 
+        return trap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + spot + " to spot, DC  " + disable + " to disable (" + disableCheck + "), DC " + save + " " + trap[1] + " save or take " + dmg + "D10 damage" + attack;
     };
     var getMonsters = function (partyLevel) {
         return monsters.filter(function (obj) {
@@ -211,7 +227,7 @@ var Encounter = (function () {
         while (monster < monsterCount);
         return { allXP: 0, count: 0 };
     };
-    var getTreasure = function (percentage) {
+    var getTreasure = function () {
         if (Math.floor(Math.random() * 100) > percentage) {
             return "Treasure: Empty";
         }
@@ -262,7 +278,7 @@ var Encounter = (function () {
             return "Monster: None";
         }
     };
-    var getMonster = function (percentage) {
+    var getMonster = function () {
         if (Math.floor(Math.random() * 100) > percentage) {
             return "Monster: None";
         }
