@@ -204,7 +204,7 @@ var Encounter = (function () {
     };
     var getMonsters = function (partyLevel) {
         return monsters.filter(function (obj) {
-            return obj.challenge_rating <= partyLevel + 2;
+            return obj.challenge_rating <= partyLevel + 2 && obj.challenge_rating >= Math.floor(partyLevel / 4);
         });
     };
     var calcEncounter = function (filteredMonsters, dungeonDifficulty) {
