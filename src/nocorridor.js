@@ -46,8 +46,14 @@ var NoCorridor = (function () {
         }
         while (!doorIsOK);
     };
+    var getDoorCount = function (down, right) {
+        if (down < 4 || right < 4) {
+            return 2;
+        } else {
+            return Utils.getRandomInt(3, 6);
+        }
+    };
     var fillRoom = function (tiles, x, y, down, right, roomDescription) {
-        var doorCount = Utils.getRandomInt(2, 3);
         for (var i = 0; i < down + 2; i++) { // fill with room_edge texture the bigger boundaries 
             for (var j = 0; j < right + 2; j++) {
                 tiles[x + i - 1][y + j - 1].Texture = 6;
@@ -60,6 +66,7 @@ var NoCorridor = (function () {
             }
         }
         Utils.addRoomDescription(tiles, x, y, roomDescription);
+        var doorCount = getDoorCount(down, right);
         for (var d = 0; d < doorCount; d++) {
             addDoor(tiles, x, y, down, right);
         }
@@ -264,8 +271,8 @@ var NoCorridor = (function () {
         }
         return checkDoors;
     };
-    var fillDoor = function (tiles) {
-        var doorCount = Utils.getRandomInt(2, 3);
+    var fillDoor = function (tiles,down,right) {
+        var doorCount = getDoorCount(down, right);
         cleanEdgeTileList(tiles);
         var maxTryNumber = edgeTileList.length;
         do {
@@ -313,7 +320,7 @@ var NoCorridor = (function () {
         }
         setVerticalEdge(tiles, x, y, right, down);
         setVerticalEdge(tiles, x, y, right < 0 ? 1 : -1, down);
-        fillDoor(tiles);
+        fillDoor(tiles, down, right);
         Utils.addRoomDescription(tiles, x, y, roomDescription);
     };
     var fillUpDown = function (tiles, x, y, down, right, roomDescription) {
@@ -329,7 +336,7 @@ var NoCorridor = (function () {
         }
         setHorizontalEdge(tiles, x, y, right, down);
         setHorizontalEdge(tiles, x, y, right, down < 0 ? 1 : -1);
-        fillDoor(tiles);
+        fillDoor(tiles, down, right);
         Utils.addRoomDescription(tiles, x, y, roomDescription);
     };
     var randomFillUpDown = function (tiles, x, y, roomSize, roomDescription, door) { // x-y is the door coordinates

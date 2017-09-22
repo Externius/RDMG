@@ -165,8 +165,14 @@ var Dungeon = (function () {
         }
         while (!doorIsOK);
     };
+    var getDoorCount = function (down, right) {
+        if (down < 4 || right < 4) {
+            return Utils.getRandomInt(1, 3);
+        } else {
+            return Utils.getRandomInt(2, 5);
+        }
+    };
     var fillRoom = function (tiles, x, y, right, down, roomDescription) { // x-y is the top left corner
-        var doorCount = Utils.getRandomInt(1, 3);
         for (var i = 0; i < down + 2; i++) { // fill with room_edge texture the bigger boundaries 
             for (var j = 0; j < right + 2; j++) {
                 tiles[x + i - 1][y + j - 1].Texture = 6;
@@ -179,6 +185,7 @@ var Dungeon = (function () {
             }
         }
         Utils.addRoomDescription(tiles, x, y, roomDescription);
+        var doorCount = getDoorCount(down, right);
         for (var d = 0; d < doorCount; d++) {
             addDoor(tiles, x, y, down, right);
         }
