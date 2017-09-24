@@ -346,7 +346,7 @@ var NoCorridor = (function () {
         }
         return true;
     };
-    var checkArea = function (tiles, x, y, roomSize, roomDescription, door) {
+    var checkArea = function (tiles, x, y, roomSize, door) {
         var vertical = checkVertical(tiles, x, y);
         var horizontal = checkHorizontal(tiles, x, y);
         if (checkPossible(tiles, vertical, horizontal, door)) {
@@ -362,14 +362,14 @@ var NoCorridor = (function () {
         return { down: 0, right: 0 };
     };
     var randomFillUpDown = function (tiles, x, y, roomSize, roomDescription, door) { // x-y is the tile next to the neighbour coordinates
-        var result = checkArea(tiles, x, y, roomSize, roomDescription, door);
-        if (result.down !== 0 || result.right !== 0) {
+        var result = checkArea(tiles, x, y, roomSize, door);
+        if (result.down !== 0 && result.right !== 0) {
             fillUpDown(tiles, x, y, result.down, result.right, roomDescription);
         }
     };
     var randomFillLeftRight = function (tiles, x, y, roomSize, roomDescription, door) { // x-y is the tile next to the neighbour coordinates
-        var result = checkArea(tiles, x, y, roomSize, roomDescription, door);
-        if (result.down !== 0 || result.right !== 0) {
+        var result = checkArea(tiles, x, y, roomSize, door);
+        if (result.down !== 0 && result.right !== 0) {
             fillLeftRight(tiles, x, y, result.down, result.right, roomDescription);
         }
     };
