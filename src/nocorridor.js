@@ -47,10 +47,10 @@ var NoCorridor = (function () {
         while (!doorIsOK);
     };
     var getDoorCount = function (down, right) {
-        if (down < 4 || right < 4) {
+        if (Math.abs(down) < 4 || Math.abs(right) < 4) {
             return 2;
         } else {
-            return Utils.getRandomInt(3, 6);
+            return Utils.getRandomInt(3, 5);
         }
     };
     var fillRoom = function (tiles, x, y, down, right, roomDescription) {
@@ -176,8 +176,8 @@ var NoCorridor = (function () {
         return { down: down, right: right };
     };
     var checkPossible = function (tiles, vertical, horizontal, door) {
-        if (vertical === 0 || horizontal === 0) { //its impossible to add room
-            tiles[door.X][door.Y].Texture = 6; //change the door to a room_edge
+        if (vertical === 0 || horizontal === 0) { // its impossible to add room
+            tiles[door.X][door.Y].Texture = 6; // change the door to a room_edge
             return false;
         }
         return true;
@@ -339,24 +339,38 @@ var NoCorridor = (function () {
         fillDoor(tiles, down, right);
         Utils.addRoomDescription(tiles, x, y, roomDescription);
     };
-    var randomFillUpDown = function (tiles, x, y, roomSize, roomDescription, door) { // x-y is the door coordinates
+    var checkPossibleEnd = function (tiles, vertical, horizontal, door, down, right) {
+        if (Math.abs(vertical) < Math.abs(down) || Math.abs(horizontal) < Math.abs(right)) { // it would overlap with another room
+            tiles[door.X][door.Y].Texture = 6; // change the door to a room_edge
+            return false;
+        }
+        return true;
+    };
+    var checkArea = function (tiles, x, y, roomSize, roomDescription, door) {
         var vertical = checkVertical(tiles, x, y);
         var horizontal = checkHorizontal(tiles, x, y);
         if (checkPossible(tiles, vertical, horizontal, door)) {
             var result = getDownRight(vertical, horizontal, roomSize);
             var down = result.down;
             var right = result.right;
-            fillUpDown(tiles, x, y, down, right, roomDescription);
+            vertical = checkVertical(tiles, x, y + right); // check horizontal end vertically
+            horizontal = checkHorizontal(tiles, x + down, y); // check vertical end horizontally
+            if (checkPossibleEnd(tiles, vertical, horizontal, door, down, right)) {
+                return { down: down, right: right };
+            }
+        }
+        return { down: 0, right: 0 };
+    };
+    var randomFillUpDown = function (tiles, x, y, roomSize, roomDescription, door) { // x-y is the tile next to the neighbour coordinates
+        var result = checkArea(tiles, x, y, roomSize, roomDescription, door);
+        if (result.down !== 0 || result.right !== 0) {
+            fillUpDown(tiles, x, y, result.down, result.right, roomDescription);
         }
     };
-    var randomFillLeftRight = function (tiles, x, y, roomSize, roomDescription, door) {
-        var vertical = checkVertical(tiles, x, y);
-        var horizontal = checkHorizontal(tiles, x, y);
-        if (checkPossible(tiles, vertical, horizontal, door)) {
-            var result = getDownRight(vertical, horizontal, roomSize);
-            var down = result.down;
-            var right = result.right;
-            fillLeftRight(tiles, x, y, down, right, roomDescription);
+    var randomFillLeftRight = function (tiles, x, y, roomSize, roomDescription, door) { // x-y is the tile next to the neighbour coordinates
+        var result = checkArea(tiles, x, y, roomSize, roomDescription, door);
+        if (result.down !== 0 || result.right !== 0) {
+            fillLeftRight(tiles, x, y, result.down, result.right, roomDescription);
         }
     };
     var checkPos = function (position) {
@@ -378,7 +392,6 @@ var NoCorridor = (function () {
             var position = checkRoomPosition(tiles, openDoorList[i].X, openDoorList[i].Y);
             if (checkPos(position)) {
                 removeFromDoors(openDoorList[i]);
-                return;
             } else if (position.Up) {
                 randomFillUpDown(tiles, openDoorList[i].X + 1, openDoorList[i].Y, roomSize, roomDescription, openDoorList[i]);
                 removeFromDoors(openDoorList[i]);
