@@ -84,20 +84,20 @@
                 <td>Room density:</td>
                 <td>
                   <select id="roomDensity">
-          <option value="20">Low</option>
-          <option value="30">Medium</option>
-          <option value="40">High</option>
-        </select>
+                  <option value="20">Low</option>
+                  <option value="30">Medium</option>
+                  <option value="40">High</option>
+                  </select>
                 </td>
               </tr>
               <tr>
                 <td>Room size:</td>
                 <td>
                   <select id="roomSize">
-          <option value="20">Small</option>
-          <option value="35">Medium</option>
-          <option value="45">Large</option>
-        </select>
+                  <option value="20">Small</option>
+                  <option value="35">Medium</option>
+                  <option value="45">Large</option>
+                </select>
                 </td>
               </tr>
     <tr>
@@ -126,24 +126,33 @@
         <td> Traps: </td>
         <td>
           <select id="trapPercent">
-  <option value="0">None</option>
-  <option value="4" selected="selected">Few</option>
-  <option value="8">More</option>
-</select>
+          <option value="0">None</option>
+          <option value="4" selected="selected">Few</option>
+          <option value="8">More</option>
+        </select>
         </td>
       </tr>
+      <tr>
+          <td> Dead ends: </td>
+          <td>
+            <select id="deadEnd">
+            <option value="true">Yes</option>
+            <option value="false"> No</option>
+          </select>
+          </td>
+        </tr>
       <tr>
         <td> Corridors: </td>
         <td>
           <select id="corridor" onchange="Utils.corridorOnchange(this)">
-  <option value="1">Yes</option>
-  <option value="0"> No</option>
-</select>
+          <option value="true">Yes</option>
+          <option value="false"> No</option>
+        </select>
         </td>
       </tr>
     </table>
     <br>
-    <button type="button" onclick="Dungeon.drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','corridor')">Generate</button>
+    <button type="button" onclick="Dungeon.drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','corridor','deadEnd')">Generate</button>
     <br>
   </div>
   <div class="drawarea">

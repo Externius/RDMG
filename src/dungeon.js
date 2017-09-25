@@ -339,7 +339,45 @@ var Dungeon = (function () {
             setPath(tiles, trapPercent, trapDescription); // modify tiles Texture with the path
         }
     };
-    var drawDungeonOneCanvas = function (canvasID, sizeID, roomDensityID, roomSizeID, trapID, corridorID) {
+    var checkTileForDeadEnd = function (tiles, x, y) {
+        for (var i = x - 2; i < x + 4; i++) {
+            for (var j = y - 2; j < y + 4; j++) {
+                if (tiles[i][j].Texture !== 0) { // check if any other tile is there
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+    var generateDeadEnds = function (tiles, roomCount) {
+        var x;
+        var y;
+        var deadends = [];
+        var count = Math.ceil(roomCount / 2);
+        var maxAttempt = tiles.length * tiles.length;
+        do {
+            x = Utils.getRandomInt(2, tiles.length - 2);
+            y = Utils.getRandomInt(2, tiles.length - 2);
+            if (checkTileForDeadEnd(tiles, x, y)) {
+                tiles[x][y].Texture = 1; // set to corridor
+                deadends[deadends.length] = { X: x, Y: y };
+            }
+            maxAttempt--;
+        }
+        while (deadends.length < count && maxAttempt > 0);
+        return deadends;
+    };
+    var addDeadEnds = function (tiles, roomCount, trapPercent, trapDescription) {
+        var firstDoor = DOORS[0]; // get the first door
+        var deadends = generateDeadEnds(tiles, roomCount);
+        deadends[deadends.length] = firstDoor;
+        DOORS = []; // empty doors
+        for (var i = 0; i < deadends.length; i++) { // repopulate DOORS
+            DOORS[DOORS.length] = deadends[i];
+        }
+        generateCorridors(tiles, trapPercent, trapDescription);
+    };
+    var drawDungeonOneCanvas = function (canvasID, sizeID, roomDensityID, roomSizeID, trapID, corridorID, deadEndID) {
         DOORS = [];
         var roomDescription = [];
         var trapDescription = [];
@@ -350,7 +388,9 @@ var Dungeon = (function () {
         var traps = document.getElementById(trapID);
         var trapPercent = parseInt(traps.options[traps.selectedIndex].value);
         var corridor = document.getElementById(corridorID);
-        var hasCorridor = parseInt(corridor.options[corridor.selectedIndex].value);
+        var hasCorridor = (corridor.options[corridor.selectedIndex].value === "true");
+        var deadEnd = document.getElementById(deadEndID);
+        var hasDeadEnds = (deadEnd.options[deadEnd.selectedIndex].value === "true");
         var dungeonSize = parseInt(dungeon.options[dungeon.selectedIndex].value);
         var roomCount = Math.round((dungeonSize / 100) * parseInt(room.options[room.selectedIndex].value));
         var roomSize = Math.round(((dungeonSize - Math.round((dungeonSize * 0.35))) / 100) * parseInt(rooms.options[rooms.selectedIndex].value));
@@ -392,13 +432,16 @@ var Dungeon = (function () {
             room: 'images/room.png',
             entry: 'images/entry.png',
             trap: 'images/trap.png',
-            room_edge: hasCorridor === 1 ? 'images/marble.png' : 'images/room_edge.png',
+            room_edge: hasCorridor === true ? 'images/marble.png' : 'images/room_edge.png',
             no_corridor_door: 'images/nc_door.png'
         };
         if (hasCorridor) {
             generateRoom(tiles, roomCount, roomSize, roomDescription);
             addEntryPoint(tiles);
             generateCorridors(tiles, trapPercent, trapDescription); // generate corridors between room doors
+            if (hasDeadEnds) {
+                addDeadEnds(tiles, roomCount, trapPercent, trapDescription);
+            }
         }
         else {
             NoCorridor.generateRoom(tiles, roomSize, roomDescription);

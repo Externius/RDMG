@@ -81,12 +81,14 @@ var Utils = (function () {
         }, false);
     };
     var corridorOnchange = function (e) {
-        if (e.value === "1") {
+        if (e.value === "true") {
             document.getElementById("roomDensity").disabled = false;
             document.getElementById("trapPercent").disabled = false;
+            document.getElementById("deadEnd").disabled = false;
         } else {
             document.getElementById("roomDensity").disabled = true;
             document.getElementById("trapPercent").disabled = true;
+            document.getElementById("deadEnd").disabled = true;
         }
     };
     var getRandomInt = function (min, max) {
