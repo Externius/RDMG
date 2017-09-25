@@ -2,6 +2,7 @@ var Utils = (function () {
     var partyLevel;
     var partySize;
     var dungeonDifficulty;
+    var monsterType;
     var getPercentage = function () {
         switch (this.dungeonDifficulty) {
             case 0:
@@ -23,6 +24,8 @@ var Utils = (function () {
         this.partySize = parseInt(ps.options[ps.selectedIndex].value);
         var dd = document.getElementById("dungeonDifficulty");
         this.dungeonDifficulty = parseInt(dd.options[dd.selectedIndex].value);
+        var mt = document.getElementById("monsterType");
+        this.monsterType = mt.options[mt.selectedIndex].value;
     };
     var downloadHTML = function (linkID) {
         var link = document.getElementById(linkID);
@@ -109,6 +112,7 @@ var Utils = (function () {
         partyLevel: partyLevel,
         partySize: partySize,
         dungeonDifficulty: dungeonDifficulty,
+        monsterType: monsterType,
         getPercentage: getPercentage,
         loadVariables: loadVariables,
         addRoomDescription: addRoomDescription,

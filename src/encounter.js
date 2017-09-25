@@ -88,9 +88,16 @@ var Encounter = (function () {
         xobj.send();
     };
     var getMonsters = function () {
-        return monsters.filter(function (obj) {
-            return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4);
-        });
+        if (Utils.monsterType === "any"){
+            return monsters.filter(function (obj) {
+                return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4);
+            });
+        }
+        else {
+            return monsters.filter(function (obj) {
+                return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4) && obj.type === Utils.monsterType;
+            });
+        }
     };
     var calcEncounter = function (filteredMonsters) {
         var monsterCount = filteredMonsters.length;

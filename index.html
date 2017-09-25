@@ -17,6 +17,16 @@
   <a href="https://github.com/externius/rdmg"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
   <div class="settings">
     <table>
+      <tr>
+        <td>Dungeon size:</td>
+        <td>
+          <select id="dungeonSize">
+          <option value="20">Small</option>
+          <option value="32">Medium</option>
+          <option value="44">Large</option>
+        </select>
+        </td>
+      </tr>
         <tr>
             <td>Dungeon difficulty:</td>
             <td>
@@ -28,76 +38,88 @@
               </select>
             </td>
           </tr>
-      <tr>
-        <td>Party level:</td>
-        <td>
-          <select id="partyLevel">
-            <option value="1">1</option>
-            <option value="2" >2</option>
-            <option value="3" >3</option>
-            <option value="4" >4</option>
-            <option value="5" >5</option>
-            <option value="6" >6</option>
-            <option value="7" >7</option>
-            <option value="8" >8</option>
-            <option value="9" >9</option>
-            <option value="10" >10</option>
-            <option value="11" >11</option>
-            <option value="12" >12</option>
-            <option value="13" >13</option>
-            <option value="14" >14</option>
-            <option value="15" >15</option>
-            <option value="16" >16</option>
-            <option value="17" >17</option>
-            <option value="18" >18</option>
-            <option value="19" >19</option>
-            <option value="20" >20</option>
-          </select>
-        </td>
-      </tr>
-    <tr>
-      <td>Party size:</td>
-      <td>
-        <select id="partySize">
-          <option value="1" >1</option>
-          <option value="2" >2</option>
-          <option value="3" >3</option>
-          <option value="4" selected="selected">4</option>
-          <option value="5" >5</option>
-          <option value="6" >6</option>
-          <option value="7" >7</option>
-          <option value="8" >8</option>
+          <tr>
+            <td>Party level:</td>
+                  <td>
+                    <select id="partyLevel">
+                      <option value="1">1</option>
+                      <option value="2" >2</option>
+                      <option value="3" >3</option>
+                      <option value="4" >4</option>
+                      <option value="5" >5</option>
+                      <option value="6" >6</option>
+                      <option value="7" >7</option>
+                      <option value="8" >8</option>
+                      <option value="9" >9</option>
+                      <option value="10" >10</option>
+                      <option value="11" >11</option>
+                      <option value="12" >12</option>
+                      <option value="13" >13</option>
+                      <option value="14" >14</option>
+                      <option value="15" >15</option>
+                      <option value="16" >16</option>
+                      <option value="17" >17</option>
+                      <option value="18" >18</option>
+                      <option value="19" >19</option>
+                      <option value="20" >20</option>
+                    </select>
+                  </td>
+                </tr>
+              <tr>
+                <td>Party size:</td>
+                <td>
+                  <select id="partySize">
+                    <option value="1" >1</option>
+                    <option value="2" >2</option>
+                    <option value="3" >3</option>
+                    <option value="4" selected="selected">4</option>
+                    <option value="5" >5</option>
+                    <option value="6" >6</option>
+                    <option value="7" >7</option>
+                    <option value="8" >8</option>
+                  </select>
+                </td>
+              </tr>
+            <tr>
+                <td>Room density:</td>
+                <td>
+                  <select id="roomDensity">
+          <option value="20">Low</option>
+          <option value="30">Medium</option>
+          <option value="40">High</option>
         </select>
-      </td>
-    </tr>
-      <tr>
-        <td>Dungeon size:</td>
+                </td>
+              </tr>
+              <tr>
+                <td>Room size:</td>
+                <td>
+                  <select id="roomSize">
+          <option value="20">Small</option>
+          <option value="35">Medium</option>
+          <option value="45">Large</option>
+        </select>
+                </td>
+              </tr>
+    <tr>
+        <td>Monsters type:</td>
         <td>
-          <select id="dungeonSize">
-  <option value="20">Small</option>
-  <option value="32">Medium</option>
-  <option value="44">Large</option>
-</select>
-        </td>
-      </tr>
-      <tr>
-        <td>Room density:</td>
-        <td>
-          <select id="roomDensity">
-  <option value="20">Low</option>
-  <option value="30">Medium</option>
-  <option value="40">High</option>
-</select>
-        </td>
-      </tr>
-      <tr>
-        <td>Room size:</td>
-        <td>
-          <select id="roomSize">
-  <option value="20">Small</option>
-  <option value="35">Medium</option>
-  <option value="45">Large</option>
-</select>
+          <select id="monsterType">
+            <option value="any" >Any</option>
+            <option value="aberration" >Aberrations</option>
+            <option value="beast" >Beasts</option>
+            <option value="celestial" >Celestials</option>
+            <option value="construct" >Constructs</option>
+            <option value="dragon" >Dragons</option>
+            <option value="elemental" >Elementals</option>
+            <option value="fey" >Fey</option>
+            <option value="fiend" >Fiends</option>
+            <option value="giant" >Giants</option>
+            <option value="humanoid" >Humanoids</option>
+            <option value="monstrosity" >Monstrosities</option>
+            <option value="ooze" >Oozes</option>
+            <option value="plant" >Plants</option>
+            <option value="undead" >Undead</option>
+          </select>
         </td>
       </tr>
       <tr>

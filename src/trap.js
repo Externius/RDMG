@@ -1,5 +1,5 @@
 var Trap = (function () {
-    var trap;
+    var currentTrap;
     var trapSeverity = [
         "Setback",
         "Dangerous",
@@ -28,7 +28,7 @@ var Trap = (function () {
         ["Rolling Sphere", "Dexterity", 15, 15, " Intelligence", false]
     ];
     var getTrapAttackBonus = function (trapDanger) {
-        if (trap[5]) {
+        if (currentTrap[5]) {
             var min = trapAttackBonus[trapDanger];
             var max = trapAttackBonus[trapDanger + 1];
             return " (attack bonus +" + Utils.getRandomInt(min, max) + ").";
@@ -73,14 +73,14 @@ var Trap = (function () {
     };
     var getTrap = function () {
         var trapDanger = getTrapDanger(); // setback, dangerous, deadly 
-        trap = trapKind[Utils.getRandomInt(0, trapKind.length)]; // get random trap index
+        currentTrap = trapKind[Utils.getRandomInt(0, trapKind.length)]; // get random trap index
         var dmg = getTrapDamage(trapDanger);
         var save = getTrapSaveDC(trapDanger);
-        var spot = trap[2];
-        var disable = trap[3];
-        var disableCheck = trap[4];
+        var spot = currentTrap[2];
+        var disable = currentTrap[3];
+        var disableCheck = currentTrap[4];
         var attack = getTrapAttackBonus(trapDanger);
-        return trap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + spot + " to spot, DC  " + disable + " to disable (" + disableCheck + "), DC " + save + " " + trap[1] + " save or take " + dmg + "D10 damage" + attack;
+        return currentTrap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + spot + " to spot, DC  " + disable + " to disable (" + disableCheck + "), DC " + save + " " + currentTrap[1] + " save or take " + dmg + "D10 damage" + attack;
     };
     return {
         getTrap: getTrap,
