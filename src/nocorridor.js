@@ -260,16 +260,14 @@ var NoCorridor = (function () {
         }
     };
     var checkNearbyDoor = function (tiles, node) {
-        var checkDoors = true;
         for (var i = node.I - 1; i < node.I + 2; i++) {
             for (var j = node.J - 1; j < node.J + 2; j++) {
                 if (tiles[i][j].Texture === 7) { // check nearby doors
-                    checkDoors = false;
-                    break;
+                    return false;
                 }
             }
         }
-        return checkDoors;
+        return true;
     };
     var fillDoor = function (tiles, down, right) {
         var doorCount = getDoorCount(down, right);
@@ -373,13 +371,13 @@ var NoCorridor = (function () {
             fillLeftRight(tiles, x, y, result.down, result.right, roomDescription);
         }
     };
-    var checkPos = function (position) {
-        return position.Up && position.Down || position.Left && position.Right;
+    var checkPos = function (position) { // returns true if the door not connecting rooms already
+        return !(position.Up && position.Down || position.Left && position.Right);
     };
     var cleanUpDoors = function (tiles) {
         for (var i = 0; i < allDoorList.length; i++) {
             var position = checkRoomPosition(tiles, allDoorList[i].X, allDoorList[i].Y);
-            if (!checkPos(position)) {
+            if (checkPos(position)) {
                 tiles[allDoorList[i].X][allDoorList[i].Y].Texture = 6; // set edge
             } else {
                 tiles[allDoorList[i].X][allDoorList[i].Y].Texture = 7; // restore door
@@ -391,20 +389,17 @@ var NoCorridor = (function () {
             var i = openDoorList.length - 1;
             var position = checkRoomPosition(tiles, openDoorList[i].X, openDoorList[i].Y);
             if (checkPos(position)) {
-                removeFromDoors(openDoorList[i]);
-            } else if (position.Up) {
-                randomFillUpDown(tiles, openDoorList[i].X + 1, openDoorList[i].Y, roomSize, roomDescription, openDoorList[i]);
-                removeFromDoors(openDoorList[i]);
-            } else if (position.Down) {
-                randomFillUpDown(tiles, openDoorList[i].X - 1, openDoorList[i].Y, roomSize, roomDescription, openDoorList[i]);
-                removeFromDoors(openDoorList[i]);
-            } else if (position.Right) {
-                randomFillLeftRight(tiles, openDoorList[i].X, openDoorList[i].Y - 1, roomSize, roomDescription, openDoorList[i]);
-                removeFromDoors(openDoorList[i]);
-            } else if (position.Left) {
-                randomFillLeftRight(tiles, openDoorList[i].X, openDoorList[i].Y + 1, roomSize, roomDescription, openDoorList[i]);
-                removeFromDoors(openDoorList[i]);
+                if (position.Up) {
+                    randomFillUpDown(tiles, openDoorList[i].X + 1, openDoorList[i].Y, roomSize, roomDescription, openDoorList[i]);
+                } else if (position.Down) {
+                    randomFillUpDown(tiles, openDoorList[i].X - 1, openDoorList[i].Y, roomSize, roomDescription, openDoorList[i]);
+                } else if (position.Right) {
+                    randomFillLeftRight(tiles, openDoorList[i].X, openDoorList[i].Y - 1, roomSize, roomDescription, openDoorList[i]);
+                } else if (position.Left) {
+                    randomFillLeftRight(tiles, openDoorList[i].X, openDoorList[i].Y + 1, roomSize, roomDescription, openDoorList[i]);
+                }
             }
+            removeFromDoors(openDoorList[i]);
         }
     };
     var checkEdges = function (tiles, x, y) {
@@ -418,7 +413,7 @@ var NoCorridor = (function () {
             x = Utils.getRandomInt(1, tiles.length - 1);
             y = Utils.getRandomInt(1, tiles.length - 1);
             var position = checkRoomPosition(tiles, x, y);
-            entryIsOk = (tiles[x][y].Texture === 6 && !checkPos(position) && checkNearbyDoor(tiles, tiles[x][y]) && checkEdges(tiles, x, y));
+            entryIsOk = (tiles[x][y].Texture === 6 && checkPos(position) && checkNearbyDoor(tiles, tiles[x][y]) && checkEdges(tiles, x, y));
         }
         while (!entryIsOk);
         tiles[x][y].Texture = 4;
