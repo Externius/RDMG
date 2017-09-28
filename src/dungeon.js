@@ -2,6 +2,7 @@ var Dungeon = (function () {
     var DOORS = [];
     var MOVEMENT = 10;
     var RESULT = [];
+    var TRAPCOUNT = 0;
     Array.prototype.contains = function (obj) {
         var i = this.length;
         while (i--) {
@@ -222,12 +223,16 @@ var Dungeon = (function () {
         }
         return tiles;
     };
+    var addTrap = function (tiles, x, y, trapDescription) {
+        tiles[x][y].Texture = 5; // add trap
+        Utils.addTrapDescription(tiles, x, y, trapDescription);
+    };
     var setPath = function (tiles, trapPercent, trapDescription) {
         for (var i = 0; i < RESULT.length; i++) {
             if (RESULT[i].Texture !== 2 && RESULT[i].Texture !== 4 && RESULT[i].Texture !== 5) { // do not change door or entry or trap Texture
                 if (Math.floor(Math.random() * 100) < trapPercent) {
-                    tiles[RESULT[i].I][RESULT[i].J].Texture = 5; // add trap
-                    Utils.addTrapDescription(tiles, RESULT[i].I, RESULT[i].J, trapDescription);
+                    addTrap(tiles, RESULT[i].I, RESULT[i].J, trapDescription);
+                    TRAPCOUNT += 1;
                 }
                 else {
                     tiles[RESULT[i].I][RESULT[i].J].Texture = 1;
@@ -377,8 +382,19 @@ var Dungeon = (function () {
         }
         generateCorridors(tiles, trapPercent, trapDescription);
     };
+    var addRandomTrap = function (tiles, dungeonSize, trapDescription) {
+        for (var i = 1; i < dungeonSize - 1; i++) {
+            for (var j = 1; j < dungeonSize - 1; j++) {
+                if (tiles[i][j].Texture === 1) { // find corridor
+                    addTrap(tiles, i, j, trapDescription);
+                    return;
+                }
+            }
+        }
+    };
     var drawDungeonOneCanvas = function (canvasID, sizeID, roomDensityID, roomSizeID, trapID, corridorID, deadEndID) {
         DOORS = [];
+        TRAPCOUNT = 0;
         var roomDescription = [];
         var trapDescription = [];
         var canvas = document.getElementById(canvasID);
@@ -399,6 +415,7 @@ var Dungeon = (function () {
         var tiles = [];
         var contextFont = getFontSize(dungeonSize);
         Utils.loadVariables();
+        var minTrapCount = trapPercent === 0 ? 0 : 1;
         /**
          * Textures:
          *  -1 edge
@@ -445,6 +462,9 @@ var Dungeon = (function () {
         }
         else {
             NoCorridor.generateRoom(tiles, roomSize, roomDescription);
+        }
+        if (TRAPCOUNT < minTrapCount) {
+            addRandomTrap(tiles, dungeonSize, trapDescription);
         }
         addDescription(roomDescription, trapDescription);
         loadImages(sources, function (images) {  // load default images to tiles
