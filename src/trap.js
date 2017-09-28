@@ -23,7 +23,7 @@ var Trap = (function () {
         ["Fire-Breathing Statue", "Dexterity", 15, 13, "Dispel Magic", false],
         ["Spiked Pit", "Constitution", 15, 15, "Intelligence", false], //
         ["Locking Pit", "Strength", 10, 15, "Intelligence", false], //
-        ["Posion Darts", "Constitution", 15, 15, "Intelligence", true], //
+        ["Poison Darts", "Constitution", 15, 15, "Intelligence", true], //
         ["Poison Needle", "Constitution", 15, 15, "Dexterity", false],
         ["Rolling Sphere", "Dexterity", 15, 15, " Intelligence", false]
     ];
