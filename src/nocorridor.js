@@ -24,16 +24,14 @@ var NoCorridor = (function () {
         return false;
     };
     var checkDoor = function (tiles, x, y) {
-        var checkDoors = true;
         for (var i = x - 1; i < x + 2; i++) {
             for (var j = y - 1; j < y + 2; j++) {
                 if (tiles[i][j].Texture === 7) { // check nearby doors
-                    checkDoors = false;
-                    break;
+                    return false;
                 }
             }
         }
-        return checkDoors && checkEnvironment(tiles, x, y);
+        return checkEnvironment(tiles, x, y);
     };
     var addDoor = function (tiles, x, y, down, right) {
         var doorIsOK;
@@ -338,7 +336,7 @@ var NoCorridor = (function () {
         Utils.addRoomDescription(tiles, x, y, roomDescription);
     };
     var checkPossibleEnd = function (tiles, vertical, horizontal, door, down, right) {
-        if (Math.abs(vertical) < Math.abs(down) || Math.abs(horizontal) < Math.abs(right)) { // it would overlap with another room
+        if (vertical < 0 !== down < 0 || horizontal < 0 !== right < 0 || Math.abs(vertical) < Math.abs(down) || Math.abs(horizontal) < Math.abs(right)) { // it would overlap with another room
             tiles[door.X][door.Y].Texture = 6; // change the door to a room_edge
             return false;
         }
