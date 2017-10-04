@@ -1,11 +1,9 @@
 var NoCorridor = (function () {
     var openDoorList = [];
-    var allDoorList = [];
     var edgeTileList = [];
     var setDoor = function (tiles, x, y) {
         tiles[x][y].Texture = 7;
         openDoorList[openDoorList.length] = { X: x, Y: y };
-        allDoorList[allDoorList.length] = { X: x, Y: y };
     };
     var checkEnvironment = function (tiles, x, y) { // check nearby tiles for room edges
         if (tiles[x][y - 1].Texture === 6) { // left
@@ -92,8 +90,100 @@ var NoCorridor = (function () {
     var checkTile = function (tiles, x, y) { // check if it is a room_edge or door
         return tiles[x][y].Texture === 6 || tiles[x][y].Texture === 7
     };
-    var checkDungeonEdge = function (tiles, x, y) {
+    var checkDungeonTilesEdge = function (tiles, x, y) {
         return tiles[x][y].Texture === -1
+    };
+    var checkUp = function (tiles, x, y) {
+        var tile;
+        var edge;
+        var temp = x;
+        var count = 0;
+        do {
+            tile = checkTile(tiles, temp, y);
+            edge = checkDungeonTilesEdge(tiles, temp, y);
+            temp--;
+            count--;
+        }
+        while (!tile && !edge);
+        if (edge) {
+            count++;
+        }
+        return count;
+    };
+    var checkDown = function (tiles, x, y) {
+        var tile;
+        var edge;
+        var temp = x;
+        var count = 0;
+        do {
+            tile = checkTile(tiles, temp, y);
+            edge = checkDungeonTilesEdge(tiles, temp, y);
+            temp++;
+            count++;
+        }
+        while (!tile && !edge);
+        if (edge) {
+            count--;
+        }
+        return count;
+    };
+    var checkLeft = function (tiles, x, y) {
+        var tile;
+        var edge;
+        var temp = y;
+        var count = 0;
+        do {
+            tile = checkTile(tiles, x, temp);
+            edge = checkDungeonTilesEdge(tiles, x, temp);
+            temp--;
+            count--;
+        }
+        while (!tile && !edge);
+        if (edge) {
+            count++;
+        }
+        return count;
+    };
+    var checkRight = function (tiles, x, y) {
+        var tile;
+        var edge;
+        var temp = y;
+        var count = 0;
+        do {
+            tile = checkTile(tiles, x, temp);
+            edge = checkDungeonTilesEdge(tiles, x, temp);
+            temp++;
+            count++;
+        }
+        while (!tile && !edge);
+        if (edge) {
+            count--;
+        }
+        return count;
+    };
+    var checkHorizontalOneWay = function (tiles, x, y, right) {
+        var count;
+        if (right < 0) { // left
+            count = checkLeft(tiles, x, y);
+        } else {
+            count = checkRight(tiles, x, y);
+        }
+        if (Math.abs(count) > 2) {
+            return count;
+        }
+        return 0;
+    };
+    var checkVerticalOneWay = function (tiles, x, y, down) {
+        var count;
+        if (down < 0) { // up
+            count = checkUp(tiles, x, y);
+        } else {
+            count = checkDown(tiles, x, y);
+        }
+        if (Math.abs(count) > 2) {
+            return count;
+        }
+        return 0;
     };
     var getCheckResult = function (x, y) {
         if (Math.abs(x) > Math.abs(y) && Math.abs(x) > 2) {
@@ -105,62 +195,10 @@ var NoCorridor = (function () {
         return 0;
     };
     var checkVertical = function (tiles, x, y) {
-        var tile;
-        var edge;
-        var up = x;
-        var down = x;
-        var upCount = 0;
-        var downCount = 0;
-        do {
-            tile = checkTile(tiles, up, y);
-            edge = checkDungeonEdge(tiles, up, y);
-            up--;
-            upCount--;
-        }
-        while (!tile && !edge)
-        if (edge) {
-            upCount++;
-        }
-        do {
-            tile = checkTile(tiles, down, y);
-            edge = checkDungeonEdge(tiles, down, y);
-            down++;
-            downCount++;
-        }
-        while (!tile && !edge)
-        if (edge) {
-            downCount--;
-        }
-        return getCheckResult(upCount, downCount);
+        return getCheckResult(checkUp(tiles, x, y), checkDown(tiles, x, y));
     };
     var checkHorizontal = function (tiles, x, y) {
-        var tile;
-        var edge;
-        var left = y;
-        var right = y;
-        var leftCount = 0;
-        var rightCount = 0;
-        do {
-            tile = checkTile(tiles, x, left);
-            edge = checkDungeonEdge(tiles, x, left);
-            left--;
-            leftCount--;
-        }
-        while (!tile && !edge)
-        if (edge) {
-            leftCount++;
-        }
-        do {
-            tile = checkTile(tiles, x, right);
-            edge = checkDungeonEdge(tiles, x, right);
-            right++;
-            rightCount++;
-        }
-        while (!tile && !edge)
-        if (edge) {
-            rightCount--;
-        }
-        return getCheckResult(leftCount, rightCount);
+        return getCheckResult(checkLeft(tiles, x, y), checkRight(tiles, x, y));
     };
     var getDownRight = function (vertical, horizontal, roomSize) {
         var down = Utils.getRandomInt(2, (Math.abs(vertical)) > roomSize ? roomSize : Math.abs(vertical));
@@ -349,8 +387,8 @@ var NoCorridor = (function () {
             var result = getDownRight(vertical, horizontal, roomSize);
             var down = result.down;
             var right = result.right;
-            vertical = checkVertical(tiles, x, y + right); // check horizontal end vertically
-            horizontal = checkHorizontal(tiles, x + down, y); // check vertical end horizontally
+            vertical = checkVerticalOneWay(tiles, x, y + right, down); // check horizontal end vertically
+            horizontal = checkHorizontalOneWay(tiles, x + down, y, right); // check vertical end horizontally
             if (checkPossibleEnd(tiles, vertical, horizontal, door, down, right)) {
                 return { down: down, right: right };
             }
@@ -371,16 +409,6 @@ var NoCorridor = (function () {
     };
     var checkPos = function (position) { // returns true if the door not connecting rooms already
         return !(position.Up && position.Down || position.Left && position.Right);
-    };
-    var cleanUpDoors = function (tiles) {
-        for (var i = 0; i < allDoorList.length; i++) {
-            var position = checkRoomPosition(tiles, allDoorList[i].X, allDoorList[i].Y);
-            if (checkPos(position)) {
-                tiles[allDoorList[i].X][allDoorList[i].Y].Texture = 6; // set edge
-            } else {
-                tiles[allDoorList[i].X][allDoorList[i].Y].Texture = 7; // restore door
-            }
-        }
     };
     var fillRoomToDoor = function (tiles, roomSize, roomDescription) {
         while (openDoorList.length > 0) {
@@ -418,14 +446,12 @@ var NoCorridor = (function () {
     };
     var setRoom = function (tiles, roomSize, roomDescription) {
         openDoorList = [];
-        allDoorList = [];
-        var x = Utils.getRandomInt(5, (tiles.length - (roomSize + 5)));
-        var y = Utils.getRandomInt(5, (tiles.length - (roomSize + 5)));
+        var x = Utils.getRandomInt(5, (tiles.length - (roomSize + 4)));
+        var y = Utils.getRandomInt(5, (tiles.length - (roomSize + 4)));
         var right = Utils.getRandomInt(2, roomSize + 1);
         var down = Utils.getRandomInt(2, roomSize + 1);
         fillRoom(tiles, x, y, down, right, roomDescription);
         fillRoomToDoor(tiles, roomSize, roomDescription);
-        cleanUpDoors(tiles);
         addEntryPoint(tiles);
     };
     var generateRoom = function (tiles, roomSize, roomDescription) {
