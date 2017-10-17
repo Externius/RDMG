@@ -4,6 +4,8 @@
 <head>
   <script type="text/javascript" src="src/nocorridor.js" async></script>
   <script type="text/javascript" src="src/utils.js" async></script>
+  <script type="text/javascript" src="src/door.js" async></script>
+  <script type="text/javascript" src="src/roomposition.js" async></script>
   <script type="text/javascript" src="src/treasure.js" async></script>
   <script type="text/javascript" src="src/trap.js" async></script>
   <script type="text/javascript" src="src/encounter.js" async></script>
@@ -13,7 +15,7 @@
   <title>Random dungeon map generator</title>
 </head>
 
-<body onload="Encounter.loadJSON()">
+<body onload="Dungeon.preloadImages(); Encounter.loadJSON();">
   <a href="https://github.com/externius/rdmg"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
   <div class="settings">
     <table>
@@ -127,8 +129,8 @@
         <td>
           <select id="trapPercent">
           <option value="0">None</option>
-          <option value="4" selected="selected">Few</option>
-          <option value="8">More</option>
+          <option value="15" selected="selected">Few</option>
+          <option value="30">More</option>
         </select>
         </td>
       </tr>
@@ -162,7 +164,7 @@
     <a id="download_map" class="button" hidden> Download Map </a>
     <a id="download_description" class="button" hidden> Download Description to CSV </a>
     <a id="download_html" class="button" hidden> Download HTML </a>
-    <table id="table_description"> </table>
+    <table id="table_description" class="wrap"> </table>
   </div>
 </body>
 

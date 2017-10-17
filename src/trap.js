@@ -27,6 +27,16 @@ var Trap = (function () {
         ["Poison Needle", "Constitution", 15, 15, "Dexterity", false],
         ["Rolling Sphere", "Dexterity", 15, 15, " Intelligence", false]
     ];
+    var trapDoorKind = [ // name, save, spot, disable, disableCheck, attackMod
+        ["Fire trap", "Dexterity", "10", "15", "Intelligence", "false"],
+        ["Lock Covered in Dragon Bile", "Constitution", "10", "15", "Intelligence", "false"],
+        ["Hail of Needles", "Dexterity", "15", "13", "Dexterity", "false"],
+        ["Stone Blocks from Ceiling", "Dexterity", "15", "15", "Intelligence", "true"], //
+        ["Doorknob Smeared with Contact Poison", "Constitution", "15", "10", "Intelligence", "false"], //
+        ["Poison Darts", "Constitution", "15", "15", "Intelligence", "true"], //
+        ["Poison Needle", "Constitution", "15", "15", "Dexterity", "false"],
+        ["Energy Drain", "Constitution", "15", "15", "Dispel Magic", "false"]
+    ];
     var getTrapAttackBonus = function (trapDanger) {
         if (currentTrap[5]) {
             var min = trapAttackBonus[trapDanger];
@@ -71,19 +81,17 @@ var Trap = (function () {
                 return 0;
         }
     };
-    var getTrap = function () {
+    var getCurrentTrap = function (door) {
         var trapDanger = getTrapDanger(); // setback, dangerous, deadly 
-        currentTrap = trapKind[Utils.getRandomInt(0, trapKind.length)]; // get random trap index
-        var dmg = getTrapDamage(trapDanger);
-        var save = getTrapSaveDC(trapDanger);
-        var spot = currentTrap[2];
-        var disable = currentTrap[3];
-        var disableCheck = currentTrap[4];
-        var attack = getTrapAttackBonus(trapDanger);
-        return currentTrap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + spot + " to spot, DC  " + disable + " to disable (" + disableCheck + "), DC " + save + " " + currentTrap[1] + " save or take " + dmg + "D10 damage" + attack;
+        if (door) { // get random currentTrap index
+            currentTrap = trapDoorKind[Utils.getRandomInt(0, trapDoorKind.length)];
+        } else {
+            currentTrap = trapKind[Utils.getRandomInt(0, trapKind.length)];
+        }
+        return currentTrap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + currentTrap[2] + " to spot, DC " + currentTrap[3] + " to disable (" + currentTrap[4] + "), DC " + getTrapSaveDC(trapDanger) + " " + currentTrap[1] + " save or take " + getTrapDamage(trapDanger) + "D10 damage" + getTrapAttackBonus(trapDanger);
     };
     return {
-        getTrap: getTrap,
+        getCurrentTrap: getCurrentTrap,
         getTrapName: getTrapName
     }
 })();

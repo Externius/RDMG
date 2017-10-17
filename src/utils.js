@@ -40,8 +40,8 @@ var Utils = (function () {
             var style = document.createElement('style');
             var head = doc.getElementsByTagName("head")[0];
             var css = "table, th, td {border-collapse: collapse;} " +
-                "th, td {padding: 8px; text-align: left; border-bottom: 1px solid #ddd; width: 100%;}" +
-                "td.room{ width: unset;}";
+                "th, td {padding: 8px; text-align: left; border-bottom: 1px solid #ddd;}" +
+                ".wrap { white-space: pre-wrap;}";
             img.src = canvas.toDataURL();
             doc.body.appendChild(img);
             doc.body.appendChild(tableClone);
@@ -103,11 +103,15 @@ var Utils = (function () {
         return "###ROOM" + x + "###";
     };
     var addTrapDescription = function (tiles, x, y, trapDescription) {
-        trapDescription[trapDescription.length] = { name: Trap.getTrapName(trapDescription.length + 1), description: Trap.getTrap() };
+        trapDescription[trapDescription.length] = { name: Trap.getTrapName(trapDescription.length + 1), description: Trap.getCurrentTrap(false) };
         tiles[x][y].Count = trapDescription.length;
     };
-    var addRoomDescription = function (tiles, x, y, roomDescription) {
-        roomDescription[roomDescription.length] = { name: getRoomName(roomDescription.length + 1), treasure: Treasure.getTreasure(), monster: Encounter.getMonster() };
+    var addRoomDescription = function (tiles, x, y, roomDescription, doorList) {
+        roomDescription[roomDescription.length] = { name: getRoomName(roomDescription.length + 1), treasure: Treasure.getTreasure(), monster: Encounter.getMonster(), door: Door.getDoorDescription(tiles, doorList) };
+        tiles[x][y].Count = roomDescription.length;
+    };
+    var addNCRoomDescription = function (tiles, x, y, roomDescription, doors) {
+        roomDescription[roomDescription.length] = { name: getRoomName(roomDescription.length + 1), treasure: Treasure.getTreasure(), monster: Encounter.getMonster(), door: doors };
         tiles[x][y].Count = roomDescription.length;
     };
     return {
@@ -119,6 +123,7 @@ var Utils = (function () {
         loadVariables: loadVariables,
         addRoomDescription: addRoomDescription,
         addTrapDescription: addTrapDescription,
+        addNCRoomDescription: addNCRoomDescription,
         getRandomInt: getRandomInt,
         manhattan: manhattan,
         corridorOnchange: corridorOnchange,
