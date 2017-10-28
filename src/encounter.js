@@ -88,7 +88,7 @@ var Encounter = (function () {
         xobj.send();
     };
     var getMonsters = function () {
-        if (Utils.monsterType === "any"){
+        if (Utils.monsterType === "any") {
             return monsters.filter(function (obj) {
                 return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4);
             });
@@ -99,10 +99,11 @@ var Encounter = (function () {
             });
         }
     };
-    var calcEncounter = function (filteredMonsters) {
+    var calcEncounter = function () {
+        var filteredMonsters = getMonsters(); //get monsters for party level
         var monsterCount = filteredMonsters.length;
         var monster = 0;
-        do {
+        while (monster < monsterCount) {
             var currentMonster = Utils.getRandomInt(0, monsterCount); // get random monster
             var monsterXP = challengeRatingXP[challengeRating.indexOf(filteredMonsters[currentMonster].challenge_rating)]; //get monster xp
             var allXP;
@@ -110,23 +111,15 @@ var Encounter = (function () {
             for (var i = multipliers.length - 1; i > -1; i--) { // find how many monster fit the difficulty 
                 count = multipliers[i][0];
                 allXP = monsterXP * count * multipliers[i][1];
-                if (allXP <= difficulty[Utils.dungeonDifficulty]) {
-                    return { allXP: allXP, count: count, monster: filteredMonsters[currentMonster] };
+                if (allXP <= difficulty[Utils.dungeonDifficulty] && count > 1) {
+                    return "Monster: " + count + "x " + filteredMonsters[currentMonster].name + " (CR: " + filteredMonsters[currentMonster].challenge_rating + ") " + allXP + " XP";
+                } else if (allXP <= difficulty[Utils.dungeonDifficulty]) {
+                    return "Monster: " + filteredMonsters[currentMonster].name + " (CR: " + filteredMonsters[currentMonster].challenge_rating + ") " + allXP + " XP";
                 }
             }
             monster++;
         }
-        while (monster < monsterCount);
-        return { allXP: 0, count: 0 };
-    };
-    var getEncounter = function () {
-        var filteredMonsters = getMonsters(); //get monsters for party level
-        var encounter = calcEncounter(filteredMonsters);
-        if (encounter.allXP !== 0) {
-            return "Monster: " + encounter.count + "x " + encounter.monster.name + " (CR: " + encounter.monster.challenge_rating + ") " + encounter.allXP + " XP";
-        } else {
-            return "Monster: None";
-        }
+        return "Monster: None";
     };
     var getMonster = function () {
         if (Math.floor(Math.random() * 100) > Utils.getPercentage()) {
@@ -137,7 +130,7 @@ var Encounter = (function () {
         difficulty[1] = thresholds[Utils.partyLevel][1] * Utils.partySize;
         difficulty[2] = thresholds[Utils.partyLevel][2] * Utils.partySize;
         difficulty[3] = thresholds[Utils.partyLevel][3] * Utils.partySize;
-        return getEncounter();
+        return calcEncounter();
     };
     return {
         loadJSON: loadJSON,

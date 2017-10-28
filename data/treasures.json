@@ -1,0 +1,508 @@
+[
+  {
+    "name": "Fine cupboard",
+    "cost": 100,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Potion of Healing",
+    "cost": 50,
+    "rarity": 0,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "ooze",
+      "plant",
+      "undead"
+    ]
+  },
+  {
+    "name": "50 GP Gemstones",
+    "cost": 50,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "ooze",
+      "undead"
+    ]
+  },
+  {
+    "name": "200 GP Gemstones",
+    "cost": 200,
+    "rarity": 1,
+    "magical": false,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "ooze",
+      "undead"
+    ]
+  },
+  {
+    "name": "800 GP Gemstones",
+    "cost": 800,
+    "rarity": 2,
+    "magical": false,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "ooze",
+      "undead"
+    ]
+  },
+  {
+    "name": "50 GP Art Objects",
+    "cost": 50,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "aberration",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "250 GP Art Objects",
+    "cost": 250,
+    "rarity": 1,
+    "magical": false,
+    "types": [
+      "aberration",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "2500 GP Art Objects",
+    "cost": 2500,
+    "rarity": 2,
+    "magical": false,
+    "types": [
+      "aberration",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Shield of Absorption",
+    "cost": 100,
+    "rarity": 0,
+    "magical": true,
+    "types": [
+      "humanoid",
+      "undead",
+      "dragon"
+    ]
+  },
+  {
+    "name": "Wand of Web",
+    "cost": 400,
+    "rarity": 1,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Wand of the War Mage +1",
+    "cost": 500,
+    "rarity": 1,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Wand of the War Mage +2",
+    "cost": 2500,
+    "rarity": 2,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Wand of the War Mage +3",
+    "cost": 25000,
+    "rarity": 3,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Ring of Protection",
+    "cost": 1000,
+    "rarity": 2,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Ring of Resistance",
+    "cost": 1000,
+    "rarity": 2,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Ring of Regeneration",
+    "cost": 10000,
+    "rarity": 3,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Potion of Greater healing",
+    "cost": 120,
+    "rarity": 1,
+    "magical": true,
+    "types": [
+      "humanoid",
+      "undead",
+      "dragon"
+    ]
+  },
+  {
+    "name": "Potion of Superior healing",
+    "cost": 600,
+    "rarity": 2,
+    "magical": true,
+    "types": [
+      "humanoid",
+      "undead",
+      "dragon"
+    ]
+  },
+  {
+    "name": "Potion of Supreme healing",
+    "cost": 5200,
+    "rarity": 3,
+    "magical": true,
+    "types": [
+      "humanoid",
+      "undead",
+      "dragon"
+    ]
+  },
+  {
+    "name": "Armor +1",
+    "cost": 3500,
+    "rarity": 2,
+    "magical": true,
+    "types": [
+      "humanoid",
+      "undead",
+      "dragon"
+    ]
+  },
+  {
+    "name": "Armor +2",
+    "cost": 20000,
+    "rarity": 3,
+    "magical": true,
+    "types": [
+      "humanoid",
+      "undead",
+      "dragon"
+    ]
+  },
+  {
+    "name": "Armor +3",
+    "cost": 55000,
+    "rarity": 4,
+    "magical": true,
+    "types": [
+      "humanoid",
+      "undead",
+      "dragon"
+    ]
+  },
+  {
+    "name": "Adamantine Armor",
+    "cost": 100,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "ooze",
+      "plant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Shield +1",
+    "cost": 500,
+    "rarity": 1,
+    "magical": true,
+    "types": [
+      "aberration",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "ooze",
+      "undead"
+    ]
+  },
+  {
+    "name": "Shield +2",
+    "cost": 3000,
+    "rarity": 2,
+    "magical": true,
+    "types": [
+      "aberration",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "ooze",
+      "undead"
+    ]
+  },
+  {
+    "name": "Shield +3",
+    "cost": 22000,
+    "rarity": 3,
+    "magical": true,
+    "types": [
+      "aberration",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "ooze",
+      "undead"
+    ]
+  },
+  {
+    "name": "Weapon +1",
+    "cost": 500,
+    "rarity": 1,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Weapon +2",
+    "cost": 2000,
+    "rarity": 2,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Weapon +3",
+    "cost": 15000,
+    "rarity": 3,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "construct",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  }
+]

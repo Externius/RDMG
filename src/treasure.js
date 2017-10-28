@@ -1,46 +1,100 @@
 var Treasure = (function () {
-    var getTreasure = function () {
-        if (Math.floor(Math.random() * 100) > Utils.getPercentage()) {
-            return "Treasure: Empty";
+    var treasureGP = [
+        0, 300, 600, 900, 1200, 1600, 2000, 2600, 3400, 4500, 5800,
+        7500, 9800, 13000, 17000, 22000, 28000, 36000, 47000, 61000, 80000
+    ];
+    var sumValue;
+    var treasures;
+    var loadJSON = function () {
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                treasures = JSON.parse(this.responseText);
+            }
+        };
+        xobj.open("GET", "data/treasures.json", true);
+        xobj.send();
+    };
+    var getFiltered = function () {
+        if (Utils.monsterType === "any") {
+            return treasures.filter(function (obj) {
+                return obj.rarity <= Utils.itemsRarity && obj.cost < sumValue;
+            });
         }
-        var gp = 0;
-        var sp = 0;
-        var cp = 0;
-        var ep = 0;
-        var pp = 0;
+        else {
+            return treasures.filter(function (obj) {
+                return obj.rarity <= Utils.itemsRarity && obj.cost < sumValue && obj.types.some(type => type === Utils.monsterType);
+            });
+        }
+    };
+    var getAllCost = function () {
+        sumValue = treasureGP[Utils.partyLevel] * Utils.treasureValue;
+    };
+    var getItemsCount = function () {
         switch (Utils.dungeonDifficulty) {
             case 0:
-                gp = Utils.getRandomInt(1, 4) * 6;
-                sp = Utils.getRandomInt(1, 5) * 6;
-                cp = Utils.getRandomInt(1, 6) * 6;
-                break;
+                return Utils.getRandomInt(0, 6);
             case 1:
-                gp = Utils.getRandomInt(1, 4) * 60;
-                sp = Utils.getRandomInt(1, 7) * 60;
-                cp = Utils.getRandomInt(1, 5) * 600;
-                ep = Utils.getRandomInt(1, 3) * 60;
-                break;
+                return Utils.getRandomInt(2, 11);
             case 2:
-                gp = Utils.getRandomInt(1, 3) * 600;
-                sp = Utils.getRandomInt(1, 5) * 600;
-                ep = Utils.getRandomInt(1, 7) * 100;
-                pp = Utils.getRandomInt(1, 3) * 60;
-                break;
+                return Utils.getRandomInt(4, 16);
             case 3:
-                gp = Utils.getRandomInt(1, 9) * 100;
-                ep = Utils.getRandomInt(1, 3) * 6000;
-                pp = Utils.getRandomInt(1, 3) * 600;
-                break;
+                return Utils.getRandomInt(6, 21);
             default:
-                break;
+                return 0;
         }
-        return "Treasure: " + gp + " gp," +
-            " " + sp + " sp," +
-            " " + cp + " cp," +
-            " " + ep + " ep," +
-            " " + pp + " pp";
+    };
+    var calcTreasure = function (filteredTreasures) {
+        var currentValue = 0;
+        var itemCount = getItemsCount();
+        var currentTreasure;
+        var finalList = [];
+        var sb = "";
+        for (var i = 0; i < itemCount; i++) {
+            currentTreasure = filteredTreasures[Utils.getRandomInt(0, filteredTreasures.length)]; // get random treasure
+            if (currentValue + currentTreasure.cost < sumValue) { // if it's still affordable add to list
+                currentValue += currentTreasure.cost;
+                finalList[finalList.length] = currentTreasure;
+            }
+        }
+        finalList.sort(function (a, b) {
+            return a.name.localeCompare(b.name);
+        });
+        var items = [];
+        var count = [];
+        var prev;
+        for (i = 0; i < finalList.length; i++) { // get duplicated items count
+            if (finalList[i] !== prev) {
+                items.push(finalList[i]);
+                count.push(1);
+            } else {
+                count[count.length - 1]++;
+            }
+            prev = finalList[i];
+        }
+        for (i = 0; i < items.length; i++) { // add items name + count to the return string
+            if (count[i] > 1) {
+                sb += count[i];
+                sb += "x ";
+            }
+            sb += items[i].name;
+            sb += ", ";
+        }
+        sb += (sumValue - currentValue); // get the remaining value
+        sb += " gp";
+        return sb;
+    };
+    var getTreasure = function () {
+        if (Math.floor(Math.random() * 100) > Utils.getPercentage()) {
+            return "Treasures: Empty";
+        }
+        getAllCost();
+        var filteredTreasures = getFiltered();
+        return "Treasures: " + calcTreasure(filteredTreasures);
     };
     return {
-        getTreasure: getTreasure
+        getTreasure: getTreasure,
+        loadJSON: loadJSON
     }
 })();

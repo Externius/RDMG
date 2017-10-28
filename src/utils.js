@@ -3,6 +3,8 @@ var Utils = (function () {
     var partySize;
     var dungeonDifficulty;
     var monsterType;
+    var treasureValue;
+    var itemsRarity;
     var getPercentage = function () {
         switch (this.dungeonDifficulty) {
             case 0:
@@ -18,14 +20,18 @@ var Utils = (function () {
         }
     };
     var loadVariables = function () {
-        var pl = document.getElementById("partyLevel");
-        this.partyLevel = parseInt(pl.options[pl.selectedIndex].value);
-        var ps = document.getElementById("partySize");
-        this.partySize = parseInt(ps.options[ps.selectedIndex].value);
-        var dd = document.getElementById("dungeonDifficulty");
-        this.dungeonDifficulty = parseInt(dd.options[dd.selectedIndex].value);
-        var mt = document.getElementById("monsterType");
-        this.monsterType = mt.options[mt.selectedIndex].value;
+        var pL = document.getElementById("partyLevel");
+        this.partyLevel = parseInt(pL.options[pL.selectedIndex].value);
+        var pS = document.getElementById("partySize");
+        this.partySize = parseInt(pS.options[pS.selectedIndex].value);
+        var dD = document.getElementById("dungeonDifficulty");
+        this.dungeonDifficulty = parseInt(dD.options[dD.selectedIndex].value);
+        var mT = document.getElementById("monsterType");
+        this.monsterType = mT.options[mT.selectedIndex].value;
+        var tV = document.getElementById("treasureValue");
+        this.treasureValue = parseFloat(tV.options[tV.selectedIndex].value);
+        var iR = document.getElementById("itemsRarity");
+        this.itemsRarity = parseInt(iR.options[iR.selectedIndex].value);
     };
     var downloadHTML = function (linkID) {
         var link = document.getElementById(linkID);
@@ -119,6 +125,8 @@ var Utils = (function () {
         partySize: partySize,
         dungeonDifficulty: dungeonDifficulty,
         monsterType: monsterType,
+        treasureValue: treasureValue,
+        itemsRarity: itemsRarity,
         getPercentage: getPercentage,
         loadVariables: loadVariables,
         addRoomDescription: addRoomDescription,
