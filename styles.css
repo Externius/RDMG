@@ -30,10 +30,11 @@ select{
     font: 15px Arial;
     text-decoration: none;
     text-align: center;
-    padding-left: 7%;
+    padding-left: 5%;
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-right: 7%;
+    padding-right: 5%;
     background: #0c5b7b;
     color: #FFF;
+    width: 23%;
 }
