@@ -3,6 +3,10 @@ var Treasure = (function () {
         0, 300, 600, 900, 1200, 1600, 2000, 2600, 3400, 4500, 5800,
         7500, 9800, 13000, 17000, 22000, 28000, 36000, 47000, 61000, 80000
     ];
+    var itemCount = [
+        0, 4, 4, 5, 5, 7, 7, 8, 8, 8, 9,
+        9, 9, 9, 9, 12, 12, 12, 15, 15, 15
+    ];
     var sumValue;
     var treasures;
     var loadJSON = function () {
@@ -34,13 +38,13 @@ var Treasure = (function () {
     var getItemsCount = function () {
         switch (Utils.dungeonDifficulty) {
             case 0:
-                return Utils.getRandomInt(0, 6);
+                return Utils.getRandomInt(0, itemCount[Utils.partyLevel]);
             case 1:
-                return Utils.getRandomInt(2, 11);
+                return Utils.getRandomInt(2, itemCount[Utils.partyLevel]);
             case 2:
-                return Utils.getRandomInt(4, 16);
+                return Utils.getRandomInt(3, itemCount[Utils.partyLevel]);
             case 3:
-                return Utils.getRandomInt(6, 21);
+                return Utils.getRandomInt(4, itemCount[Utils.partyLevel]);
             default:
                 return 0;
         }
@@ -49,14 +53,18 @@ var Treasure = (function () {
         var currentValue = 0;
         var itemCount = getItemsCount();
         var currentTreasure;
+        var currentCount = 0;
+        var maxAttempt = filteredTreasures.length * 2;
         var finalList = [];
         var sb = "";
-        for (var i = 0; i < itemCount; i++) {
+        while (currentCount < itemCount && maxAttempt > 0) {
             currentTreasure = filteredTreasures[Utils.getRandomInt(0, filteredTreasures.length)]; // get random treasure
             if (currentValue + currentTreasure.cost < sumValue) { // if it's still affordable add to list
                 currentValue += currentTreasure.cost;
                 finalList[finalList.length] = currentTreasure;
+                currentCount++;
             }
+            maxAttempt--;
         }
         finalList.sort(function (a, b) {
             return a.name.localeCompare(b.name);
@@ -64,7 +72,7 @@ var Treasure = (function () {
         var items = [];
         var count = [];
         var prev;
-        for (i = 0; i < finalList.length; i++) { // get duplicated items count
+        for (var i = 0; i < finalList.length; i++) { // get duplicated items count
             if (finalList[i] !== prev) {
                 items.push(finalList[i]);
                 count.push(1);
@@ -81,7 +89,7 @@ var Treasure = (function () {
             sb += items[i].name;
             sb += ", ";
         }
-        sb += (sumValue - currentValue); // get the remaining value
+        sb += Utils.getRandomInt(1, sumValue - currentValue); // get the remaining value randomly
         sb += " gp";
         return sb;
     };

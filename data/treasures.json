@@ -1,7 +1,97 @@
 [
   {
+    "name": "Harp",
+    "cost": 100,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Chest",
+    "cost": 50,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
     "name": "Fine cupboard",
     "cost": 100,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Dungeoneer's Pack",
+    "cost": 50,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Barrel",
+    "cost": 20,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Book",
+    "cost": 1,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Horn",
+    "cost": 40,
     "rarity": 0,
     "magical": false,
     "types": [
@@ -244,6 +334,82 @@
     "name": "Ring of Protection",
     "cost": 1000,
     "rarity": 2,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Ring of Invisibility",
+    "cost": 70000,
+    "rarity": 4,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Ring of Evasion",
+    "cost": 2000,
+    "rarity": 2,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Ring of Free Action",
+    "cost": 3000,
+    "rarity": 2,
+    "magical": true,
+    "types": [
+      "aberration",
+      "beast",
+      "celestial",
+      "dragon",
+      "elemental",
+      "fey",
+      "fiend",
+      "giant",
+      "humanoid",
+      "monstrosity",
+      "undead"
+    ]
+  },
+  {
+    "name": "Ring of Swimming",
+    "cost": 400,
+    "rarity": 1,
     "magical": true,
     "types": [
       "aberration",
