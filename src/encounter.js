@@ -99,37 +99,60 @@ var Encounter = (function () {
             });
         }
     };
-    var calcEncounter = function () {
-        var filteredMonsters = getMonsters(); //get monsters for party level
+    var removeMonster = function (monsterList, monster) {
+        var index = monsterList.indexOf(monster)
+        monsterList.splice(index, 1);
+    };
+    var addMonster = function (filteredMonsters, currentXP) {
         var monsterCount = filteredMonsters.length;
         var monster = 0;
         while (monster < monsterCount) {
-            var currentMonster = Utils.getRandomInt(0, monsterCount); // get random monster
-            var monsterXP = challengeRatingXP[challengeRating.indexOf(filteredMonsters[currentMonster].challenge_rating)]; //get monster xp
+            var currentMonster = filteredMonsters[Utils.getRandomInt(0, filteredMonsters.length)]; // get random monster
+            removeMonster(filteredMonsters, currentMonster); // remove monster from the list 
+            var monsterXP = challengeRatingXP[challengeRating.indexOf(currentMonster.challenge_rating)]; // get monster xp
             var allXP;
             var count;
-            for (var i = multipliers.length - 1; i > -1; i--) { // find how many monster fit the difficulty 
+            for (var i = multipliers.length - 1; i > -1; i--) { // find how many monster fit for the current XP
                 count = multipliers[i][0];
                 allXP = monsterXP * count * multipliers[i][1];
-                if (allXP <= difficulty[Utils.dungeonDifficulty] && count > 1) {
-                    return "Monster: " + count + "x " + filteredMonsters[currentMonster].name + " (CR: " + filteredMonsters[currentMonster].challenge_rating + ") " + allXP + " XP";
-                } else if (allXP <= difficulty[Utils.dungeonDifficulty]) {
-                    return "Monster: " + filteredMonsters[currentMonster].name + " (CR: " + filteredMonsters[currentMonster].challenge_rating + ") " + allXP + " XP";
+                if (allXP <= currentXP && count > 1) {
+                    return count + "x " + currentMonster.name + " (CR: " + currentMonster.challenge_rating + ") " + allXP + " XP";
+                } else if (allXP <= currentXP) {
+                    return currentMonster.name + " (CR: " + currentMonster.challenge_rating + ") " + allXP + " XP";
                 }
             }
             monster++;
         }
-        return "Monster: None";
+        return "None";
+    };
+    var calcEncounter = function () {
+        var filteredMonsters = getMonsters(); // get monsters for party level
+        var sumXP = difficulty[Utils.dungeonDifficulty];
+        var result = "Monster: ";
+        if (Math.floor(Math.random() * 100) > 50) {
+            result += addMonster(filteredMonsters, sumXP);
+        } else {
+            var x = Utils.getRandomInt(2, Utils.dungeonDifficulty + 3);
+            for (var i = 0; i < x; i++) {
+                result += addMonster(filteredMonsters, sumXP / x);
+                result += ", ";
+            }
+            result = result.slice(0, -2);
+        }
+        result = result.split(", None").join("");
+        return result;
+    };
+    var setDifficulty = function () {
+        difficulty[0] = thresholds[Utils.partyLevel][0] * Utils.partySize;
+        difficulty[1] = thresholds[Utils.partyLevel][1] * Utils.partySize;
+        difficulty[2] = thresholds[Utils.partyLevel][2] * Utils.partySize;
+        difficulty[3] = thresholds[Utils.partyLevel][3] * Utils.partySize;
     };
     var getMonster = function () {
         if (Math.floor(Math.random() * 100) > Utils.getPercentage()) {
             return "Monster: None";
         }
-        //set difficulty
-        difficulty[0] = thresholds[Utils.partyLevel][0] * Utils.partySize;
-        difficulty[1] = thresholds[Utils.partyLevel][1] * Utils.partySize;
-        difficulty[2] = thresholds[Utils.partyLevel][2] * Utils.partySize;
-        difficulty[3] = thresholds[Utils.partyLevel][3] * Utils.partySize;
+        setDifficulty();
         return calcEncounter();
     };
     return {
