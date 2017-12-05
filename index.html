@@ -22,7 +22,7 @@
   </a>
   <div class="container">
     <div class="settings">
-      <table>
+      <table id="options">
         <tr>
           <td>Dungeon size:</td>
           <td>
@@ -180,7 +180,8 @@
         </tr>
       </table>
       <br>
-      <button type="button" onclick="Dungeon.drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','corridor','deadEnd')">Generate</button>
+      <button type="button" onclick="Dungeon.drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','corridor','deadEnd')"
+        style="width: 100%;block-size: 50px;">Generate</button>
       <br>
     </div>
     <div class="drawarea">

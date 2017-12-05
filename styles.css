@@ -5,9 +5,13 @@ body {
     width: 100%;
     overflow: hidden; 
 }
+#options tr td {
+    width: 100%;
+}
 .settings {
     float: left;
     width: 400px;
+    margin: 10px;
 }
 .drawarea{
     float: left;
