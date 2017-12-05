@@ -1,13 +1,21 @@
 body {
     background-color: whitesmoke;
 }
+.container {
+    width: 100%;
+    overflow: hidden; 
+}
 .settings {
     float: left;
     width: 400px;
 }
 .drawarea{
-
     float: left;
+}
+.play{
+    float: left;
+    text-align: center;
+    width: 25%;
 }
 .description {
     clear: both;
