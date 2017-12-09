@@ -6,20 +6,32 @@ var Dungeon = (function () {
     var TRAPCOUNT = 0;
     var ROOMS = [];
     var SOURCES = [
-        'images/marble.png',
-        'images/corridor.png',
-        'images/door.png',
-        'images/room.png',
-        'images/entry.png',
-        'images/trap.png',
-        'images/room_edge.png',
-        'images/nc_door.png',
-        'images/door_locked.png',
-        'images/door_traped.png',
-        'images/nc_door_locked.png',
-        'images/nc_door_trapped.png'
+        'images/marble_dark.png',
+        'images/marble_light.png',
+        'images/marble_white.png',
+        'images/corridor_dark.png',
+        'images/door_dark.png',
+        'images/room_dark.png',
+        'images/room_light.png',
+        'images/room_white.png',
+        'images/entry_dark.png',
+        'images/trap_dark.png',
+        'images/room_edge_dark.png',
+        'images/room_edge_light.png',
+        'images/nc_door_dark.png',
+        'images/nc_door_light.png',
+        'images/nc_door_white.png',
+        'images/door_locked_dark.png',
+        'images/door_trapped_dark.png',
+        'images/nc_door_locked_dark.png',
+        'images/nc_door_locked_light.png',
+        'images/nc_door_locked_white.png',
+        'images/nc_door_trapped_dark.png',
+        'images/nc_door_trapped_light.png',
+        'images/nc_door_trapped_white.png'
     ];
     var IMAGEOBJECT = [];
+    var THEMEINDEX = [];
     Array.prototype.contains = function (obj) {
         var i = this.length;
         while (i--) {
@@ -424,49 +436,84 @@ var Dungeon = (function () {
             }
         }
     };
+    var setBase = function (corridorIndex, doorIndex, entryIndex, trapIndex, doorLockedIndex, doorTrappedIndex) {
+        THEMEINDEX[1] = corridorIndex;
+        THEMEINDEX[2] = doorIndex;
+        THEMEINDEX[4] = entryIndex;
+        THEMEINDEX[5] = trapIndex;
+        THEMEINDEX[8] = doorLockedIndex;
+        THEMEINDEX[9] = doorTrappedIndex;
+    };
+    var setTheme = function (marbleIndex, roomIndex, roomEdgeIndex, ncDoorIndex, ncDoorLockedIndex, ncDoorTrappedIndex) {
+        THEMEINDEX[0] = marbleIndex;
+        THEMEINDEX[3] = roomIndex;
+        THEMEINDEX[6] = roomEdgeIndex;
+        THEMEINDEX[7] = ncDoorIndex;
+        THEMEINDEX[10] = ncDoorLockedIndex;
+        THEMEINDEX[11] = ncDoorTrappedIndex;
+    };
+    var getTheme = function () {
+        var theme = document.getElementById("theme");
+        var themeID = parseInt(theme.options[theme.selectedIndex].value);
+        THEMEINDEX = [];
+        setBase(3, 4, 8, 9, 15, 16);
+        switch (themeID) {
+            case 0: // dark
+                setTheme(0, 5, 10, 12, 17, 20);
+                break;
+            case 1: // light
+                setTheme(1, 6, 11, 13, 18, 21);
+                break;
+            case 2: // minimal
+                setTheme(2, 7, 2, 14, 19, 22);
+                break;
+            default:
+                break;
+        }
+    };
     var drawMap = function (tiles, context, contextFont, hasCorridor) {
         for (var i = 1; i < tiles.length - 1; i++) {
             for (var j = 1; j < tiles[i].length - 1; j++) {
                 switch (tiles[i][j].Texture) {
-                    case 0:
-                        context.drawImage(IMAGEOBJECT[0], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                    case 0: // marble
+                        context.drawImage(IMAGEOBJECT[THEMEINDEX[0]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
-                    case 1:
-                        context.drawImage(IMAGEOBJECT[1], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                    case 1: // corridor
+                        context.drawImage(IMAGEOBJECT[THEMEINDEX[1]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
-                    case 2:
-                        rotateImage(context, IMAGEOBJECT[2], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                    case 2: // door
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[2]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
                         break;
-                    case 3:
-                        context.drawImage(IMAGEOBJECT[3], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                    case 3: // room
+                        context.drawImage(IMAGEOBJECT[THEMEINDEX[3]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         context.font = contextFont;
                         context.fillText(tiles[i][j].Count, tiles[i][j].X + Math.round(tiles[i][j].Width * 0.1), tiles[i][j].Y + Math.round(tiles[i][j].Height * 0.65));
                         break;
-                    case 4:
-                        context.drawImage(IMAGEOBJECT[4], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                    case 4: // entry
+                        context.drawImage(IMAGEOBJECT[THEMEINDEX[4]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
-                    case 5:
-                        context.drawImage(IMAGEOBJECT[5], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                    case 5: // trap
+                        context.drawImage(IMAGEOBJECT[THEMEINDEX[5]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         context.font = contextFont;
                         context.fillText(tiles[i][j].Count, tiles[i][j].X + Math.round(tiles[i][j].Width * 0.1), tiles[i][j].Y + Math.round(tiles[i][j].Height * 0.5));
                         break;
-                    case 6:
-                        context.drawImage(hasCorridor ? IMAGEOBJECT[0] : IMAGEOBJECT[6], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                    case 6: // room_edge
+                        context.drawImage(hasCorridor ? IMAGEOBJECT[THEMEINDEX[0]] : IMAGEOBJECT[THEMEINDEX[6]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
-                    case 7:
-                        rotateImage(context, IMAGEOBJECT[7], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                    case 7: // nc_Door
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[7]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
                         break;
-                    case 8:
-                        rotateImage(context, IMAGEOBJECT[8], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                    case 8: // door_locked
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[8]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
                         break;
-                    case 9:
-                        rotateImage(context, IMAGEOBJECT[9], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                    case 9: // door_trapped
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[9]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
                         break;
-                    case 10:
-                        rotateImage(context, IMAGEOBJECT[10], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                    case 10: // nc_door_locked
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[10]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
                         break;
-                    case 11:
-                        rotateImage(context, IMAGEOBJECT[11], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                    case 11: // nc_door_trapped
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[11]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
                         break;
                     default:
                         break;
@@ -543,6 +590,7 @@ var Dungeon = (function () {
             NoCorridor.generate(tiles, roomSize, roomDescription);
         }
         addDescription(roomDescription, trapDescription);
+        getTheme();
         drawMap(tiles, context, contextFont, hasCorridor);
         Utils.downloadImg("download_map", canvas);
         Utils.downloadDescription("download_description", "DungeonRooms.csv");
