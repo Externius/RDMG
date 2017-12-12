@@ -6,29 +6,29 @@ var Dungeon = (function () {
     var TRAPCOUNT = 0;
     var ROOMS = [];
     var SOURCES = [
-        'images/marble_dark.png',
-        'images/marble_light.png',
-        'images/marble_white.png',
-        'images/corridor_dark.png',
-        'images/door_dark.png',
-        'images/room_dark.png',
-        'images/room_light.png',
-        'images/room_white.png',
-        'images/entry_dark.png',
-        'images/trap_dark.png',
-        'images/room_edge_dark.png',
-        'images/room_edge_light.png',
-        'images/nc_door_dark.png',
-        'images/nc_door_light.png',
-        'images/nc_door_white.png',
-        'images/door_locked_dark.png',
-        'images/door_trapped_dark.png',
-        'images/nc_door_locked_dark.png',
-        'images/nc_door_locked_light.png',
-        'images/nc_door_locked_white.png',
-        'images/nc_door_trapped_dark.png',
-        'images/nc_door_trapped_light.png',
-        'images/nc_door_trapped_white.png'
+        'images/dark/marble.png',
+        'images/dark/corridor.png',
+        'images/dark/door.png',
+        'images/dark/room.png',
+        'images/dark/entry.png',
+        'images/dark/trap.png',
+        'images/dark/room_edge.png',
+        'images/dark/nc_door.png',
+        'images/dark/door_locked.png',
+        'images/dark/door_trapped.png',
+        'images/dark/nc_door_locked.png',
+        'images/dark/nc_door_trapped.png',
+        'images/light/marble.png',
+        'images/light/room.png',
+        'images/light/room_edge.png',
+        'images/light/nc_door.png',
+        'images/light/nc_door_locked.png',
+        'images/light/nc_door_trapped.png',
+        'images/white/marble.png',
+        'images/white/room.png',
+        'images/white/nc_door.png',
+        'images/white/nc_door_locked.png',
+        'images/white/nc_door_trapped.png'
     ];
     var IMAGEOBJECT = [];
     var THEMEINDEX = [];
@@ -456,16 +456,16 @@ var Dungeon = (function () {
         var theme = document.getElementById("theme");
         var themeID = parseInt(theme.options[theme.selectedIndex].value);
         THEMEINDEX = [];
-        setBase(3, 4, 8, 9, 15, 16);
+        setBase(1, 2, 4, 5, 8, 9);
         switch (themeID) {
             case 0: // dark
-                setTheme(0, 5, 10, 12, 17, 20);
+                setTheme(0, 3, 6, 7, 10, 11);
                 break;
             case 1: // light
-                setTheme(1, 6, 11, 13, 18, 21);
+                setTheme(12, 13, 14, 15, 16, 17);
                 break;
             case 2: // minimal
-                setTheme(2, 7, 2, 14, 19, 22);
+                setTheme(18, 19, 18, 20, 21, 22);
                 break;
             default:
                 break;
