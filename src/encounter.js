@@ -116,9 +116,9 @@ var Encounter = (function () {
                 count = multipliers[i][0];
                 allXP = monsterXP * count * multipliers[i][1];
                 if (allXP <= currentXP && count > 1) {
-                    return count + "x " + currentMonster.name + " (CR: " + currentMonster.challenge_rating + ") " + allXP + " XP";
+                    return count + "x " + currentMonster.name + " (CR: " + currentMonster.challenge_rating + ") " + monsterXP * count + " XP";
                 } else if (allXP <= currentXP) {
-                    return currentMonster.name + " (CR: " + currentMonster.challenge_rating + ") " + allXP + " XP";
+                    return currentMonster.name + " (CR: " + currentMonster.challenge_rating + ") " + monsterXP + " XP";
                 }
             }
             monster++;
