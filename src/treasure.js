@@ -94,7 +94,7 @@ var Treasure = (function () {
         return sb;
     };
     var getTreasure = function () {
-        if (Math.floor(Math.random() * 100) > Utils.getPercentage()) {
+        if (Math.floor(Math.random() * 100) > Utils.getTreasurePercentage()) {
             return "Treasures: Empty";
         }
         getAllCost();

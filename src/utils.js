@@ -5,20 +5,6 @@ var Utils = (function () {
     var monsterType;
     var treasureValue;
     var itemsRarity;
-    var getPercentage = function () {
-        switch (this.dungeonDifficulty) {
-            case 0:
-                return Utils.getRandomInt(20, 71);
-            case 1:
-                return Utils.getRandomInt(30, 81);
-            case 2:
-                return Utils.getRandomInt(40, 91);
-            case 3:
-                return Utils.getRandomInt(50, 101);
-            default:
-                return 0;
-        }
-    };
     var loadVariables = function () {
         var pL = document.getElementById("partyLevel");
         this.partyLevel = parseInt(pL.options[pL.selectedIndex].value);
@@ -102,6 +88,34 @@ var Utils = (function () {
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min;
     };
+    var getTreasurePercentage = function () {
+        switch (this.dungeonDifficulty) {
+            case 0:
+                return getRandomInt(20, 71);
+            case 1:
+                return getRandomInt(30, 81);
+            case 2:
+                return getRandomInt(40, 91);
+            case 3:
+                return getRandomInt(50, 101);
+            default:
+                return 0;
+        }
+    };
+    var getMonsterPercentage = function () {
+        switch (this.dungeonDifficulty) {
+            case 0:
+                return getRandomInt(40, 81);
+            case 1:
+                return getRandomInt(50, 91);
+            case 2:
+                return getRandomInt(60, 101);
+            case 3:
+                return getRandomInt(70, 101);
+            default:
+                return 0;
+        }
+    };
     var manhattan = function (dx, dy) {
         return (dx + dy);
     };
@@ -127,7 +141,8 @@ var Utils = (function () {
         monsterType: monsterType,
         treasureValue: treasureValue,
         itemsRarity: itemsRarity,
-        getPercentage: getPercentage,
+        getTreasurePercentage: getTreasurePercentage,
+        getMonsterPercentage: getMonsterPercentage,
         loadVariables: loadVariables,
         addRoomDescription: addRoomDescription,
         addTrapDescription: addTrapDescription,

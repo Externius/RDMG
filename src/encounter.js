@@ -149,7 +149,7 @@ var Encounter = (function () {
         difficulty[3] = thresholds[Utils.partyLevel][3] * Utils.partySize;
     };
     var getMonster = function () {
-        if (Math.floor(Math.random() * 100) > Utils.getPercentage()) {
+        if (Math.floor(Math.random() * 100) > Utils.getMonsterPercentage()) {
             return "Monster: None";
         }
         setDifficulty();
