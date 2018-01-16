@@ -17,25 +17,25 @@ var Trap = (function () {
         [4, 10, 18],
         [10, 18, 24]
     ];
-    var trapKind = [ // name, save, spot, disable, diableCheck, attackMod
-        ["Collapsing Roof", "Dexterity", 10, 15, "Dexterity", false],
-        ["Falling Net", "Strength", 10, 15, "Dexterity", false],
-        ["Fire-Breathing Statue", "Dexterity", 15, 13, "Dispel Magic", false],
-        ["Spiked Pit", "Constitution", 15, 15, "Intelligence", false], //
-        ["Locking Pit", "Strength", 10, 15, "Intelligence", false], //
-        ["Poison Darts", "Constitution", 15, 15, "Intelligence", true], //
-        ["Poison Needle", "Constitution", 15, 15, "Dexterity", false],
-        ["Rolling Sphere", "Dexterity", 15, 15, " Intelligence", false]
+    var trapKind = [ // name, save, spot, disable, diableCheck, attackMod, dmg type, special
+        ["Collapsing Roof", "Dexterity", 10, 15, "Dexterity", false, "bludgeoning", null],
+        ["Falling Net", "Strength", 10, 15, "Dexterity", false, null, "restrained."],
+        ["Fire-Breathing Statue", "Dexterity", 15, 13, "Dispel Magic", false, "fire", null],
+        ["Spiked Pit", "Constitution", 15, 15, "Intelligence", false, "piercing", null],
+        ["Locking Pit", "Strength", 10, 15, "Intelligence", false, null, "locked."],
+        ["Poison Darts", "Constitution", 15, 15, "Intelligence", true, "poison", null],
+        ["Poison Needle", "Constitution", 15, 15, "Dexterity", false, "poison", null],
+        ["Rolling Sphere", "Dexterity", 15, 15, " Intelligence", false, "bludgeoning", null]
     ];
-    var trapDoorKind = [ // name, save, spot, disable, disableCheck, attackMod
-        ["Fire trap", "Dexterity", "10", "15", "Intelligence", "false"],
-        ["Lock Covered in Dragon Bile", "Constitution", "10", "15", "Intelligence", "false"],
-        ["Hail of Needles", "Dexterity", "15", "13", "Dexterity", "false"],
-        ["Stone Blocks from Ceiling", "Dexterity", "15", "15", "Intelligence", "true"], //
-        ["Doorknob Smeared with Contact Poison", "Constitution", "15", "10", "Intelligence", "false"], //
-        ["Poison Darts", "Constitution", "15", "15", "Intelligence", "true"], //
-        ["Poison Needle", "Constitution", "15", "15", "Dexterity", "false"],
-        ["Energy Drain", "Constitution", "15", "15", "Dispel Magic", "false"]
+    var trapDoorKind = [ // name, save, spot, disable, disableCheck, attackMod, dmg type, special
+        ["Fire trap", "Dexterity", "10", "15", "Intelligence", "false", "fire", null],
+        ["Lock Covered in Dragon Bile", "Constitution", "10", "15", "Intelligence", "false", "poison", null],
+        ["Hail of Needles", "Dexterity", "15", "13", "Dexterity", "false", "piercing", null],
+        ["Stone Blocks from Ceiling", "Dexterity", "15", "15", "Intelligence", "true", "bludgeoning", null],
+        ["Doorknob Smeared with Contact Poison", "Constitution", "15", "10", "Intelligence", "false", "poison", null],
+        ["Poison Darts", "Constitution", "15", "15", "Intelligence", "true", "poison", null],
+        ["Poison Needle", "Constitution", "15", "15", "Dexterity", "false", "poison", null],
+        ["Energy Drain", "Constitution", "15", "15", "Dispel Magic", "false", "necrotic", null]
     ];
     var getTrapAttackBonus = function (trapDanger) {
         if (currentTrap[5]) {
@@ -88,7 +88,11 @@ var Trap = (function () {
         } else {
             currentTrap = trapKind[Utils.getRandomInt(0, trapKind.length)];
         }
-        return currentTrap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + currentTrap[2] + " to spot, DC " + currentTrap[3] + " to disable (" + currentTrap[4] + "), DC " + getTrapSaveDC(trapDanger) + " " + currentTrap[1] + " save or take " + getTrapDamage(trapDanger) + "D10 damage" + getTrapAttackBonus(trapDanger);
+        if (currentTrap[6] != null) { // check dmg type
+            return currentTrap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + currentTrap[2] + " to spot, DC " + currentTrap[3] + " to disable (" + currentTrap[4] + "), DC " + getTrapSaveDC(trapDanger) + " " + currentTrap[1] + " save or take " + getTrapDamage(trapDanger) + "D10 (" + currentTrap[6] + ") damage" + getTrapAttackBonus(trapDanger);
+        } else {
+            return currentTrap[0] + " [" + trapSeverity[trapDanger] + "]: DC " + currentTrap[2] + " to spot, DC " + currentTrap[3] + " to disable (" + currentTrap[4] + "), DC " + getTrapSaveDC(trapDanger) + " " + currentTrap[1] + " save or " + currentTrap[7];
+        }
     };
     return {
         getCurrentTrap: getCurrentTrap,
