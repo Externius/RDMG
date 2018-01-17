@@ -25,7 +25,7 @@ var Trap = (function () {
         ["Locking Pit", "Strength", 10, 15, "Intelligence", false, null, "locked."],
         ["Poison Darts", "Constitution", 15, 15, "Intelligence", true, "poison", null],
         ["Poison Needle", "Constitution", 15, 15, "Dexterity", false, "poison", null],
-        ["Rolling Sphere", "Dexterity", 15, 15, " Intelligence", false, "bludgeoning", null]
+        ["Rolling Sphere", "Dexterity", 15, 15, "Intelligence", false, "bludgeoning", null]
     ];
     var trapDoorKind = [ // name, save, spot, disable, disableCheck, attackMod, dmg type, special
         ["Fire trap", "Dexterity", "10", "15", "Intelligence", "false", "fire", null],

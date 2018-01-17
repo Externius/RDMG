@@ -1,5 +1,115 @@
 [
   {
+    "name": "Ammunition (20)",
+    "cost": 2,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Ammunition +1 (20)",
+    "cost": 200,
+    "rarity": 1,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Ammunition +2 (20)",
+    "cost": 2000,
+    "rarity": 2,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Ammunition +3 (20)",
+    "cost": 20000,
+    "rarity": 3,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Alchemist's supplies",
+    "cost": 50,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
+    "name": "Disguise kit",
+    "cost": 25,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "fey",
+      "fiend",
+      "giant"
+    ]
+  },
+  {
+    "name": "Forgery kit",
+    "cost": 15,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "fey",
+      "fiend",
+      "giant"
+    ]
+  },
+  {
+    "name": "Gaming Set",
+    "cost": 10,
+    "rarity": 0,
+    "magical": false,
+    "types": [
+      "humanoid",
+      "dragon",
+      "fey",
+      "fiend",
+      "giant",
+      "undead"
+    ]
+  },
+  {
     "name": "Harp",
     "cost": 100,
     "rarity": 0,
