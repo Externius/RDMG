@@ -23,25 +23,23 @@ var Utils = (function () {
         var link = document.getElementById(linkID);
         link.hidden = false;
         link.style.display = "inline-block";
-        link.addEventListener("click", function () {
-            var canvas = document.getElementById("mapArea");
-            var table = document.getElementById("table_description");
-            var tableClone = table.cloneNode(true);
-            var doc = document.implementation.createHTMLDocument("DungeonMap");
-            var img = document.createElement("img");
-            var style = document.createElement('style');
-            var head = doc.getElementsByTagName("head")[0];
-            var css = "table, th, td {border-collapse: collapse;} " +
-                "th, td {padding: 8px; text-align: left; border-bottom: 1px solid #ddd;}" +
-                ".wrap { white-space: pre-wrap;}";
-            img.src = canvas.toDataURL();
-            doc.body.appendChild(img);
-            doc.body.appendChild(tableClone);
-            style.innerHTML = css;
-            head.appendChild(style);
-            link.href = "data:text/html;charset=UTF-8," + encodeURIComponent(doc.documentElement.outerHTML);
-            link.download = "dungeonmap.html";
-        }, false);
+        var canvas = document.getElementById("mapArea");
+        var table = document.getElementById("table_description");
+        var tableClone = table.cloneNode(true);
+        var doc = document.implementation.createHTMLDocument("DungeonMap");
+        var img = document.createElement("img");
+        var style = document.createElement('style');
+        var head = doc.getElementsByTagName("head")[0];
+        var css = "table, th, td {border-collapse: collapse;} " +
+            "th, td {padding: 8px; text-align: left; border-bottom: 1px solid #ddd;}" +
+            ".wrap { white-space: pre-wrap;}";
+        img.src = canvas.toDataURL();
+        doc.body.appendChild(img);
+        doc.body.appendChild(tableClone);
+        style.innerHTML = css;
+        head.appendChild(style);
+        link.href = "data:text/html;charset=UTF-8," + encodeURIComponent(doc.documentElement.outerHTML);
+        link.download = "dungeonmap.html";
     };
     var donwloadCSV = function (linkID, csv, fileName) {
         var csvFile = new Blob([csv], { type: "text/csv" });
@@ -67,10 +65,8 @@ var Utils = (function () {
         var link = document.getElementById(linkID);
         link.hidden = false;
         link.style.display = "inline-block";
-        link.addEventListener("click", function () {
-            link.href = canvas.toDataURL();
-            link.download = "dungeonmap.png";
-        }, false);
+        link.href = canvas.toDataURL();
+        link.download = "dungeonmap.png";
     };
     var corridorOnchange = function (e) {
         if (e.value === "true") {
