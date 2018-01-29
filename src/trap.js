@@ -42,8 +42,7 @@ var Trap = (function () {
             var min = trapAttackBonus[trapDanger];
             var max = trapAttackBonus[trapDanger + 1];
             return " (attack bonus +" + Utils.getRandomInt(min, max) + ").";
-        }
-        else {
+        } else {
             return ".";
         }
     };
@@ -57,11 +56,9 @@ var Trap = (function () {
             return trapDmgSeverity[0][trapDanger];
         } else if (Utils.partyLevel < 11) {
             return trapDmgSeverity[1][trapDanger];
-        }
-        else if (Utils.partyLevel < 17) {
+        } else if (Utils.partyLevel < 17) {
             return trapDmgSeverity[2][trapDanger];
-        }
-        else {
+        } else {
             return trapDmgSeverity[3][trapDanger];
         }
     };

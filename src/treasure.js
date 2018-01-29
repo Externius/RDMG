@@ -25,8 +25,7 @@ var Treasure = (function () {
             return treasures.filter(function (obj) {
                 return obj.rarity <= Utils.itemsRarity && obj.cost < sumValue;
             });
-        }
-        else {
+        } else {
             return treasures.filter(function (obj) {
                 return obj.rarity <= Utils.itemsRarity && obj.cost < sumValue && obj.types.some(type => type === Utils.monsterType);
             });

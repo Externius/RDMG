@@ -42,13 +42,14 @@ var Dungeon = (function () {
         return false;
     };
     Array.prototype.diff = function (a) {
-        return this.filter(function (i) { return a.indexOf(i) < 0; });
+        return this.filter(function (i) {
+            return a.indexOf(i) < 0;
+        });
     };
     var getFontSize = function (dungeonSize) {
         if (dungeonSize > 30) {
             return "9pt Calibri bold";
-        }
-        else {
+        } else {
             return "10pt Calibri bold";
         }
     };
@@ -249,10 +250,17 @@ var Dungeon = (function () {
         }
         while (!roomIsOk && failSafeCount > 0);
         if (failSafeCount > 0) {
-            return { X: x, Y: y, Right: right, Down: down };
-        }
-        else {
-            return { X: 0, Y: 0 }; // it can never be 0 if its a good coordinate
+            return {
+                X: x,
+                Y: y,
+                Right: right,
+                Down: down
+            };
+        } else {
+            return {
+                X: 0,
+                Y: 0
+            }; // it can never be 0 if its a good coordinate
         }
     };
     var generateRoom = function (tiles, roomNumber, roomSize, roomDescription) {
@@ -567,12 +575,30 @@ var Dungeon = (function () {
         for (var i = 0; i < dungeonSize; i++) { // declare base array 
             tiles[i] = [];
             for (var j = 0; j < dungeonSize; j++) {
-                tiles[i][j] = { X: j * sizeX, Y: i * sizeY, Width: sizeX, Height: sizeY, Texture: -1 };
+                tiles[i][j] = {
+                    X: j * sizeX,
+                    Y: i * sizeY,
+                    Width: sizeX,
+                    Height: sizeY,
+                    Texture: -1
+                };
             }
         }
         for (i = 1; i < dungeonSize - 1; i++) { // set drawingarea
             for (j = 1; j < dungeonSize - 1; j++) {
-                tiles[i][j] = { X: (j - 1) * sizeX, Y: (i - 1) * sizeY, Width: sizeX, Height: sizeY, Texture: 0, H: null, G: 0, Parent: null, F: null, I: i, J: j }; //-1 because we dont use the edges
+                tiles[i][j] = {
+                    X: (j - 1) * sizeX, // -1 because we dont use the edges
+                    Y: (i - 1) * sizeY,
+                    Width: sizeX,
+                    Height: sizeY,
+                    Texture: 0,
+                    H: null,
+                    G: 0,
+                    Parent: null,
+                    F: null,
+                    I: i,
+                    J: j
+                }; 
             }
         }
         var context = canvas.getContext("2d"); // get canvas context
@@ -585,8 +611,7 @@ var Dungeon = (function () {
                 addDeadEnds(tiles, roomCount);
             }
             addRandomTrap(tiles, trapDescription);
-        }
-        else {
+        } else {
             NoCorridor.generate(tiles, roomSize, roomDescription);
         }
         addDescription(roomDescription, trapDescription);

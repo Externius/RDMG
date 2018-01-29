@@ -42,7 +42,9 @@ var Utils = (function () {
         link.download = "dungeonmap.html";
     };
     var donwloadCSV = function (linkID, csv, fileName) {
-        var csvFile = new Blob([csv], { type: "text/csv" });
+        var csvFile = new Blob([csv], {
+            type: "text/csv"
+        });
         var link = document.getElementById(linkID);
         link.hidden = false;
         link.style.display = "inline-block";
@@ -54,7 +56,8 @@ var Utils = (function () {
         var description = document.getElementById("table_description");
         var rows = description.querySelectorAll("table tr");
         for (var i = 0; i < rows.length; i++) {
-            var row = [], cols = rows[i].querySelectorAll("td, th");
+            var row = [],
+                cols = rows[i].querySelectorAll("td, th");
             for (var j = 0; j < cols.length; j++)
                 row.push(cols[j].innerText);
             csv.push(row.join(","));
@@ -119,15 +122,28 @@ var Utils = (function () {
         return "###ROOM" + x + "###";
     };
     var addTrapDescription = function (tiles, x, y, trapDescription) {
-        trapDescription[trapDescription.length] = { name: Trap.getTrapName(trapDescription.length + 1), description: Trap.getCurrentTrap(false) };
+        trapDescription[trapDescription.length] = {
+            name: Trap.getTrapName(trapDescription.length + 1),
+            description: Trap.getCurrentTrap(false)
+        };
         tiles[x][y].Count = trapDescription.length;
     };
     var addRoomDescription = function (tiles, x, y, roomDescription, doorList) {
-        roomDescription[roomDescription.length] = { name: getRoomName(roomDescription.length + 1), treasure: Treasure.getTreasure(), monster: Encounter.getMonster(), door: Door.getDoorDescription(tiles, doorList) };
+        roomDescription[roomDescription.length] = {
+            name: getRoomName(roomDescription.length + 1),
+            treasure: Treasure.getTreasure(),
+            monster: Encounter.getMonster(),
+            door: Door.getDoorDescription(tiles, doorList)
+        };
         tiles[x][y].Count = roomDescription.length;
     };
     var addNCRoomDescription = function (tiles, x, y, roomDescription, doors) {
-        roomDescription[roomDescription.length] = { name: getRoomName(roomDescription.length + 1), treasure: Treasure.getTreasure(), monster: Encounter.getMonster(), door: doors };
+        roomDescription[roomDescription.length] = {
+            name: getRoomName(roomDescription.length + 1),
+            treasure: Treasure.getTreasure(),
+            monster: Encounter.getMonster(),
+            door: doors
+        };
         tiles[x][y].Count = roomDescription.length;
     };
     return {

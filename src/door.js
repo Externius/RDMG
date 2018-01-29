@@ -85,7 +85,7 @@ var Door = (function () {
         nCount = 1;
         var result = "";
         for (var i = 0; i < closedList.length; i++) {
-            if (checkNCDoor(dungeon, closedList[i].I, closedList[i].J -1)) {
+            if (checkNCDoor(dungeon, closedList[i].I, closedList[i].J - 1)) {
                 result += "West Entry #" + wCount++ + dungeon[closedList[i].I][closedList[i].J - 1].Count;
             } else if (checkNCDoor(dungeon, closedList[i].I, closedList[i].J + 1)) {
                 result += "East Entry #" + eCount++ + dungeon[closedList[i].I][closedList[i].J + 1].Count;

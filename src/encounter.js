@@ -92,8 +92,7 @@ var Encounter = (function () {
             return monsters.filter(function (obj) {
                 return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4);
             });
-        }
-        else {
+        } else {
             return monsters.filter(function (obj) {
                 return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4) && obj.type === Utils.monsterType;
             });

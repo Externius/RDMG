@@ -201,7 +201,10 @@ var NoCorridor = (function () {
         if (horizontal < 0) {
             right = -right;
         }
-        return { down: down, right: right };
+        return {
+            down: down,
+            right: right
+        };
     };
     var checkPossible = function (tiles, vertical, horizontal, door) {
         if (vertical === 0 || horizontal === 0) { // its impossible to add room
@@ -220,8 +223,7 @@ var NoCorridor = (function () {
             tiles[x][y + right].Texture = 6; // left edge 
             edgeTileList[edgeTileList.length] = tiles[x][y + 1];
             edgeTileList[edgeTileList.length] = tiles[x][y + right];
-        }
-        else { // right
+        } else { // right
             for (i = 0; i < right; i++) { // set room
                 tiles[x][y + i].Texture = 3;
                 tiles[x][y + i].Count = " ";
@@ -256,8 +258,7 @@ var NoCorridor = (function () {
         if (!Door.checkNCDoor(tiles, x, y) && addToEdgeList) { // if its not a corridor_door
             tiles[x][y].Texture = 6;
             edgeTileList[edgeTileList.length] = tiles[x][y];
-        }
-        else if (!Door.checkNCDoor(tiles, x, y)) {
+        } else if (!Door.checkNCDoor(tiles, x, y)) {
             tiles[x][y].Texture = 6;
         }
     };
@@ -267,8 +268,7 @@ var NoCorridor = (function () {
             for (var i = down; i < 2; i++) { //right edge
                 setRoomEdge(tiles, x + i, y + right, addToEdgeList);
             }
-        }
-        else { // bottom
+        } else { // bottom
             for (i = -1; i < down + 1; i++) { //left edge
                 setRoomEdge(tiles, x + i, y + right, addToEdgeList);
             }
@@ -280,8 +280,7 @@ var NoCorridor = (function () {
             for (var i = right; i < 2; i++) {
                 setRoomEdge(tiles, x + down, y + i, addToEdgeList);
             }
-        }
-        else { // right
+        } else { // right
             for (i = -1; i < right + 1; i++) {
                 setRoomEdge(tiles, x + down, y + i, addToEdgeList);
             }
@@ -321,8 +320,7 @@ var NoCorridor = (function () {
             tiles[x + down][y].Texture = 6; // top edge 
             edgeTileList[edgeTileList.length] = tiles[x + 1][y];
             edgeTileList[edgeTileList.length] = tiles[x + down][y];
-        }
-        else { // down
+        } else { // down
             for (i = 0; i < down; i++) { // set room
                 tiles[x + i][y].Texture = 3;
                 tiles[x + i][y].Count = " ";
@@ -382,10 +380,16 @@ var NoCorridor = (function () {
             vertical = checkVerticalOneWay(tiles, x, y + right, down); // check horizontal end vertically
             horizontal = checkHorizontalOneWay(tiles, x + down, y, right); // check vertical end horizontally
             if (checkPossibleEnd(tiles, vertical, horizontal, door, down, right)) {
-                return { down: down, right: right };
+                return {
+                    down: down,
+                    right: right
+                };
             }
         }
-        return { down: 0, right: 0 };
+        return {
+            down: 0,
+            right: 0
+        };
     };
     var randomFillUpDown = function (tiles, x, y, roomSize, door) { // x-y is the tile next to the neighbour coordinates
         var result = checkArea(tiles, x, y, roomSize, door);
@@ -483,7 +487,7 @@ var NoCorridor = (function () {
         for (var i = 0; i < roomStart.length; i++) {
             var openList = [];
             var closedList = [];
-            var start = roomStart[i]; 
+            var start = roomStart[i];
             Dungeon.addToClosedList(closedList, tiles, start); // add start point to closed list
             addToOpen(tiles, start, openList, closedList); // add the nearby nodes to openList
             while (openList.length > 0) {
