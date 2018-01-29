@@ -19,212 +19,216 @@
 </head>
 
 <body onload="Dungeon.preloadImages(); Encounter.loadJSON(); Treasure.loadJSON();">
-  <div class="row">
-    <div class="col-lg-3">
-      <table id="options" class="table table-sm table-striped">
-        <tr>
-          <td>Dungeon size:</td>
-          <td>
-            <select id="dungeonSize" class="form-control">
-              <option value="20">Small</option>
-              <option value="32">Medium</option>
-              <option value="44">Large</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Dungeon difficulty:</td>
-          <td>
-            <select id="dungeonDifficulty" class="form-control">
-              <option value="0">Easy</option>
-              <option value="1" selected="selected">Medium</option>
-              <option value="2">Hard</option>
-              <option value="3">Deadly</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Party level:</td>
-          <td>
-            <select id="partyLevel" class="form-control">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-              <option value="13">13</option>
-              <option value="14">14</option>
-              <option value="15">15</option>
-              <option value="16">16</option>
-              <option value="17">17</option>
-              <option value="18">18</option>
-              <option value="19">19</option>
-              <option value="20">20</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Party size:</td>
-          <td>
-            <select id="partySize" class="form-control">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4" selected="selected">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Treasure value:</td>
-          <td>
-            <select id="treasureValue" class="form-control">
-              <option value="0.5">Low</option>
-              <option value="1" selected="selected">Standard</option>
-              <option value="1.5">High</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Items max rarity:</td>
-          <td>
-            <select id="itemsRarity" class="form-control">
-              <option value="0">Common</option>
-              <option value="1" selected="selected">Unommon</option>
-              <option value="2">Rare</option>
-              <option value="3">Very Rare</option>
-              <option value="4">Legendary</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Room density:</td>
-          <td>
-            <select id="roomDensity" class="form-control">
-              <option value="20">Low</option>
-              <option value="30">Medium</option>
-              <option value="40">High</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Room size:</td>
-          <td>
-            <select id="roomSize" class="form-control">
-              <option value="20">Small</option>
-              <option value="35">Medium</option>
-              <option value="45">Large</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Monsters type:</td>
-          <td>
-            <select id="monsterType" class="form-control">
-              <option value="any">Any</option>
-              <option value="aberration">Aberrations</option>
-              <option value="beast">Beasts</option>
-              <option value="celestial">Celestials</option>
-              <option value="construct">Constructs</option>
-              <option value="dragon">Dragons</option>
-              <option value="elemental">Elementals</option>
-              <option value="fey">Fey</option>
-              <option value="fiend">Fiends</option>
-              <option value="giant">Giants</option>
-              <option value="humanoid">Humanoids</option>
-              <option value="monstrosity">Monstrosities</option>
-              <option value="ooze">Oozes</option>
-              <option value="plant">Plants</option>
-              <option value="undead">Undead</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td> Traps: </td>
-          <td>
-            <select id="trapPercent" class="form-control">
-              <option value="0">None</option>
-              <option value="15" selected="selected">Few</option>
-              <option value="30">More</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td> Dead ends: </td>
-          <td>
-            <select id="deadEnd" class="form-control">
-              <option value="true">Yes</option>
-              <option value="false"> No</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td> Corridors: </td>
-          <td>
-            <select id="corridor" onchange="Utils.corridorOnchange(this)" class="form-control">
-              <option value="true">Yes</option>
-              <option value="false"> No</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td> Theme: </td>
-          <td>
-            <select id="theme" class="form-control">
-              <option value="0">Dark</option>
-              <option value="1">Light</option>
-              <option value="2">Minimal</option>
-            </select>
-          </td>
-        </tr>
-      </table>
-      <div>
-        <input type="button" value="Generate" onclick="Dungeon.drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','corridor','deadEnd')"
-          class="btn btn-secondary btn-block" />
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-3">
+        <table id="options" class="table table-sm table-striped">
+          <tr>
+            <td>Dungeon size:</td>
+            <td>
+              <select id="dungeonSize" class="form-control">
+                <option value="20">Small</option>
+                <option value="32">Medium</option>
+                <option value="44">Large</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Dungeon difficulty:</td>
+            <td>
+              <select id="dungeonDifficulty" class="form-control">
+                <option value="0">Easy</option>
+                <option value="1" selected="selected">Medium</option>
+                <option value="2">Hard</option>
+                <option value="3">Deadly</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Party level:</td>
+            <td>
+              <select id="partyLevel" class="form-control">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Party size:</td>
+            <td>
+              <select id="partySize" class="form-control">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4" selected="selected">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Treasure value:</td>
+            <td>
+              <select id="treasureValue" class="form-control">
+                <option value="0.5">Low</option>
+                <option value="1" selected="selected">Standard</option>
+                <option value="1.5">High</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Items max rarity:</td>
+            <td>
+              <select id="itemsRarity" class="form-control">
+                <option value="0">Common</option>
+                <option value="1" selected="selected">Unommon</option>
+                <option value="2">Rare</option>
+                <option value="3">Very Rare</option>
+                <option value="4">Legendary</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Room density:</td>
+            <td>
+              <select id="roomDensity" class="form-control">
+                <option value="20">Low</option>
+                <option value="30">Medium</option>
+                <option value="40">High</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Room size:</td>
+            <td>
+              <select id="roomSize" class="form-control">
+                <option value="20">Small</option>
+                <option value="35">Medium</option>
+                <option value="45">Large</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Monsters type:</td>
+            <td>
+              <select id="monsterType" class="form-control">
+                <option value="any">Any</option>
+                <option value="aberration">Aberrations</option>
+                <option value="beast">Beasts</option>
+                <option value="celestial">Celestials</option>
+                <option value="construct">Constructs</option>
+                <option value="dragon">Dragons</option>
+                <option value="elemental">Elementals</option>
+                <option value="fey">Fey</option>
+                <option value="fiend">Fiends</option>
+                <option value="giant">Giants</option>
+                <option value="humanoid">Humanoids</option>
+                <option value="monstrosity">Monstrosities</option>
+                <option value="ooze">Oozes</option>
+                <option value="plant">Plants</option>
+                <option value="undead">Undead</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td> Traps: </td>
+            <td>
+              <select id="trapPercent" class="form-control">
+                <option value="0">None</option>
+                <option value="15" selected="selected">Few</option>
+                <option value="30">More</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td> Dead ends: </td>
+            <td>
+              <select id="deadEnd" class="form-control">
+                <option value="true">Yes</option>
+                <option value="false"> No</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td> Corridors: </td>
+            <td>
+              <select id="corridor" onchange="Utils.corridorOnchange(this)" class="form-control">
+                <option value="true">Yes</option>
+                <option value="false"> No</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td> Theme: </td>
+            <td>
+              <select id="theme" class="form-control">
+                <option value="0">Dark</option>
+                <option value="1">Light</option>
+                <option value="2">Minimal</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+        <div>
+          <input type="button" value="Generate" onclick="Dungeon.drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','corridor','deadEnd')"
+            class="btn btn-secondary btn-block" />
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <canvas id="mapArea" width="800" height="800" style="border:0px #000000;"> </canvas>
+      </div>
+      <div class="col-lg-3 text-center">
+        <a href="https://github.com/externius/rdmg">
+          <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+            alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+        </a>
+        <br>
+        <p class="font-weight-bold">Available on Google Play:</p>
+        <br>
+        <a href="https://play.google.com/store/apps/details?id=externius.rdmg">
+          <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" class="img-fluid" alt="Get it on google play">
+        </a>
+        <p>If you want to support me, you can buy me a drink.</p>
+        <a href="https://www.paypal.me/externius/">
+          <img src="/images/cup.png" alt="Coffee Cup" class="img-fluid">
+        </a>
       </div>
     </div>
-    <div class="col-lg-6">
-      <canvas id="mapArea" width="800" height="800" style="border:0px #000000;"> </canvas>
+    <div class="row">
+      <div class="col-lg-4">
+        <a id="download_map" class="btn btn-info btn-block" hidden> Download Map </a>
+      </div>
+      <div class="col-lg-4">
+        <a id="download_description" class="btn btn-info btn-block" hidden> Download Description to CSV </a>
+      </div>
+      <div class="col-lg-4">
+        <a id="download_html" class="btn btn-info btn-block" hidden> Download HTML </a>
+      </div>
     </div>
-    <div class="col-lg-3 text-center">
-      <a href="https://github.com/externius/rdmg">
-        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
-          alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
-      </a>
-      <br>
-      <p class="font-weight-bold">Available on Google Play:</p>
-      <br>
-      <a href="https://play.google.com/store/apps/details?id=externius.rdmg">
-        <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" class="img-fluid" alt="Get it on google play">
-      </a>
-      <p>If you want to support me, you can buy me a drink.</p>
-      <a href="https://www.paypal.me/externius/">
-        <img src="/images/cup.png" alt="Coffee Cup" class="img-fluid">
-      </a>
+    <div>
+      <table id="table_description" class="table" style="white-space: pre-wrap;"> </table>
     </div>
   </div>
-  <div class="row">
-    <div class="col-lg-4">
-      <a id="download_map" class="btn btn-info btn-block" hidden> Download Map </a>
-    </div>
-    <div class="col-lg-4">
-      <a id="download_description" class="btn btn-info btn-block" hidden> Download Description to CSV </a>
-    </div>
-    <div class="col-lg-4">
-      <a id="download_html" class="btn btn-info btn-block" hidden> Download HTML </a>
-    </div>
-  </div>
-  <table id="table_description" class="table" style="white-space: pre-wrap;"> </table>
 </body>
 
 </html>
