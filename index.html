@@ -38,7 +38,7 @@
             <td>
               <select id="dungeonDifficulty" class="form-control">
                 <option value="0">Easy</option>
-                <option value="1" selected="selected">Medium</option>
+                <option value="1" selected>Medium</option>
                 <option value="2">Hard</option>
                 <option value="3">Deadly</option>
               </select>
@@ -78,7 +78,7 @@
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
-                <option value="4" selected="selected">4</option>
+                <option value="4" selected>4</option>
                 <option value="5">5</option>
                 <option value="6">6</option>
                 <option value="7">7</option>
@@ -91,7 +91,7 @@
             <td>
               <select id="treasureValue" class="form-control">
                 <option value="0.5">Low</option>
-                <option value="1" selected="selected">Standard</option>
+                <option value="1" selected>Standard</option>
                 <option value="1.5">High</option>
               </select>
             </td>
@@ -101,7 +101,7 @@
             <td>
               <select id="itemsRarity" class="form-control">
                 <option value="0">Common</option>
-                <option value="1" selected="selected">Unommon</option>
+                <option value="1" selected>Unommon</option>
                 <option value="2">Rare</option>
                 <option value="3">Very Rare</option>
                 <option value="4">Legendary</option>
@@ -131,22 +131,21 @@
           <tr>
             <td>Monsters type:</td>
             <td>
-              <select id="monsterType" class="form-control">
-                <option value="any">Any</option>
-                <option value="aberration">Aberrations</option>
-                <option value="beast">Beasts</option>
-                <option value="celestial">Celestials</option>
-                <option value="construct">Constructs</option>
-                <option value="dragon">Dragons</option>
-                <option value="elemental">Elementals</option>
-                <option value="fey">Fey</option>
-                <option value="fiend">Fiends</option>
-                <option value="giant">Giants</option>
-                <option value="humanoid">Humanoids</option>
-                <option value="monstrosity">Monstrosities</option>
-                <option value="ooze">Oozes</option>
-                <option value="plant">Plants</option>
-                <option value="undead">Undead</option>
+              <select multiple id="monsterType" class="form-control">
+                <option value="aberration" selected>Aberrations</option>
+                <option value="beast" selected>Beasts</option>
+                <option value="celestial" selected>Celestials</option>
+                <option value="construct" selected>Constructs</option>
+                <option value="dragon" selected>Dragons</option>
+                <option value="elemental" selected>Elementals</option>
+                <option value="fey" selected>Fey</option>
+                <option value="fiend" selected>Fiends</option>
+                <option value="giant" selected>Giants</option>
+                <option value="humanoid" selected>Humanoids</option>
+                <option value="monstrosity" selected>Monstrosities</option>
+                <option value="ooze" selected>Oozes</option>
+                <option value="plant" selected>Plants</option>
+                <option value="undead" selected>Undead</option>
               </select>
             </td>
           </tr>
@@ -155,7 +154,7 @@
             <td>
               <select id="trapPercent" class="form-control">
                 <option value="0">None</option>
-                <option value="15" selected="selected">Few</option>
+                <option value="15" selected>Few</option>
                 <option value="30">More</option>
               </select>
             </td>

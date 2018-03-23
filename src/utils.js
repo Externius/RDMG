@@ -13,7 +13,16 @@ var Utils = (function () {
         var dD = document.getElementById("dungeonDifficulty");
         this.dungeonDifficulty = parseInt(dD.options[dD.selectedIndex].value);
         var mT = document.getElementById("monsterType");
-        this.monsterType = mT.options[mT.selectedIndex].value;
+        this.monsterType = [];
+        if (mT.selectedOptions.length === 0) {
+            this.monsterType[0] = "none";
+        } else if (mT.selectedOptions.length === mT.length) {
+            this.monsterType[0] = "any";
+        } else {
+            for (var i = 0; i < mT.selectedOptions.length; i++) {
+                this.monsterType[i] = mT.selectedOptions[i].value;
+            }
+        }
         var tV = document.getElementById("treasureValue");
         this.treasureValue = parseFloat(tV.options[tV.selectedIndex].value);
         var iR = document.getElementById("itemsRarity");

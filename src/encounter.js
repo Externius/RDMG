@@ -88,13 +88,13 @@ var Encounter = (function () {
         xobj.send();
     };
     var getMonsters = function () {
-        if (Utils.monsterType === "any") {
+        if (Utils.monsterType[0] === "any") {
             return monsters.filter(function (obj) {
                 return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4);
             });
         } else {
             return monsters.filter(function (obj) {
-                return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4) && obj.type === Utils.monsterType;
+                return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4) && Utils.monsterType.includes(obj.type);
             });
         }
     };
@@ -148,7 +148,7 @@ var Encounter = (function () {
         difficulty[3] = thresholds[Utils.partyLevel][3] * Utils.partySize;
     };
     var getMonster = function () {
-        if (Math.floor(Math.random() * 100) > Utils.getMonsterPercentage()) {
+        if (Math.floor(Math.random() * 100) > Utils.getMonsterPercentage() || Utils.monsterType[0] === "none") {
             return "Monster: None";
         }
         setDifficulty();
