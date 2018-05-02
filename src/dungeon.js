@@ -4,6 +4,7 @@ var Dungeon = (function () {
     var RESULT = [];
     var CORRIDORS = [];
     var TRAPCOUNT = 0;
+    var ROAMINGCOUNT = 0;
     var ROOMS = [];
     var SOURCES = [
         'images/dark/marble.png',
@@ -18,6 +19,7 @@ var Dungeon = (function () {
         'images/dark/door_trapped.png',
         'images/dark/nc_door_locked.png',
         'images/dark/nc_door_trapped.png',
+        'images/dark/monster.png',
         'images/light/marble.png',
         'images/light/room.png',
         'images/light/room_edge.png',
@@ -80,7 +82,7 @@ var Dungeon = (function () {
         tr.appendChild(td);
         return tr;
     };
-    var addDescription = function (roomDescription, trapDescription) {
+    var addDescription = function (roomDescription, trapDescription, roamingDescription) {
         var table = document.getElementById("table_description");
         table.innerHTML = "";
         for (var i = 0; i < roomDescription.length; i++) {
@@ -97,6 +99,12 @@ var Dungeon = (function () {
             tr = createTrapTableNode(trapDescription[i].name, true);
             table.appendChild(tr);
             tr = createTrapTableNode(trapDescription[i].description, false);
+            table.appendChild(tr);
+        }
+        for (i = 0; i < roamingDescription.length; i++) {
+            tr = createTrapTableNode(roamingDescription[i].name, true);
+            table.appendChild(tr);
+            tr = createTrapTableNode(roamingDescription[i].description, false);
             table.appendChild(tr);
         }
     };
@@ -276,6 +284,10 @@ var Dungeon = (function () {
         tiles[x][y].Texture = 5; // add trap
         Utils.addTrapDescription(tiles, x, y, trapDescription);
     };
+    var addRoamingMonster = function (tiles, x, y, roamingDescription) {
+        tiles[x][y].Texture = 12; // add roaming monster
+        Utils.addRoamingDescription(tiles, x, y, roamingDescription);
+    };
     var setPath = function (tiles) {
         for (var i = 0; i < RESULT.length; i++) {
             if (RESULT[i].Texture === 0) { // only change the marble texture
@@ -432,25 +444,38 @@ var Dungeon = (function () {
             generateCorridors(tiles);
         }
     };
-    var addRandomTrap = function (tiles, trapDescription) {
+    var addItem = function (tiles, i, j, item, description) {
+        switch (item) {
+            case 0: // trap
+                addTrap(tiles, i, j, description)
+                break;
+            case 1: // roaming
+                addRoamingMonster(tiles, i, j, description)
+                break;
+            default:
+                break;
+        }
+    };
+    var addCorridorItem = function (tiles, INCOUNT, item, description) {
         var count = 0;
-        while (TRAPCOUNT > count) {
+        while (INCOUNT > count) {
             var x = Utils.getRandomInt(0, CORRIDORS.length);
             var i = CORRIDORS[x].I
             var j = CORRIDORS[x].J;
             if (tiles[i][j].Texture === 1) {
-                addTrap(tiles, i, j, trapDescription);
+                addItem(tiles, i, j, item, description);
                 count++;
             }
         }
     };
-    var setBase = function (corridorIndex, doorIndex, entryIndex, trapIndex, doorLockedIndex, doorTrappedIndex) {
+    var setBase = function (corridorIndex, doorIndex, entryIndex, trapIndex, doorLockedIndex, doorTrappedIndex, monsterIndex) {
         THEMEINDEX[1] = corridorIndex;
         THEMEINDEX[2] = doorIndex;
         THEMEINDEX[4] = entryIndex;
         THEMEINDEX[5] = trapIndex;
         THEMEINDEX[8] = doorLockedIndex;
         THEMEINDEX[9] = doorTrappedIndex;
+        THEMEINDEX[12] = monsterIndex;
     };
     var setTheme = function (marbleIndex, roomIndex, roomEdgeIndex, ncDoorIndex, ncDoorLockedIndex, ncDoorTrappedIndex) {
         THEMEINDEX[0] = marbleIndex;
@@ -464,16 +489,16 @@ var Dungeon = (function () {
         var theme = document.getElementById("theme");
         var themeID = parseInt(theme.options[theme.selectedIndex].value);
         THEMEINDEX = [];
-        setBase(1, 2, 4, 5, 8, 9);
+        setBase(1, 2, 4, 5, 8, 9, 12);
         switch (themeID) {
             case 0: // dark
                 setTheme(0, 3, 6, 7, 10, 11);
                 break;
             case 1: // light
-                setTheme(12, 13, 14, 15, 16, 17);
+                setTheme(13, 14, 15, 16, 17, 18);
                 break;
             case 2: // minimal
-                setTheme(18, 19, 18, 20, 21, 22);
+                setTheme(19, 20, 19, 21, 22, 23);
                 break;
             default:
                 break;
@@ -523,25 +548,32 @@ var Dungeon = (function () {
                     case 11: // nc_door_trapped
                         rotateImage(context, IMAGEOBJECT[THEMEINDEX[11]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
                         break;
+                    case 12: // roaming monster
+                        context.drawImage(IMAGEOBJECT[THEMEINDEX[12]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        context.font = contextFont;
+                        context.fillText(tiles[i][j].Count, tiles[i][j].X + Math.round(tiles[i][j].Width * 0.1), tiles[i][j].Y + Math.round(tiles[i][j].Height * 0.4));
+                        break;
                     default:
                         break;
                 }
             }
         }
     };
-    var drawDungeonOneCanvas = function (canvasID, sizeID, roomDensityID, roomSizeID, trapID, corridorID, deadEndID) {
+    var drawDungeonOneCanvas = function (canvasID, sizeID, roomDensityID, roomSizeID, trapID, corridorID, deadEndID, roamingID) {
         DOORS = [];
-        TRAPCOUNT = 0;
         CORRIDORS = [];
         ROOMS = [];
         var roomDescription = [];
         var trapDescription = [];
+        var roamingDescription = [];
         var canvas = document.getElementById(canvasID);
         var dungeon = document.getElementById(sizeID);
         var room = document.getElementById(roomDensityID);
         var rooms = document.getElementById(roomSizeID);
         var traps = document.getElementById(trapID);
+        var roaming = document.getElementById(roamingID);
         var trapPercent = parseInt(traps.options[traps.selectedIndex].value);
+        var roamingPercent = parseInt(roaming.options[roaming.selectedIndex].value);
         var corridor = document.getElementById(corridorID);
         var hasCorridor = (corridor.options[corridor.selectedIndex].value === "true");
         var deadEnd = document.getElementById(deadEndID);
@@ -554,6 +586,7 @@ var Dungeon = (function () {
         var tiles = [];
         var contextFont = getFontSize(dungeonSize);
         TRAPCOUNT = dungeonSize * trapPercent / 100;
+        ROAMINGCOUNT = dungeonSize * roamingPercent / 100;
         Utils.loadVariables();
         /**
          * Textures:
@@ -570,6 +603,7 @@ var Dungeon = (function () {
          *  9 door_trapped
          *  10 nc_door_locked
          *  11 nc_door_trapped
+         *  12 roaming monster
          */
         dungeonSize += 2; // + 2 because of edges
         for (var i = 0; i < dungeonSize; i++) { // declare base array 
@@ -598,7 +632,7 @@ var Dungeon = (function () {
                     F: null,
                     I: i,
                     J: j
-                }; 
+                };
             }
         }
         var context = canvas.getContext("2d"); // get canvas context
@@ -610,11 +644,12 @@ var Dungeon = (function () {
             if (hasDeadEnds) {
                 addDeadEnds(tiles, roomCount);
             }
-            addRandomTrap(tiles, trapDescription);
+            addCorridorItem(tiles, TRAPCOUNT, 0, trapDescription);
+            addCorridorItem(tiles, ROAMINGCOUNT, 1, roamingDescription);
         } else {
             NoCorridor.generate(tiles, roomSize, roomDescription);
         }
-        addDescription(roomDescription, trapDescription);
+        addDescription(roomDescription, trapDescription, roamingDescription);
         getTheme();
         drawMap(tiles, context, contextFont, hasCorridor);
         Utils.downloadImg("download_map", canvas);

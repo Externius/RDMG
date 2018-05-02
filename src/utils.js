@@ -85,10 +85,12 @@ var Utils = (function () {
             document.getElementById("roomDensity").disabled = false;
             document.getElementById("trapPercent").disabled = false;
             document.getElementById("deadEnd").disabled = false;
+            document.getElementById("roamingPercent").disabled = false;
         } else {
             document.getElementById("roomDensity").disabled = true;
             document.getElementById("trapPercent").disabled = true;
             document.getElementById("deadEnd").disabled = true;
+            document.getElementById("roamingPercent").disabled = true;
         }
     };
     var getRandomInt = function (min, max) {
@@ -130,6 +132,13 @@ var Utils = (function () {
     var getRoomName = function (x) {
         return "###ROOM" + x + "###";
     };
+    var addRoamingDescription = function (tiles, x, y, roamingDescription) {
+        roamingDescription[roamingDescription.length] = {
+            name: Encounter.getRoamingName(roamingDescription.length + 1),
+            description: Encounter.getRoamingMonster()
+        };
+        tiles[x][y].Count = roamingDescription.length;
+    };
     var addTrapDescription = function (tiles, x, y, trapDescription) {
         trapDescription[trapDescription.length] = {
             name: Trap.getTrapName(trapDescription.length + 1),
@@ -167,6 +176,7 @@ var Utils = (function () {
         loadVariables: loadVariables,
         addRoomDescription: addRoomDescription,
         addTrapDescription: addTrapDescription,
+        addRoamingDescription: addRoamingDescription,
         addNCRoomDescription: addNCRoomDescription,
         getRandomInt: getRandomInt,
         manhattan: manhattan,

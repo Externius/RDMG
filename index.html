@@ -178,6 +178,16 @@
             </td>
           </tr>
           <tr>
+            <td> Roaming monsters: </td>
+            <td>
+              <select id="roamingPercent" class="form-control">
+                <option value="0">None</option>
+                <option value="10">Few</option>
+                <option value="20">More</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
             <td> Theme: </td>
             <td>
               <select id="theme" class="form-control">
@@ -189,7 +199,7 @@
           </tr>
         </table>
         <div>
-          <input type="button" value="Generate" onclick="Dungeon.drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','corridor','deadEnd')"
+          <input type="button" value="Generate" onclick="Dungeon.drawDungeonOneCanvas('mapArea','dungeonSize','roomDensity','roomSize','trapPercent','corridor','deadEnd','roamingPercent')"
             class="btn btn-secondary btn-block" />
         </div>
       </div>

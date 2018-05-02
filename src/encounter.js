@@ -154,8 +154,17 @@ var Encounter = (function () {
         setDifficulty();
         return calcEncounter();
     };
+    var getRoamingName = function (x) {
+        return "ROAMING MONSTERS #" + x;
+    };
+    var getRoamingMonster = function () {
+        setDifficulty();
+        return calcEncounter().substring(9); // remove "Monster: "
+    };
     return {
         loadJSON: loadJSON,
-        getMonster: getMonster
+        getMonster: getMonster,
+        getRoamingMonster: getRoamingMonster,
+        getRoamingName: getRoamingName
     }
 })();
