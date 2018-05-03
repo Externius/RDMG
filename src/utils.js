@@ -85,7 +85,7 @@ var Utils = (function () {
             document.getElementById("roomDensity").disabled = false;
             document.getElementById("trapPercent").disabled = false;
             document.getElementById("deadEnd").disabled = false;
-            document.getElementById("roamingPercent").disabled = false;
+            monsterTypeOnChange(document.getElementById("monsterType"));
         } else {
             document.getElementById("roomDensity").disabled = true;
             document.getElementById("trapPercent").disabled = true;
@@ -97,7 +97,7 @@ var Utils = (function () {
         if (e.selectedOptions.length === 0) {
             document.getElementById("roamingPercent").disabled = true;
             document.getElementById("roamingPercent").selectedIndex = 0;
-        } else {
+        } else if (document.getElementById("corridor").value === "true") {
             document.getElementById("roamingPercent").disabled = false;
         }
     };
