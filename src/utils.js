@@ -93,6 +93,14 @@ var Utils = (function () {
             document.getElementById("roamingPercent").disabled = true;
         }
     };
+    var monsterTypeOnChange = function (e) {
+        if (e.selectedOptions.length === 0) {
+            document.getElementById("roamingPercent").disabled = true;
+            document.getElementById("roamingPercent").selectedIndex = 0;
+        } else {
+            document.getElementById("roamingPercent").disabled = false;
+        }
+    };
     var getRandomInt = function (min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
@@ -181,6 +189,7 @@ var Utils = (function () {
         getRandomInt: getRandomInt,
         manhattan: manhattan,
         corridorOnchange: corridorOnchange,
+        monsterTypeOnChange: monsterTypeOnChange,
         downloadImg: downloadImg,
         downloadDescription: downloadDescription,
         downloadHTML: downloadHTML

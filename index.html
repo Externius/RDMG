@@ -131,7 +131,7 @@
           <tr>
             <td>Monsters type:</td>
             <td>
-              <select multiple id="monsterType" class="form-control">
+              <select multiple id="monsterType" onchange="Utils.monsterTypeOnChange(this)" class="form-control">
                 <option value="aberration" selected>Aberrations</option>
                 <option value="beast" selected>Beasts</option>
                 <option value="celestial" selected>Celestials</option>
