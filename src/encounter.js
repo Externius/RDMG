@@ -131,8 +131,7 @@ var Encounter = (function () {
     };
     var checkPossible = function () {
         for (var i = 0; i < filteredMonsters.length; i++) {
-            var monsterXP = getMonsterXP(filteredMonsters[i]);
-            if (sumXP > monsterXP) {
+            if (sumXP > getMonsterXP(filteredMonsters[i])) {
                 return true;
             }
         }
@@ -170,7 +169,7 @@ var Encounter = (function () {
         if (checkResult && Math.floor(Math.random() * 100) <= Utils.getMonsterPercentage()) {
             return calcEncounter();
         } else if (!checkResult) {
-            return "Monster: No suitable monsters with this settings.";
+            return "Monster: No suitable monsters with this settings";
         } else {
             return "Monster: None";
         }
@@ -183,7 +182,7 @@ var Encounter = (function () {
         if (checkPossible()) {
             return calcEncounter().substring(9); // remove "Monster: "
         } else {
-            return "No suitable monsters with this settings.";
+            return "No suitable monsters with this settings";
         }
     };
     return {
