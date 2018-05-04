@@ -1,5 +1,7 @@
 var Encounter = (function () {
     var monsters;
+    var filteredMonsters;
+    var sumXP;
     var challengeRatingXP = [
         10,
         25,
@@ -102,13 +104,16 @@ var Encounter = (function () {
         var index = monsterList.indexOf(monster)
         monsterList.splice(index, 1);
     };
-    var addMonster = function (filteredMonsters, currentXP) {
+    var getMonsterXP = function (monster) {
+        return challengeRatingXP[challengeRating.indexOf(monster.challenge_rating)];
+    };
+    var addMonster = function (currentXP) {
         var monsterCount = filteredMonsters.length;
         var monster = 0;
         while (monster < monsterCount) {
             var currentMonster = filteredMonsters[Utils.getRandomInt(0, filteredMonsters.length)]; // get random monster
             removeMonster(filteredMonsters, currentMonster); // remove monster from the list 
-            var monsterXP = challengeRatingXP[challengeRating.indexOf(currentMonster.challenge_rating)]; // get monster xp
+            var monsterXP = getMonsterXP(currentMonster);
             var allXP;
             var count;
             for (var i = multipliers.length - 1; i > -1; i--) { // find how many monster fit for the current XP
@@ -124,16 +129,23 @@ var Encounter = (function () {
         }
         return "None";
     };
+    var checkPossible = function () {
+        for (var i = 0; i < filteredMonsters.length; i++) {
+            var monsterXP = getMonsterXP(filteredMonsters[i]);
+            if (sumXP > monsterXP) {
+                return true;
+            }
+        }
+        return false;
+    };
     var calcEncounter = function () {
-        var filteredMonsters = getMonsters(); // get monsters for party level
-        var sumXP = difficulty[Utils.dungeonDifficulty];
         var result = "Monster: ";
-        if (Math.floor(Math.random() * 100) > 50) {
-            result += addMonster(filteredMonsters, sumXP);
+        if (Math.floor(Math.random() * 100) > 50 || filteredMonsters.length === 1) {
+            result += addMonster(sumXP);
         } else {
             var x = Utils.getRandomInt(2, Utils.dungeonDifficulty + 3);
             for (var i = 0; i < x; i++) {
-                result += addMonster(filteredMonsters, sumXP / x);
+                result += addMonster(sumXP / x);
                 result += ", ";
             }
             result = result.slice(0, -2);
@@ -141,25 +153,38 @@ var Encounter = (function () {
         result = result.split(", None").join("");
         return result;
     };
-    var setDifficulty = function () {
+    var init = function () {
         difficulty[0] = thresholds[Utils.partyLevel][0] * Utils.partySize;
         difficulty[1] = thresholds[Utils.partyLevel][1] * Utils.partySize;
         difficulty[2] = thresholds[Utils.partyLevel][2] * Utils.partySize;
         difficulty[3] = thresholds[Utils.partyLevel][3] * Utils.partySize;
+        filteredMonsters = getMonsters(); // get monsters for party level
+        sumXP = difficulty[Utils.dungeonDifficulty];
     };
     var getMonster = function () {
-        if (Math.floor(Math.random() * 100) > Utils.getMonsterPercentage() || Utils.monsterType[0] === "none") {
+        if (Utils.monsterType[0] === "none") {
             return "Monster: None";
         }
-        setDifficulty();
-        return calcEncounter();
+        init();
+        var checkResult = checkPossible();
+        if (checkResult && Math.floor(Math.random() * 100) <= Utils.getMonsterPercentage()) {
+            return calcEncounter();
+        } else if (!checkResult) {
+            return "Monster: No suitable monsters with this settings.";
+        } else {
+            return "Monster: None";
+        }
     };
     var getRoamingName = function (x) {
         return "ROAMING MONSTERS #" + x;
     };
     var getRoamingMonster = function () {
-        setDifficulty();
-        return calcEncounter().substring(9); // remove "Monster: "
+        init();
+        if (checkPossible()) {
+            return calcEncounter().substring(9); // remove "Monster: "
+        } else {
+            return "No suitable monsters with this settings.";
+        }
     };
     return {
         loadJSON: loadJSON,
