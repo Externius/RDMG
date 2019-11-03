@@ -59,8 +59,9 @@ var NoCorridor = (function () {
         }
     };
     var fillRoom = function (tiles, x, y, down, right) {
-        for (var i = 0; i < down + 2; i++) { // fill with room_edge texture the bigger boundaries 
-            for (var j = 0; j < right + 2; j++) {
+        var i, j;
+        for (i = 0; i < down + 2; i++) { // fill with room_edge texture the bigger boundaries 
+            for (j = 0; j < right + 2; j++) {
                 tiles[x + i - 1][y + j - 1].Texture = 6;
             }
         }
@@ -76,14 +77,14 @@ var NoCorridor = (function () {
         }
     };
     var removeFromDoors = function (door) {
-        var index = openDoorList.indexOf(door)
+        var index = openDoorList.indexOf(door);
         openDoorList.splice(index, 1);
     };
     var checkTile = function (tiles, x, y) { // check if it is a room_edge or door
-        return tiles[x][y].Texture === 6 || Door.checkNCDoor(tiles, x, y)
+        return tiles[x][y].Texture === 6 || Door.checkNCDoor(tiles, x, y);
     };
     var checkDungeonTilesEdge = function (tiles, x, y) {
-        return tiles[x][y].Texture === -1
+        return tiles[x][y].Texture === -1;
     };
     var checkUp = function (tiles, x, y) {
         var tile;
@@ -214,8 +215,9 @@ var NoCorridor = (function () {
         return true;
     };
     var fillHorizontal = function (tiles, x, y, right) {
+        var i;
         if (right < 0) { // left
-            for (var i = right + 1; i < 1; i++) { // set room
+            for (i = right + 1; i < 1; i++) { // set room
                 tiles[x][y + i].Texture = 3;
                 tiles[x][y + i].Count = " ";
             }
@@ -264,8 +266,9 @@ var NoCorridor = (function () {
     };
     var setVerticalEdge = function (tiles, x, y, right, down) {
         var addToEdgeList = !(right === 1 || right === -1);
+        var i;
         if (down < 0) { // up
-            for (var i = down; i < 2; i++) { //right edge
+            for (i = down; i < 2; i++) { //right edge
                 setRoomEdge(tiles, x + i, y + right, addToEdgeList);
             }
         } else { // bottom
@@ -276,8 +279,9 @@ var NoCorridor = (function () {
     };
     var setHorizontalEdge = function (tiles, x, y, right, down) {
         var addToEdgeList = !(down === 1 || down === -1);
+        var i;
         if (right < 0) { // left
-            for (var i = right; i < 2; i++) {
+            for (i = right; i < 2; i++) {
                 setRoomEdge(tiles, x + down, y + i, addToEdgeList);
             }
         } else { // right
@@ -308,11 +312,12 @@ var NoCorridor = (function () {
             }
             maxTryNumber--;
         }
-        while (doorCount > 0 && maxTryNumber > 0)
+        while (doorCount > 0 && maxTryNumber > 0);
     };
     var fillVertical = function (tiles, x, y, down) {
+        var i;
         if (down < 0) { // up
-            for (var i = down + 1; i < 1; i++) { // set room
+            for (i = down + 1; i < 1; i++) { // set room
                 tiles[x + i][y].Texture = 3;
                 tiles[x + i][y].Count = " ";
             }
@@ -333,8 +338,9 @@ var NoCorridor = (function () {
     };
     var fillLeftRight = function (tiles, x, y, down, right) {
         edgeTileList = [];
+        var i;
         if (right < 0) {
-            for (var i = right + 1; i < 1; i++) {
+            for (i = right + 1; i < 1; i++) {
                 fillVertical(tiles, x, y + i, down);
             }
         } else {
@@ -349,8 +355,9 @@ var NoCorridor = (function () {
     };
     var fillUpDown = function (tiles, x, y, down, right) {
         edgeTileList = [];
+        var i;
         if (down < 0) {
-            for (var i = down + 1; i < 1; i++) {
+            for (i = down + 1; i < 1; i++) {
                 fillHorizontal(tiles, x + i, y, right);
             }
         } else {
@@ -455,7 +462,7 @@ var NoCorridor = (function () {
         }
     };
     var checkTileForOpenList = function (tiles, x, y) {
-        return tiles[x][y].Texture === 3
+        return tiles[x][y].Texture === 3;
     };
     var addToOpenList = function (tiles, x, y, openList, closedList) {
         if (checkTileForOpenList(tiles, x, y) && !closedList.contains(tiles[x][y]) && !openList.contains(tiles[x][y])) { // checkTile + not in openlist/closedlist
@@ -508,5 +515,5 @@ var NoCorridor = (function () {
     };
     return {
         generate: generate
-    }
+    };
 })();

@@ -103,5 +103,5 @@ var Treasure = (function () {
     return {
         getTreasure: getTreasure,
         loadJSON: loadJSON
-    }
+    };
 })();

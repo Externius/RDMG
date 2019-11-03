@@ -94,5 +94,5 @@ var Trap = (function () {
     return {
         getCurrentTrap: getCurrentTrap,
         getTrapName: getTrapName
-    }
+    };
 })();

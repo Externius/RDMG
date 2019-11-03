@@ -101,7 +101,7 @@ var Encounter = (function () {
         }
     };
     var removeMonster = function (monsterList, monster) {
-        var index = monsterList.indexOf(monster)
+        var index = monsterList.indexOf(monster);
         monsterList.splice(index, 1);
     };
     var getMonsterXP = function (monster) {
@@ -190,5 +190,5 @@ var Encounter = (function () {
         getMonster: getMonster,
         getRoamingMonster: getRoamingMonster,
         getRoamingName: getRoamingName
-    }
+    };
 })();

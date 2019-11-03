@@ -1,3 +1,6 @@
 .table td {
     vertical-align: middle;
 }
+.root {
+    background-color: lightgray;
+}

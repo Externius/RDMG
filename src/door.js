@@ -103,5 +103,5 @@ var Door = (function () {
         getNCDoor: getNCDoor,
         getNCDoorDescription: getNCDoorDescription,
         getDoorDescription: getDoorDescription
-    }
+    };
 })();

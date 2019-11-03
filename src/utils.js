@@ -193,5 +193,5 @@ var Utils = (function () {
         downloadImg: downloadImg,
         downloadDescription: downloadDescription,
         downloadHTML: downloadHTML
-    }
+    };
 })();

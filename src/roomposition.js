@@ -39,5 +39,5 @@ var RoomPosition = (function () {
         isDown: isDown,
         isLeft: isLeft,
         isRight: isRight
-    }
+    };
 })();

@@ -55,17 +55,6 @@ var Dungeon = (function () {
             return "10pt Calibri bold";
         }
     };
-    var createTrapTableNode = function (nodeText, isRoot) {
-        var tr = document.createElement('tr');
-        var td = document.createElement('td');
-        var text = document.createTextNode(nodeText);
-        if (isRoot) {
-            td.rowSpan = 2;
-        }
-        td.appendChild(text);
-        tr.appendChild(td);
-        return tr;
-    };
     var createTableNode = function (nodeText, isRoot, parent) {
         var tr;
         if (parent === undefined) {
@@ -76,7 +65,8 @@ var Dungeon = (function () {
         var td = document.createElement('td');
         var text = document.createTextNode(nodeText);
         if (isRoot) {
-            td.rowSpan = 3;
+            td.colSpan = 5;
+            td.setAttribute('class','font-weight-bold text-center root');
         }
         td.appendChild(text);
         tr.appendChild(td);
@@ -84,11 +74,12 @@ var Dungeon = (function () {
     };
     var addDescription = function (roomDescription, trapDescription, roamingDescription) {
         var table = document.getElementById("table_description");
+        var tr;
         table.innerHTML = "";
         for (var i = 0; i < roomDescription.length; i++) {
-            var tr = createTableNode(roomDescription[i].name, true);
+            tr = createTableNode(roomDescription[i].name, true);
             table.appendChild(tr);
-            tr = createTableNode(roomDescription[i].monster, false, tr);
+            tr = createTableNode(roomDescription[i].monster, false);
             table.appendChild(tr);
             tr = createTableNode(roomDescription[i].treasure, false);
             table.appendChild(tr);
@@ -96,15 +87,15 @@ var Dungeon = (function () {
             table.appendChild(tr);
         }
         for (i = 0; i < trapDescription.length; i++) {
-            tr = createTrapTableNode(trapDescription[i].name, true);
+            tr = createTableNode(trapDescription[i].name, true);
             table.appendChild(tr);
-            tr = createTrapTableNode(trapDescription[i].description, false);
+            tr = createTableNode(trapDescription[i].description, false);
             table.appendChild(tr);
         }
         for (i = 0; i < roamingDescription.length; i++) {
-            tr = createTrapTableNode(roamingDescription[i].name, true);
+            tr = createTableNode(roamingDescription[i].name, true);
             table.appendChild(tr);
-            tr = createTrapTableNode(roamingDescription[i].description, false);
+            tr = createTableNode(roamingDescription[i].description, false);
             table.appendChild(tr);
         }
     };
@@ -149,7 +140,7 @@ var Dungeon = (function () {
         }
     };
     var checkIsRoom = function (tiles, x, y) {
-        return tiles[x][y].Texture === 3 || tiles[x][y].Texture === 6
+        return tiles[x][y].Texture === 3 || tiles[x][y].Texture === 6;
     };
     var checkTileGoodForRoom = function (tiles, x, y, right, down) {
         var maxX = x + down + 2; // +2 because of the edges
@@ -220,8 +211,9 @@ var Dungeon = (function () {
         }
     };
     var fillRoom = function (tiles, x, y, right, down, roomDescription) { // x-y is the top left corner
-        for (var i = 0; i < down + 2; i++) { // fill with room_edge texture the bigger boundaries 
-            for (var j = 0; j < right + 2; j++) {
+        var i, j;
+        for (i = 0; i < down + 2; i++) { // fill with room_edge texture the bigger boundaries 
+            for (j = 0; j < right + 2; j++) {
                 tiles[x + i - 1][y + j - 1].Texture = 6;
             }
         }
@@ -320,11 +312,11 @@ var Dungeon = (function () {
         }
     };
     var removeFromOpen = function (openList, node) {
-        var index = openList.indexOf(node)
+        var index = openList.indexOf(node);
         openList.splice(index, 1);
     };
     var checkTileForOpenList = function (tiles, x, y) {
-        return tiles[x][y].H !== undefined && tiles[x][y].Texture !== 3 && tiles[x][y].Texture !== 6 // check its not edge/room/room_edge
+        return tiles[x][y].H !== undefined && tiles[x][y].Texture !== 3 && tiles[x][y].Texture !== 6; // check its not edge/room/room_edge
     };
     var addToOpenList = function (tiles, node, x, y, openList, closedList, end) {
         if (!checkEnd(tiles, node, x, y, end)) {
@@ -447,10 +439,10 @@ var Dungeon = (function () {
     var addItem = function (tiles, i, j, item, description) {
         switch (item) {
             case 0: // trap
-                addTrap(tiles, i, j, description)
+                addTrap(tiles, i, j, description);
                 break;
             case 1: // roaming
-                addRoamingMonster(tiles, i, j, description)
+                addRoamingMonster(tiles, i, j, description);
                 break;
             default:
                 break;
@@ -460,7 +452,7 @@ var Dungeon = (function () {
         var count = 0;
         while (INCOUNT > count) {
             var x = Utils.getRandomInt(0, CORRIDORS.length);
-            var i = CORRIDORS[x].I
+            var i = CORRIDORS[x].I;
             var j = CORRIDORS[x].J;
             if (tiles[i][j].Texture === 1) {
                 addItem(tiles, i, j, item, description);
@@ -515,7 +507,7 @@ var Dungeon = (function () {
                         context.drawImage(IMAGEOBJECT[THEMEINDEX[1]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 2: // door
-                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[2]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[2]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 3: // room
                         context.drawImage(IMAGEOBJECT[THEMEINDEX[3]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
@@ -534,19 +526,19 @@ var Dungeon = (function () {
                         context.drawImage(hasCorridor ? IMAGEOBJECT[THEMEINDEX[0]] : IMAGEOBJECT[THEMEINDEX[6]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 7: // nc_Door
-                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[7]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[7]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 8: // door_locked
-                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[8]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[8]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 9: // door_trapped
-                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[9]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[9]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 10: // nc_door_locked
-                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[10]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[10]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 11: // nc_door_trapped
-                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[11]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height)
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[11]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
                         break;
                     case 12: // roaming monster
                         context.drawImage(IMAGEOBJECT[THEMEINDEX[12]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
@@ -606,9 +598,10 @@ var Dungeon = (function () {
          *  12 roaming monster
          */
         dungeonSize += 2; // + 2 because of edges
-        for (var i = 0; i < dungeonSize; i++) { // declare base array 
+        var i, j ;
+        for (i = 0; i < dungeonSize; i++) { // declare base array 
             tiles[i] = [];
-            for (var j = 0; j < dungeonSize; j++) {
+            for (j = 0; j < dungeonSize; j++) {
                 tiles[i][j] = {
                     X: j * sizeX,
                     Y: i * sizeY,
@@ -661,5 +654,5 @@ var Dungeon = (function () {
         preloadImages: preloadImages,
         removeFromOpen: removeFromOpen,
         addToClosedList: addToClosedList
-    }
+    };
 })();
