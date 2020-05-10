@@ -12,15 +12,25 @@
     }
   });
 
+  var setCanvasSize = function () {
+    var size = Math.round(($("#canvasDiv").width() / 100)) * 100;
+    var canvas = document.getElementById("mapArea");
+    canvas.width = size;
+    canvas.height = size;
+    var context = canvas.getContext("2d");
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
   $("#generateBtn").on("click", function () {
-    if ($("#dungeonMap")[0].hasAttribute('hidden')){
+    if ($("#dungeonMap")[0].hasAttribute('hidden')) {
       $("#dungeonMap").removeAttr('hidden');
     }
 
     $(".navbar-nav").find('*').removeAttr("hidden");
+    setCanvasSize();
     Dungeon.drawDungeonOneCanvas('mapArea', 'dungeonSize', 'roomDensity', 'roomSize', 'trapPercent', 'corridor', 'deadEnd', 'roamingPercent');
 
-    if ($("#dungeonDetails")[0].hasAttribute('hidden')){
+    if ($("#dungeonDetails")[0].hasAttribute('hidden')) {
       $("#dungeonDetails").removeAttr('hidden');
     }
   });
