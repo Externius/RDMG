@@ -1,6 +1,90 @@
-.table td {
+.table td th {
     vertical-align: middle;
 }
 .root {
     background-color: lightgray;
 }
+
+.main-div{
+    padding: 50px;
+    border-top: 1px dotted #343A40;
+}
+
+.download-btn{
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+    padding: 5vh;
+    width: 90%;
+}
+
+@media (min-width:995px) {
+	body {
+		padding-top: 0
+	}
+}
+
+@media (min-width:995px) {
+	body {
+		margin-left: 260px
+	}
+}
+
+.contact-icons a {
+    display: inline-block;
+    height: 3.5rem;
+    width: 3.5rem;
+    background-color: #343A40;
+    color: #fff !important;
+    border-radius: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 3.5rem;
+    margin-right: 1rem;
+}
+
+@media (min-width: 995px) {
+    .navbar {
+      text-align: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      width: 14rem;
+      height: 100vh;
+    }
+
+    .navbar-nav{
+        font-weight: 800;
+        letter-spacing: 0.05rem;
+        text-transform: uppercase;
+    }  
+
+    .navbar-brand {
+      display: flex;
+      margin: auto auto 0;
+      padding: 0.5rem;
+    }
+    .navbar-brand .img-profile {
+      max-width: 10rem;
+      max-height: 10rem;
+      border: 0.5rem solid rgba(255, 255, 255, 0.2);
+    }
+    .navbar-collapse {
+      display: flex;
+      align-items: flex-start;
+      flex-grow: 0;
+      width: 100%;
+      margin-bottom: auto;
+    }
+    .navbar-collapse .navbar-nav {
+      flex-direction: column;
+      width: 100%;
+    }
+    .navbar-collapse .navbar-nav .nav-item {
+      display: block;
+    }
+    .navbar-collapse .navbar-nav .nav-item .nav-link {
+      display: block;
+    }
+  }
