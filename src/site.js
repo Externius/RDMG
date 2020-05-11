@@ -6,7 +6,7 @@
       if (target.length) {
         $('html, body').animate({
           scrollTop: (target.offset().top)
-        }, 1000, "easeInOutExpo");
+        }, 1000);
         return false;
       }
     }
@@ -29,6 +29,9 @@
     $(".navbar-nav").find('*').removeAttr("hidden");
     setCanvasSize();
     Dungeon.drawDungeonOneCanvas('mapArea', 'dungeonSize', 'roomDensity', 'roomSize', 'trapPercent', 'corridor', 'deadEnd', 'roamingPercent');
+    $('html, body').animate({
+      scrollTop: ($("#dungeonMap").offset().top)
+    }, 1000);
 
     if ($("#dungeonDetails")[0].hasAttribute('hidden')) {
       $("#dungeonDetails").removeAttr('hidden');
