@@ -73,12 +73,12 @@ var Utils = (function () {
         }
         donwloadCSV(linkID, csv.join("\n"), fileName);
     };
-    var downloadImg = function (linkID, canvas) {
+    var downloadImg = function (linkID, canvas, fileName) {
         var link = document.getElementById(linkID);
         link.hidden = false;
         link.style.display = "inline-block";
         link.href = canvas.toDataURL();
-        link.download = "dungeonmap.png";
+        link.download = fileName;
     };
     var corridorOnchange = function (e) {
         if (e.value === "true") {

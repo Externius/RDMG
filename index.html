@@ -230,6 +230,15 @@
                 </select>
               </td>
             </tr>
+            <tr>
+              <td> Generate plain map: </td>
+              <td>
+                <select id="plainMap" class="form-control">
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
+                </select>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -252,6 +261,14 @@
           </div>
           <div class="col-lg-12">
             <a id="download_html" class="btn btn-info download-btn float-right" hidden> Download HTML </a>
+          </div>
+        </div>
+        <div id="canvasDivPlain" class="col-lg-8">
+          <canvas id="mapAreaPlain" style="border:0px #000000;"> </canvas>
+        </div>
+        <div class="col-lg-4">
+          <div class="col-lg-12">
+            <a id="download_map_plain" class="btn btn-info download-btn float-right" hidden> Download Plain Map </a>
           </div>
         </div>
       </div>
@@ -280,10 +297,10 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="src/site.js"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/png" href="/images/favicon.png" sizes="16x16">
 </body>

@@ -66,7 +66,7 @@ var Dungeon = (function () {
         var text = document.createTextNode(nodeText);
         if (isRoot) {
             td.colSpan = 5;
-            td.setAttribute('class','font-weight-bold text-center root');
+            td.setAttribute('class', 'font-weight-bold text-center root');
         }
         td.appendChild(text);
         tr.appendChild(td);
@@ -551,24 +551,65 @@ var Dungeon = (function () {
             }
         }
     };
-    var drawDungeonOneCanvas = function (canvasID, sizeID, roomDensityID, roomSizeID, trapID, corridorID, deadEndID, roamingID) {
+    var drawPlainMap = function (tiles, context, hasCorridor) {
+        for (var i = 1; i < tiles.length - 1; i++) {
+            for (var j = 1; j < tiles[i].length - 1; j++) {
+                switch (tiles[i][j].Texture) {
+                    case 0: // marble
+                        context.drawImage(IMAGEOBJECT[THEMEINDEX[0]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        break;
+                    case 1: // corridor
+                    case 5: // trap
+                    case 12: // roaming monster
+                        context.drawImage(IMAGEOBJECT[THEMEINDEX[1]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        break;
+                    case 2: // door
+                    case 8: // door_locked
+                    case 9: // door_trapped
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[2]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        break;
+                    case 3: // room
+                        context.drawImage(IMAGEOBJECT[THEMEINDEX[3]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        break;
+                    case 4: // entry
+                        context.drawImage(IMAGEOBJECT[THEMEINDEX[4]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        break;
+                    case 6: // room_edge
+                        context.drawImage(hasCorridor ? IMAGEOBJECT[THEMEINDEX[0]] : IMAGEOBJECT[THEMEINDEX[6]], tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        break;
+                    case 7: // nc_Door
+                    case 10: // nc_door_locked
+                    case 11: // nc_door_trapped
+                        rotateImage(context, IMAGEOBJECT[THEMEINDEX[7]], getDegree(tiles, i, j), tiles[i][j].X, tiles[i][j].Y, tiles[i][j].Width, tiles[i][j].Height);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    };
+    var drawDungeonOneCanvas = function (canvasId, sizeId, roomDensityId, roomSizeId,
+        trapId, corridorId, deadEndId, roamingId, canvasPlainId, plainId) {
         DOORS = [];
         CORRIDORS = [];
         ROOMS = [];
         var roomDescription = [];
         var trapDescription = [];
         var roamingDescription = [];
-        var canvas = document.getElementById(canvasID);
-        var dungeon = document.getElementById(sizeID);
-        var room = document.getElementById(roomDensityID);
-        var rooms = document.getElementById(roomSizeID);
-        var traps = document.getElementById(trapID);
-        var roaming = document.getElementById(roamingID);
+        var canvas = document.getElementById(canvasId);
+        var dungeon = document.getElementById(sizeId);
+        var room = document.getElementById(roomDensityId);
+        var rooms = document.getElementById(roomSizeId);
+        var traps = document.getElementById(trapId);
+        var roaming = document.getElementById(roamingId);
+        var canvasPlain = document.getElementById(canvasPlainId);
+        var plain = document.getElementById(plainId);
+        var generatePlainMap = (plain.options[plain.selectedIndex].value === "true");
         var trapPercent = parseInt(traps.options[traps.selectedIndex].value);
         var roamingPercent = parseInt(roaming.options[roaming.selectedIndex].value);
-        var corridor = document.getElementById(corridorID);
+        var corridor = document.getElementById(corridorId);
         var hasCorridor = (corridor.options[corridor.selectedIndex].value === "true");
-        var deadEnd = document.getElementById(deadEndID);
+        var deadEnd = document.getElementById(deadEndId);
         var hasDeadEnds = (deadEnd.options[deadEnd.selectedIndex].value === "true");
         var dungeonSize = parseInt(dungeon.options[dungeon.selectedIndex].value);
         var roomCount = Math.round((dungeonSize / 100) * parseInt(room.options[room.selectedIndex].value));
@@ -598,7 +639,7 @@ var Dungeon = (function () {
          *  12 roaming monster
          */
         dungeonSize += 2; // + 2 because of edges
-        var i, j ;
+        var i, j;
         for (i = 0; i < dungeonSize; i++) { // declare base array 
             tiles[i] = [];
             for (j = 0; j < dungeonSize; j++) {
@@ -645,9 +686,16 @@ var Dungeon = (function () {
         addDescription(roomDescription, trapDescription, roamingDescription);
         getTheme();
         drawMap(tiles, context, contextFont, hasCorridor);
-        Utils.downloadImg("download_map", canvas);
+        Utils.downloadImg("download_map", canvas, "dungeonmap.png");
         Utils.downloadDescription("download_description", "DungeonRooms.csv");
         Utils.downloadHTML("download_html");
+
+        if (generatePlainMap) {
+            var contextPlain = canvasPlain.getContext("2d");
+            contextPlain.clearRect(0, 0, canvasPlain.width, canvasPlain.height); // clear canvas
+            drawPlainMap(tiles, contextPlain, hasCorridor);
+            Utils.downloadImg("download_map_plain", canvasPlain, "dungeonplainmap.png");
+        }
     };
     return {
         drawDungeonOneCanvas: drawDungeonOneCanvas,

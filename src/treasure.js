@@ -3,7 +3,7 @@ var Treasure = (function () {
         0, 300, 600, 900, 1200, 1600, 2000, 2600, 3400, 4500, 5800,
         7500, 9800, 13000, 17000, 22000, 28000, 36000, 47000, 61000, 80000
     ];
-    var itemCount = [
+    var _itemCount = [
         0, 4, 4, 5, 5, 7, 7, 8, 8, 8, 9,
         9, 9, 9, 9, 12, 12, 12, 15, 15, 15
     ];
@@ -37,13 +37,13 @@ var Treasure = (function () {
     var getItemsCount = function () {
         switch (Utils.dungeonDifficulty) {
             case 0:
-                return Utils.getRandomInt(0, itemCount[Utils.partyLevel]);
+                return Utils.getRandomInt(0, _itemCount[Utils.partyLevel]);
             case 1:
-                return Utils.getRandomInt(2, itemCount[Utils.partyLevel]);
+                return Utils.getRandomInt(2, _itemCount[Utils.partyLevel]);
             case 2:
-                return Utils.getRandomInt(3, itemCount[Utils.partyLevel]);
+                return Utils.getRandomInt(3, _itemCount[Utils.partyLevel]);
             case 3:
-                return Utils.getRandomInt(4, itemCount[Utils.partyLevel]);
+                return Utils.getRandomInt(4, _itemCount[Utils.partyLevel]);
             default:
                 return 0;
         }

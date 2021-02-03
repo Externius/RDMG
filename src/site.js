@@ -12,9 +12,9 @@
     }
   });
 
-  var setCanvasSize = function () {
-    var size = Math.round(($("#canvasDiv").width() / 100)) * 100;
-    var canvas = document.getElementById("mapArea");
+  var setCanvasSize = function (canvasDiv, canvasId) {
+    var size = Math.round((canvasDiv.width() / 100)) * 100;
+    var canvas = document.getElementById(canvasId);
     canvas.width = size;
     canvas.height = size;
     var context = canvas.getContext("2d");
@@ -27,8 +27,18 @@
     }
 
     $(".navbar-nav").find('*').removeAttr("hidden");
-    setCanvasSize();
-    Dungeon.drawDungeonOneCanvas('mapArea', 'dungeonSize', 'roomDensity', 'roomSize', 'trapPercent', 'corridor', 'deadEnd', 'roamingPercent');
+    setCanvasSize($("#canvasDiv"), "mapArea");
+
+    if ($("#plainMap").val() === 'true') {
+      $("#canvasDivPlain").show();
+      setCanvasSize($("#canvasDivPlain"), "mapAreaPlain");
+    } else {
+      $("#canvasDivPlain").hide();
+      $("#download_map_plain").hide();
+    }
+
+    Dungeon.drawDungeonOneCanvas('mapArea', 'dungeonSize', 'roomDensity', 'roomSize',
+      'trapPercent', 'corridor', 'deadEnd', 'roamingPercent', 'mapAreaPlain', 'plainMap');
     $('html, body').animate({
       scrollTop: ($("#dungeonMap").offset().top)
     }, 1000);
