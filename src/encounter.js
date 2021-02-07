@@ -92,11 +92,14 @@ var Encounter = (function () {
     var getMonsters = function () {
         if (Utils.monsterType[0] === "any") {
             return monsters.filter(function (obj) {
-                return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4);
+                return parseInt(obj.challenge_rating) <= Utils.partyLevel + 2 && 
+                parseInt(obj.challenge_rating) >= Math.floor(Utils.partyLevel / 4);
             });
         } else {
             return monsters.filter(function (obj) {
-                return obj.challenge_rating <= Utils.partyLevel + 2 && obj.challenge_rating >= Math.floor(Utils.partyLevel / 4) && Utils.monsterType.includes(obj.type);
+                return parseInt(obj.challenge_rating) <= Utils.partyLevel + 2 && 
+                parseInt(obj.challenge_rating) >= Math.floor(Utils.partyLevel / 4) && 
+                Utils.monsterType.includes(obj.type);
             });
         }
     };
